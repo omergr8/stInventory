@@ -1,0 +1,70 @@
+.alignCenter {
+  text-align: center;
+  padding: 40px 0;
+  background-color: #f5f5f5 !important;
+
+  height: 100vh;
+}
+.loginCard {
+  margin: 0 auto;
+  border-radius: 10px;
+  width: 400px;
+  -webkit-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+  -moz-box-shadow: 0px 10px 20px 0px rgba(50, 50, 50, 0.52);
+  box-shadow: 0px 0px 20px 0px rgba(50, 50, 50, 0.52);
+  background-color: white !important;
+  padding: 10px;
+}
+.loginCard h1 {
+  font-weight: bold;
+}
+.logo {
+  padding-bottom: 30px;
+}
+.bottomText {
+  display: inline-block;
+  max-width: 450px;
+  padding: 10px;
+  text-align: center;
+}
+.bottomText p {
+  font-size: 12px;
+}
+.captchaInfo {
+  font-size: 12px;
+  max-width: 400px;
+  margin: 5px auto auto;
+  text-align: center;
+}
+@media screen and (max-width: 435px) {
+  .loginCard {
+    width: 90%;
+  }
+}
+/* Css for form */
+.inputLabel {
+  text-align: left !important;
+  color: #555;
+}
+.container {
+  margin-right: auto; /* 1 */
+  margin-left: auto; /* 1 */
+
+  max-width: 960px; /* 2 */
+
+  padding-right: 20px; /* 3 */
+  padding-left: 20px; /* 3 */
+}
+.formInput {
+  color: #222;
+  font-size: 1.2em;
+  border-radius: 10px;
+  border-color: #ddd;
+  box-shadow: none;
+  background-color: rgba(28, 29, 61, 0.02) !important;
+}
+.submitButton {
+  color: #fff !important;
+  background-color: #1c1d3d !important;
+  border-radius: 10px !important;
+}

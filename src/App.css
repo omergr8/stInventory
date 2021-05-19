@@ -1,6 +1,10 @@
 .App {
   text-align: center;
 }
+.ant-menu ul,
+.ant-menu ol {
+  background-color: #eeeef6 !important;
+}
 
 .App-logo {
   height: 40vmin;
