@@ -1,4 +1,5 @@
 import Setting from "./sections/Setting/Setting";
+import User from "./sections/User/User";
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 const AppSetting = () => {
@@ -14,7 +15,9 @@ const AppSetting = () => {
           </div>
         </TabPane>
         <TabPane tab="USERS" key="2">
-          USERS
+          <div>
+            <User />
+          </div>
         </TabPane>
       </Tabs>
     </div>

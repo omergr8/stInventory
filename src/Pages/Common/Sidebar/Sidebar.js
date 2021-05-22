@@ -1,5 +1,6 @@
 import { Layout, Menu } from "antd";
 import React, { useState, useEffect } from "react";
+import { NavLink, Link } from "react-router-dom";
 import classes from "./Sidebar.module.css";
 import {
   HomeFilled,
@@ -14,7 +15,7 @@ import { FaCubes, FaLayerGroup } from "react-icons/fa";
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-const Sidebar = () => {
+const Sidebar = (props) => {
   const [openKeys, setOpenKeys] = useState([]);
 
   const rootKeys = ["sub1", "sub2", "sub3"];
@@ -76,9 +77,14 @@ const Sidebar = () => {
           Reports
         </Menu.Item>
         <SubMenu key="sub3" icon={<SettingFilled />} title="Settings">
-          <Menu.Item key="14">App Settings</Menu.Item>
+          <Menu.Item key="14">
+            <Link to="/dashboard/setting">App Settings </Link>
+          </Menu.Item>
+
           <Menu.Item key="15">Users</Menu.Item>
-          <Menu.Item key="16">Shopify Billing</Menu.Item>
+          <Menu.Item key="16">
+            <Link to="/dashboard/billing/shopify">Shopify Billing</Link>
+          </Menu.Item>
           <Menu.Item key="17">Reset Cache</Menu.Item>
         </SubMenu>
       </Menu>

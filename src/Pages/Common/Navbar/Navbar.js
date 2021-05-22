@@ -38,6 +38,8 @@ const Navbar = () => {
   const [user, setUser] = useState(userr);
 
   useEffect(() => {
+    console.log("navbar");
+    setUser(JSON.parse(localStorage.getItem("user-info")));
     if (localStorage.getItem("user-info")) {
       history.push("/dashboard");
     } else {

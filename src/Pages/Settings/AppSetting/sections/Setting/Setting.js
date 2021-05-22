@@ -1,29 +1,164 @@
 import Box from "../Box/Box";
+import classes from "./Setting.module.css";
+import { FiTruck } from "react-icons/fi";
+import { AiFillSetting } from "react-icons/ai";
+import {
+  FaWarehouse,
+  FaListUl,
+  FaBoxes,
+  FaBox,
+  FaPrint,
+  FaCubes,
+  FaCube,
+} from "react-icons/fa";
 import { Row, Col } from "antd";
+
 const Setting = () => {
   return (
     <div>
       <Box>
-        <Row gutter={[16, 48]}>
-          <Col xs={2} sm={4} md={6} lg={8} xl={10}>
-            Col
-          </Col>
-          <Col xs={20} sm={16} md={12} lg={8} xl={4}>
-            Col
-          </Col>
-          <Col xs={2} sm={4} md={6} lg={8} xl={10}>
-            Col
-          </Col>
-          <Col xs={2} sm={4} md={6} lg={8} xl={10}>
-            Col
-          </Col>
-          <Col xs={20} sm={16} md={12} lg={8} xl={4}>
-            Col
-          </Col>
-          <Col xs={2} sm={4} md={6} lg={8} xl={10}>
-            Col
-          </Col>
-        </Row>
+        <div className={classes.wrapper}>
+          <Row>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FiTruck />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Product Listings</p>
+                    <p className={classes.item2}>
+                      Sumtracker products links <br /> with online products
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <AiFillSetting />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Default App Settings</p>
+                    <p className={classes.item2}>
+                      Set the timezone and country
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaWarehouse />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Warehouses</p>
+                    <p className={classes.item2}>
+                      Your warehouses list and their addresses
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaWarehouse />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Warehouse Links</p>
+                    <p className={classes.item2}>
+                      Sumtracker warehouse links with Shopify locations
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaListUl />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Tax list</p>
+                    <p className={classes.item2}>List of taxes</p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaBoxes />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Product Category</p>
+                    <p className={classes.item2}>Manage product categories</p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaBox />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Product Pack Sizes</p>
+                    <p className={classes.item2}>
+                      Manage pack sizes for products
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaPrint />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Document and Print Config</p>
+                    <p className={classes.item2}>
+                      Set document number, warehouse and print settings
+                    </p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+            <Col lg={{ span: 7, offset: 1 }}>
+              <a href="!" className={classes.anchor}>
+                <div className={classes.first}>
+                  <div className={classes.icon}>
+                    <FaCube />
+                  </div>
+
+                  <div className={classes.iconText}>
+                    <p className={classes.item1}>Archived Products</p>
+                    <p className={classes.item2}>Manage archived products</p>
+                  </div>
+                </div>
+              </a>
+            </Col>
+          </Row>
+        </div>
       </Box>
     </div>
   );

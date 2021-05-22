@@ -1,0 +1,26 @@
+.box {
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  margin: auto;
+  width: 70%;
+  padding: 30px;
+}
+.select {
+  text-align: left !important;
+}
+.container {
+  max-width: 960px; /* 20px smaller, to fit the paddings on the sides */
+  padding-right: 150px;
+  padding-left: 150px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 550;
+  padding-top: 15px;
+}
+.plan {
+  font-size: 28px;
+  font-weight: 450;
+}

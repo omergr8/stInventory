@@ -1,14 +1,16 @@
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { Layout, Menu, Breadcrumb } from "antd";
+import routes from "../../../../routes";
 import AppSetting from "../../../Settings/AppSetting/AppSetting";
 const { Content } = Layout;
 
-const ContentDash = () => {
+const ContentDash = (props) => {
   return (
     <Layout
       className="site-layout"
       style={{ marginLeft: 200, backgroundColor: "#FAFAFA" }}
     >
-      <Breadcrumb style={{ margin: "16px 0" }}>
+      <Breadcrumb style={{ margin: "26px 26px" }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         <Breadcrumb.Item>List</Breadcrumb.Item>
         <Breadcrumb.Item>App</Breadcrumb.Item>
@@ -21,7 +23,7 @@ const ContentDash = () => {
           minHeight: 280,
         }}
       >
-        <AppSetting />
+        {props.children}
       </Content>
     </Layout>
   );

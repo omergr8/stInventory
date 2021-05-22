@@ -25,6 +25,7 @@ const NormalLoginForm = (props) => {
       })
       .then((response) => {
         localStorage.setItem("user-info", JSON.stringify(response.data));
+        localStorage.setItem("token", JSON.stringify(response.data.token));
         if (response) {
           props.handler();
         }
