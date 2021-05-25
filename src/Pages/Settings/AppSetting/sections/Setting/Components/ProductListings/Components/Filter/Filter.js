@@ -36,7 +36,7 @@ const Filter = () => {
             <Input placeholder="Search product/sku" />
           </Form.Item>
         </Col>
-        <Col span={5} key={1}>
+        <Col span={5} key={2}>
           <Form.Item
             name="Channel "
             label="Channel"
@@ -50,7 +50,7 @@ const Filter = () => {
             <Input />
           </Form.Item>
         </Col>
-        <Col span={5} key={1}>
+        <Col span={5} key={3}>
           <Form.Item
             name="Tracking Type"
             label="Tracking Type"
@@ -64,7 +64,7 @@ const Filter = () => {
             <Input />
           </Form.Item>
         </Col>
-        <Col span={5} key={1}>
+        <Col span={5} key={4}>
           <Form.Item
             name="Inventory Sync"
             label="Inventory Sync"

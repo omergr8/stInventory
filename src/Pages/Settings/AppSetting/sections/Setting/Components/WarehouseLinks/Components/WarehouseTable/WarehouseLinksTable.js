@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import WarehouseName from "./Components/WarehouseName/WarehouseName";
+import WarehouseChannel from "./Components/WarehouseChannel/WarehouseChannel";
 import { Table, Tag, Space } from "antd";
+import { getByTestId } from "@testing-library/dom";
 
 const columns = [
   {
@@ -35,8 +38,7 @@ const columns = [
 const WarehouseTable = () => {
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [warehouselinks, setWarehouseLinks] = useState([]);
-  const [warehousee, setWarehouse] = useState([]);
-  const [channel, setChannel] = useState("");
+
   let userToken = "token";
   userToken += " ";
   userToken += token;
@@ -55,64 +57,23 @@ const WarehouseTable = () => {
       .then((res) => {
         const warehouse = res.data;
         setWarehouseLinks(warehouse);
-        console.log(warehouse);
-      });
-  }, []);
-
-  const getChannel = (id) => {
-    console.log(id);
-    axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/${id}`,
-        {
-          headers,
+        if (warehouse) {
+          console.log(warehouse);
         }
-      )
-      .then((res) => {
-        const channelName = res.data;
-        setChannel(channelName.name);
       });
-
-    return channel;
-  };
-  var CHANNEL_TYPE = {
-    SHOPIFY: 2,
-    AMAZON: 3,
-    OFFLINE: 5,
-    WOOCOMMERCE: 6,
-    EBAY: 7,
-    ETSY: 8,
-  };
-  const getWarehouse = () => {
-    const asArray = Object.entries(CHANNEL_TYPE);
-    const filtered = asArray.filter(([key, value]) => value === 2);
-    const atLeast9WinsObject = Object.fromEntries(filtered);
-    console.log(filtered, atLeast9WinsObject);
-  };
+  }, [setWarehouseLinks]);
 
   const data = [
     warehouselinks.map((warehouse, index) => ({
       key: warehouse.id,
-      warehouse: getWarehouse(),
+      warehouse: <WarehouseName id={warehouse.warehouse_id} />,
       location: warehouse.location_name,
       priority: warehouse.priority,
-      channelname:
-        warehouse.channel_id === 2
-          ? "SHOPIFY"
-          : warehouse.channel_id === 3
-          ? "AMAZON"
-          : warehouse.channel_id === 5
-          ? "OFFLINE"
-          : warehouse.channel_id === 6
-          ? "WOOCOMMERCE"
-          : warehouse.channel_id === 7
-          ? "EBAY"
-          : warehouse.channel_id === 8
-          ? "ETSY"
-          : "",
-      channel: getChannel(warehouse.channel_id),
+      channelname: <WarehouseChannel id={warehouse.channel_id} />,
+      channel: <WarehouseChannel id={warehouse.channel_id} />,
     })),
   ];
+
   return (
     <div>
       <div>

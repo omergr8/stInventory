@@ -4,6 +4,7 @@ import { Button } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "axios";
 import ContentBar from "../../../../../ContentBar/ContentBar";
+import WarehouseChannel from "../../../WarehouseLinks/Components/WarehouseTable/Components/WarehouseChannel/WarehouseChannel";
 import classes from "./ProductTable.module.css";
 import Filter from "../Filter/Filter";
 const columns = [
@@ -55,7 +56,6 @@ const columns = [
 const ProductTable = () => {
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [product, setProduct] = useState({});
-  const [channel, setChannel] = useState("");
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const [url, setUrl] = useState(
@@ -93,31 +93,17 @@ const ProductTable = () => {
   }, [setUrl]);
 
   console.log(product.results);
-  const getChannel = (id) => {
-    axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/${id}`,
-        {
-          headers,
-        }
-      )
-      .then((res) => {
-        const channelName = res.data;
-        setChannel(channelName.name);
-      });
 
-    return channel;
-  };
   let data;
   if (product.results !== undefined) {
     data = [
       product.results.map((product, index) => ({
-        key: product.id,
+        key: index,
         product: product.product.name,
         sumtracker: product.product.sku,
         remote: product.remote_id,
         inv: product.has_inventory_sync,
-        channel: getChannel(product.channel_id),
+        channel: <WarehouseChannel id={product.channel_id} />,
         properties: product.product.is_bundle
           ? "B"
           : product.product.is_archived
