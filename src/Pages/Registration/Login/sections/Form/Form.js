@@ -14,7 +14,22 @@ const NormalLoginForm = (props) => {
       history.push("/dashboard");
     }
   }, []);
-
+  const getMetadata = (token) => {
+    let userToken = "token";
+    userToken += " ";
+    userToken += token;
+    const headers = {
+      Authorization: userToken,
+    };
+    axios
+      .get(`https://inventory-dev-295903.appspot.com/settings/metadata/`, {
+        headers,
+      })
+      .then((res) => {
+        const metaData = res.data;
+        localStorage.setItem("meta-data", JSON.stringify(metaData));
+      });
+  };
   const login = () => {
     let item = { username, password };
     props.handler();
@@ -28,6 +43,7 @@ const NormalLoginForm = (props) => {
         localStorage.setItem("token", JSON.stringify(response.data.token));
         if (response) {
           props.handler();
+          getMetadata(response.data.token);
         }
 
         setTimeout(() => {

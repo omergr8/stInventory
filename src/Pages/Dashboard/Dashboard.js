@@ -1,7 +1,8 @@
 import Content from "./sections/Content/Content";
 import Navbar from "../Common/Navbar/Navbar";
 import Sidebar from "../Common/Sidebar/Sidebar";
-import Box from "../Settings/ShopifyBilling/ShopifyBilling";
+// import Box from "../Settings/ShopifyBilling/ShopifyBilling";
+// import Table from "../Settings/AppSetting/sections/Setting/Components/DataTable/DataTable";
 import routes from "../../routes";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { Layout } from "antd";

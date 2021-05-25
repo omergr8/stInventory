@@ -1,0 +1,31 @@
+.margin {
+  margin-bottom: 20px;
+}
+.trueInv {
+  height: 10px;
+  width: 10px;
+  background-color: green;
+  border-radius: 50%;
+}
+.falseInv {
+  height: 10px;
+  width: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+.bundle {
+  border: 1px solid green;
+  color: white;
+  background-color: green;
+  border-radius: 2px;
+  width: 20px !important;
+}
+.bundle label {
+  margin-left: 4px;
+}
+
+.button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}

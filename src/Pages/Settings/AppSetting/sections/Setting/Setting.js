@@ -2,6 +2,7 @@ import Box from "../Box/Box";
 import classes from "./Setting.module.css";
 import { FiTruck } from "react-icons/fi";
 import { AiFillSetting } from "react-icons/ai";
+import { NavLink, Link } from "react-router-dom";
 import {
   FaWarehouse,
   FaListUl,
@@ -20,23 +21,23 @@ const Setting = () => {
         <div className={classes.wrapper}>
           <Row>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/product-listing">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FiTruck />
                   </div>
 
                   <div className={classes.iconText}>
-                    <p className={classes.item1}>Product Listings</p>
+                    <p className={classes.item1}> Product Listings</p>
                     <p className={classes.item2}>
                       Sumtracker products links <br /> with online products
                     </p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/default-setting">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <AiFillSetting />
@@ -49,10 +50,10 @@ const Setting = () => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/warehouses">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaWarehouse />
@@ -65,10 +66,10 @@ const Setting = () => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/warehouselinks">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaWarehouse />
@@ -81,7 +82,7 @@ const Setting = () => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
               <a href="!" className={classes.anchor}>
