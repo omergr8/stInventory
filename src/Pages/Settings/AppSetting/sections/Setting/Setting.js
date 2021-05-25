@@ -85,7 +85,7 @@ const Setting = () => {
               </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/tax-list">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaListUl />
@@ -96,7 +96,7 @@ const Setting = () => {
                     <p className={classes.item2}>List of taxes</p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
               <a href="!" className={classes.anchor}>
