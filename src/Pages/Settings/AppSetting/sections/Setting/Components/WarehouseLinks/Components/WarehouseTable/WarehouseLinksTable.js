@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import WarehouseName from "./Components/WarehouseName/WarehouseName";
 import WarehouseChannel from "./Components/WarehouseChannel/WarehouseChannel";
+import MetaFind from "../../../../../MetaFind/MetaFind";
 import { Table, Tag, Space } from "antd";
 import { getByTestId } from "@testing-library/dom";
 
@@ -66,11 +67,20 @@ const WarehouseTable = () => {
   const data = [
     warehouselinks.map((warehouse, index) => ({
       key: warehouse.id,
-      warehouse: <WarehouseName id={warehouse.warehouse_id} />,
+      warehouse: (
+        <MetaFind
+          id={warehouse.warehouse_id}
+          incoming="WarehouseTableWarehouse"
+        />
+      ),
       location: warehouse.location_name,
       priority: warehouse.priority,
-      channelname: <WarehouseChannel id={warehouse.channel_id} />,
-      channel: <WarehouseChannel id={warehouse.channel_id} />,
+      channelname: (
+        <MetaFind id={warehouse.channel_id} incoming="WarehouseTableChannel" />
+      ),
+      channel: (
+        <MetaFind id={warehouse.channel_id} incoming="WarehouseTableChannel" />
+      ),
     })),
   ];
 

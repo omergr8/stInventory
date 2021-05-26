@@ -4,6 +4,9 @@ import DefaultSettings from "./Pages/Settings/AppSetting/sections/Setting/Compon
 import Warehouses from "./Pages/Settings/AppSetting/sections/Setting/Components/Warehouses/Warehouses";
 import WarehouseLinks from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/WarehouseLinks";
 import TaxList from "./Pages/Settings/AppSetting/sections/Setting/Components/TaxList/TaxList";
+import ProductCategory from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductCategory/ProductCategory";
+import ProductPackSize from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/ProductPackSize";
+import ArchievedProduct from "./Pages/Settings/AppSetting/sections/Setting/Components/ArchievedProduct/ArchievedProduct";
 import User from "./Pages/Settings/User/User";
 import Billing from "./Pages/Settings/ShopifyBilling/ShopifyBilling";
 let adminDashboardRoutes = [];
@@ -29,20 +32,38 @@ adminDashboardRoutes = [
   },
   {
     path: "/warehouses",
-    name: "Warehouses",
+    name: "warehouses",
     component: Warehouses,
     layout: "/dashboard",
   },
   {
     path: "/warehouselinks",
-    name: "WarehouseLinks",
+    name: "warehouseLinks",
     component: WarehouseLinks,
     layout: "/dashboard",
   },
   {
     path: "/tax-list",
-    name: "TaxList",
+    name: "taxList",
     component: TaxList,
+    layout: "/dashboard",
+  },
+  {
+    path: "/product-category",
+    name: "productcategory",
+    component: ProductCategory,
+    layout: "/dashboard",
+  },
+  {
+    path: "/product-pack-size",
+    name: "productpackpize",
+    component: ProductPackSize,
+    layout: "/dashboard",
+  },
+  {
+    path: "/archieved-product",
+    name: "archievedroduct",
+    component: ArchievedProduct,
     layout: "/dashboard",
   },
   {

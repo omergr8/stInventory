@@ -4,7 +4,7 @@ import { Button } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "axios";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import WarehouseChannel from "../../../WarehouseLinks/Components/WarehouseTable/Components/WarehouseChannel/WarehouseChannel";
+import MetaFind from "../../../../../MetaFind/MetaFind";
 import classes from "./ProductTable.module.css";
 import Filter from "../Filter/Filter";
 const columns = [
@@ -103,7 +103,7 @@ const ProductTable = () => {
         sumtracker: product.product.sku,
         remote: product.remote_id,
         inv: product.has_inventory_sync,
-        channel: <WarehouseChannel id={product.channel_id} />,
+        channel: <MetaFind incoming="ProductTable" id={product.channel_id} />,
         properties: product.product.is_bundle
           ? "B"
           : product.product.is_archived
@@ -134,7 +134,7 @@ const ProductTable = () => {
   return (
     <div>
       <div className={classes.margin}>
-        <ContentBar />
+        <ContentBar incoming="ProductListings" title="Product Listings" />
       </div>
       <div style={{ float: "right" }}>
         <Button

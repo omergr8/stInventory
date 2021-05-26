@@ -99,7 +99,7 @@ const Setting = () => {
               </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/product-category">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaBoxes />
@@ -110,10 +110,13 @@ const Setting = () => {
                     <p className={classes.item2}>Manage product categories</p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link
+                className={classes.anchor}
+                to="/dashboard/product-pack-size"
+              >
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaBox />
@@ -126,7 +129,7 @@ const Setting = () => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
               <a href="!" className={classes.anchor}>
@@ -145,7 +148,10 @@ const Setting = () => {
               </a>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link
+                className={classes.anchor}
+                to="/dashboard/archieved-product"
+              >
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaCube />
@@ -156,7 +162,7 @@ const Setting = () => {
                     <p className={classes.item2}>Manage archived products</p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
           </Row>
         </div>
