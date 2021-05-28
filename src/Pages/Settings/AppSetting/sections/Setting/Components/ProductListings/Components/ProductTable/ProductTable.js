@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { queryParams } from "../../../../../../../../../Services/ListServices";
 import { Table } from "antd";
 import { Button } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "axios";
-import ContentBar from "../../../../../ContentBar/ContentBar";
+
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import classes from "./ProductTable.module.css";
 import Filter from "../Filter/Filter";
@@ -53,13 +54,13 @@ const columns = [
   },
 ];
 
-const ProductTable = () => {
+const ProductTable = (props) => {
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [product, setProduct] = useState({});
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/`
+    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archieved=False`
   );
   let userToken = "token";
   userToken += " ";
@@ -67,10 +68,9 @@ const ProductTable = () => {
   const headers = {
     Authorization: userToken,
   };
+
   const totalPages = (product) => {
-    console.log("total", product.next);
     if (product.next !== null) {
-      // setItem(totalItem + 2);
       setNextButton(false);
     } else {
       setNextButton(true);
@@ -80,19 +80,23 @@ const ProductTable = () => {
     } else {
       setPreviousButton(true);
     }
-
-    // console.log(totalItem);
   };
+  const getQueryParams = () => {
+    const queryParamsList = queryParams(props);
+    let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archieved=False${queryParamsList}`;
+    setUrl(url);
+  };
+  React.useEffect(() => {
+    props.productTableMethod_ref.current = getQueryParams;
+  }, [props]);
+
   useEffect(() => {
     axios.get(url, { headers }).then((res) => {
       const productLinks = res.data;
       setProduct(productLinks);
       totalPages(productLinks);
-      console.log(productLinks);
     });
-  }, [setUrl]);
-
-  console.log(product.results);
+  }, [url]);
 
   let data;
   if (product.results !== undefined) {
@@ -133,9 +137,7 @@ const ProductTable = () => {
   };
   return (
     <div>
-      <div className={classes.margin}>
-        <ContentBar incoming="ProductListings" title="Product Listings" />
-      </div>
+      {/* <div> <Button onClick={getQueryParams}>test</Button></div> */}
       <div style={{ float: "right" }}>
         <Button
           className={classes.button}
@@ -152,13 +154,7 @@ const ProductTable = () => {
           onClick={() => handleTableChange("next")}
         />
       </div>
-      <Table
-        columns={columns}
-        dataSource={data}
-        bordered
-        pagination={false}
-        title={() => <Filter />}
-      />
+      <Table columns={columns} dataSource={data} bordered pagination={false} />
       <div style={{ float: "right" }}>
         <Button
           className={classes.button}

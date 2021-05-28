@@ -12,26 +12,16 @@ const layout = {
     span: 16,
   },
 };
-/* eslint-disable no-template-curly-in-string */
-
-const validateMessages = {
-  required: "${label} is required!",
-  types: {
-    email: "${label} is not a valid email!",
-    number: "${label} is not a valid number!",
-  },
-  number: {
-    range: "${label} must be between ${min} and ${max}",
-  },
-};
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-/* eslint-enable no-template-curly-in-string */
 
 const DefaultSettings = () => {
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [defaultSettings, setDefaultSettings] = useState({});
+  const [country, setCountry] = useState("");
+  const [timezone, setTimeZone] = useState("");
+  const [paymentmethod, setPaymentMethod] = useState([]);
+  const [clientsetting, setClientSetting] = useState([]);
+  const [hidesetupinstruction, setHideSetupInstruction] = useState(false);
+  const [disableautoarchieve, setDisableAutoArchieve] = useState(false);
   let userToken = "token";
   userToken += " ";
   userToken += token;
@@ -39,7 +29,53 @@ const DefaultSettings = () => {
     Authorization: userToken,
   };
   const onFinish = (values) => {
-    console.log(values);
+    const oldArray = [...clientsetting];
+    if (hidesetupinstruction && oldArray.includes(1) === false) {
+      oldArray.push(1);
+    } else if (!hidesetupinstruction) {
+      const index = oldArray.indexOf(1);
+      if (index > -1) {
+        oldArray.splice(index, 1);
+      }
+    }
+    if (disableautoarchieve && oldArray.includes(2) === false) {
+      oldArray.push(2);
+    } else if (!disableautoarchieve) {
+      const index = oldArray.indexOf(2);
+      if (index > -1) {
+        oldArray.splice(index, 1);
+      }
+    }
+    let paymentCopy = [...paymentmethod];
+    let splitPayment;
+    if (paymentCopy.length === 1) {
+      splitPayment = paymentCopy[0].split(",");
+    } else {
+      splitPayment = paymentCopy;
+    }
+
+    const settingObject = {
+      timezone: timezone,
+      country_code: country,
+      payment_methods: splitPayment,
+      client_settings: oldArray,
+    };
+
+    axios
+      .put(
+        `https://inventory-dev-295903.appspot.com/settings/defaults/`,
+        settingObject,
+        {
+          headers,
+        }
+      )
+      .then((res) => {});
+  };
+  const handleCountryValue = (e) => {
+    setCountry(e);
+  };
+  const handleTimeZoneValue = (e) => {
+    setTimeZone(e);
   };
 
   useEffect(() => {
@@ -49,28 +85,71 @@ const DefaultSettings = () => {
       })
       .then((res) => {
         const setting = res.data;
-        setDefaultSettings(res.data);
+        setCountry(setting.country_code);
+        setTimeZone(setting.timezone);
+        setClientSetting(setting.client_settings);
+        setPaymentMethod(setting.payment_methods);
+        setDefaultSettings(setting);
+        getClientSettingStatus(setting);
       });
   }, []);
-  console.log(defaultSettings);
+
+  const getClientSettingStatus = (setting) => {
+    const client_settings = JSON.parse(localStorage.getItem("meta-data"));
+    for (let i = 0; i < client_settings.client_settings.length; i++) {
+      const metaClientId = client_settings.client_settings[i].id;
+      let find = true;
+      for (let j = 0; j < setting.client_settings.length; j++) {
+        if (metaClientId === setting.client_settings[j]) {
+          find = false;
+
+          if (
+            client_settings.client_settings[i].description ===
+            "Hide setup instructions"
+          ) {
+            setHideSetupInstruction(true);
+          } else if (
+            client_settings.client_settings[i].description ===
+            "Disable Auto Archive"
+          ) {
+            setDisableAutoArchieve(true);
+          }
+        } else if (find) {
+          if (
+            client_settings.client_settings[i].description ===
+            "Hide setup instructions"
+          ) {
+            setHideSetupInstruction(false);
+          } else if (
+            client_settings.client_settings[i].description ===
+            "Disable Auto Archive"
+          ) {
+            setDisableAutoArchieve(false);
+          }
+        }
+      }
+    }
+  };
+  const onChangeHideSetup = (e) => {
+    setHideSetupInstruction(e.target.checked);
+  };
+  const onChangeAutoArchieve = (e) => {
+    setDisableAutoArchieve(e.target.checked);
+  };
+
   return (
-    <Form
-      {...layout}
-      name="nest-messages"
-      onFinish={onFinish}
-      validateMessages={validateMessages}
-    >
+    <Form {...layout} name="nest-messages" onFinish={onFinish}>
+      {/* <button onClick={covertPaymentToString}>test</button> */}
+
       <Form.Item
         name={["user", "country"]}
         label="Country"
         label={<label style={{ fontWeight: "600" }}>Country</label>}
-        rules={[
-          {
-            required: true,
-          },
-        ]}
       >
-        <CountrySelector countryCode={defaultSettings.country_code} />
+        <CountrySelector
+          handleChange={handleCountryValue}
+          countryCode={country}
+        />
       </Form.Item>
       <Form.Item
         name={["user", "timeZone"]}
@@ -81,7 +160,10 @@ const DefaultSettings = () => {
           },
         ]}
       >
-        <TimeZoneSelector timeZone={defaultSettings.timezone} />
+        <TimeZoneSelector
+          handleChange={handleTimeZoneValue}
+          timeZone={timezone}
+        />
       </Form.Item>
       <Form.Item
         name={["user", "currency"]}
@@ -97,10 +179,12 @@ const DefaultSettings = () => {
         <label>{defaultSettings.currency}</label>
       </Form.Item>
       <Form.Item
-        name={["user", "payment"]}
         label={<label style={{ fontWeight: "600" }}>Payment Methods</label>}
       >
-        <Input.TextArea value={defaultSettings.payment_methods} />
+        <Input.TextArea
+          value={paymentmethod}
+          onChange={(e) => setPaymentMethod([e.target.value])}
+        />
       </Form.Item>
       <Form.Item
         name={["user", "instruction"]}
@@ -108,7 +192,7 @@ const DefaultSettings = () => {
           <label style={{ fontWeight: "600" }}>Hide setup instructions</label>
         }
       >
-        <Checkbox />
+        <Checkbox onChange={onChangeHideSetup} checked={hidesetupinstruction} />
       </Form.Item>
       <Form.Item
         name={["user", "autoarchieve"]}
@@ -116,7 +200,10 @@ const DefaultSettings = () => {
           <label style={{ fontWeight: "600" }}>Disable Auto Archive</label>
         }
       >
-        <Checkbox />
+        <Checkbox
+          onChange={onChangeAutoArchieve}
+          checked={disableautoarchieve}
+        />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
         <Button block type="primary" htmlType="submit">

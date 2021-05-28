@@ -11,7 +11,7 @@ const TimeZoneSelector = (props) => {
     <Select
       key={`${Math.floor(Math.random() * 1000)}-min`}
       defaultValue={props.timeZone}
-      onChange={handleChange}
+      onChange={props.handleChange}
     >
       {minimalTimezoneSet.map((data, index) => {
         return (

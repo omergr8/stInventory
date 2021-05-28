@@ -2,6 +2,7 @@ import AppSetting from "./Pages/Settings/AppSetting/AppSetting";
 import ProductList from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductListings/ProductListing";
 import DefaultSettings from "./Pages/Settings/AppSetting/sections/Setting/Components/DefaultSettings/DefaultSettings";
 import Warehouses from "./Pages/Settings/AppSetting/sections/Setting/Components/Warehouses/Warehouses";
+import WarehouseDetails from "./Pages/Settings/AppSetting/sections/Setting/Components/Warehouses/Components/WarehouseDetails/WarehouseDetails";
 import WarehouseLinks from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/WarehouseLinks";
 import TaxList from "./Pages/Settings/AppSetting/sections/Setting/Components/TaxList/TaxList";
 import ProductCategory from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductCategory/ProductCategory";
@@ -64,6 +65,12 @@ adminDashboardRoutes = [
     path: "/archieved-product",
     name: "archievedroduct",
     component: ArchievedProduct,
+    layout: "/dashboard",
+  },
+  {
+    path: "/warehouse/edit/:id",
+    name: "warehousedetail",
+    component: WarehouseDetails,
     layout: "/dashboard",
   },
   {

@@ -13,7 +13,7 @@ const CountrySelector = (props) => {
       <Select
         key={`${Math.floor(Math.random() * 1000)}-min`}
         defaultValue={props.countryCode}
-        onChange={handleChange}
+        onChange={props.handleChange}
       >
         {countryList.getData().map((data, index) => {
           return (

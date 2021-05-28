@@ -2,7 +2,7 @@ import Box from "../Box/Box";
 import classes from "./Setting.module.css";
 import { FiTruck } from "react-icons/fi";
 import { AiFillSetting } from "react-icons/ai";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   FaWarehouse,
   FaListUl,

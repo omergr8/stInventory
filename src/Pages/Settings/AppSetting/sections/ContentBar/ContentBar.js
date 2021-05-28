@@ -1,5 +1,6 @@
 import classes from "./ContentBar.module.css";
 import React from "react";
+import { exportList } from "../../../../../Services/ListServices";
 import { PageHeader, Button, Menu, Dropdown, Select } from "antd";
 
 const { Option } = Select;
@@ -26,18 +27,31 @@ const menu = (
     <Menu.Item key="1">Download sample</Menu.Item>
   </Menu>
 );
+const exportCSV = (incoming) => {
+  if (incoming === "ProductListings") {
+    const url =
+      "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?paginate=False&format=csv&is_archieved=False";
+    exportList(url, "Product Listing");
+  }
+};
 const ContentBar = (props) => {
   let extra;
-  console.log(props.incoming);
+
   if (props.incoming === "ProductListings") {
     extra = (
       <React.Fragment>
-        <Button key="4">Export</Button>
+        <Button key="4" onClick={() => exportCSV("ProductListings")}>
+          Export
+        </Button>
         <Button key="3">Import</Button>
         {syncInventory}
         {syncProduct}
         <Button key="2">Reset filters</Button>
-        <Button key="1" type="primary">
+        <Button
+          onClick={() => props.productTableMethod_ref.current()}
+          key="1"
+          type="primary"
+        >
           Apply
         </Button>
       </React.Fragment>

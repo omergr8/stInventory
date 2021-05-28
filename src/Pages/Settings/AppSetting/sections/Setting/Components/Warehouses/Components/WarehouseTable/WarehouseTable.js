@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { Table, Tag, Space } from "antd";
 
 const columns = [
@@ -7,7 +8,20 @@ const columns = [
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (text) => <a>{text}</a>,
+    render: (text, row) => (
+      <div>
+        <div>
+          <Link to={`/dashboard/warehouse/edit/${row.key}`}>{text}</Link>
+        </div>
+        {row.isArchived ? (
+          <div>
+            <Tag color="blue">{row.isArchived ? "Archived" : "not"}</Tag>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+    ),
   },
   {
     title: "Code",
@@ -63,6 +77,7 @@ const WarehouseTable = () => {
         warehouse.address.address_line_2,
       pincode: warehouse.address.pincode,
       contact: warehouse.address.contact,
+      isArchived: warehouse.is_archived,
     })),
   ];
   return (
