@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import WarehouseName from "./Components/WarehouseName/WarehouseName";
 import WarehouseChannel from "./Components/WarehouseChannel/WarehouseChannel";
@@ -11,7 +12,9 @@ const columns = [
     title: "Warehouse",
     dataIndex: "warehouse",
     key: "warehouse",
-    render: (text) => <a>{text}</a>,
+    render: (text, row) => (
+      <Link to={`/dashboard/warehouselink/edit/${row.key}`}>{text}</Link>
+    ),
   },
   {
     title: "Remote Location",

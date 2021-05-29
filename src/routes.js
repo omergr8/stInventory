@@ -3,6 +3,7 @@ import ProductList from "./Pages/Settings/AppSetting/sections/Setting/Components
 import DefaultSettings from "./Pages/Settings/AppSetting/sections/Setting/Components/DefaultSettings/DefaultSettings";
 import Warehouses from "./Pages/Settings/AppSetting/sections/Setting/Components/Warehouses/Warehouses";
 import WarehouseDetails from "./Pages/Settings/AppSetting/sections/Setting/Components/Warehouses/Components/WarehouseDetails/WarehouseDetails";
+import WarehouseLinksDetails from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/Components/WarehouseLinksDetails/WarehouseLinksDetails";
 import WarehouseLinks from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/WarehouseLinks";
 import TaxList from "./Pages/Settings/AppSetting/sections/Setting/Components/TaxList/TaxList";
 import ProductCategory from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductCategory/ProductCategory";
@@ -71,6 +72,12 @@ adminDashboardRoutes = [
     path: "/warehouse/edit/:id",
     name: "warehousedetail",
     component: WarehouseDetails,
+    layout: "/dashboard",
+  },
+  {
+    path: "/warehouselink/edit/:id",
+    name: "warehouselinksdetails",
+    component: WarehouseLinksDetails,
     layout: "/dashboard",
   },
   {

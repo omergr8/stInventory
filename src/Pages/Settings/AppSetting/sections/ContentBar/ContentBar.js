@@ -2,7 +2,7 @@ import classes from "./ContentBar.module.css";
 import React from "react";
 import { exportList } from "../../../../../Services/ListServices";
 import { PageHeader, Button, Menu, Dropdown, Select } from "antd";
-
+import { AiOutlinePlus } from "react-icons/ai";
 const { Option } = Select;
 
 function handleChange(value) {
@@ -57,15 +57,26 @@ const ContentBar = (props) => {
       </React.Fragment>
     );
   } else if (props.incoming === "ProductCategory") {
+    const ProductCategoryUrl =
+      "https://inventory-dev-295903.appspot.com/products/groups/1/?format=csv&is_archived=false&paginate=False";
     extra = (
       <React.Fragment>
-        <Button className={classes.margin} key="3">
+        <Button
+          onClick={() => exportList(ProductCategoryUrl, "Product Category")}
+          className={classes.margin}
+          key="3"
+        >
           Export
         </Button>
         <Dropdown.Button className={classes.margin} key="2" overlay={menu}>
           Import
         </Dropdown.Button>
-        <Button className={classes.margin} key="1" type="primary">
+        <Button
+          onClick={props.addNew}
+          className={classes.margin}
+          key="1"
+          type="primary"
+        >
           Add New
         </Button>
       </React.Fragment>
@@ -89,6 +100,14 @@ const ContentBar = (props) => {
         <Button key="2">Reset</Button>
         <Button key="1" type="primary">
           Apply
+        </Button>
+      </React.Fragment>
+    );
+  } else if (props.incoming === "WarehouseLink") {
+    extra = (
+      <React.Fragment>
+        <Button icon={<AiOutlinePlus />} key="1">
+          New Link
         </Button>
       </React.Fragment>
     );
