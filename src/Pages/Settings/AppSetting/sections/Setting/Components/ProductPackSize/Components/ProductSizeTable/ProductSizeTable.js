@@ -3,14 +3,16 @@ import axios from "axios";
 import classes from "./ProductSizeTable.module.css";
 import { Table, Button, Space } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import { AiFillDelete } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
     title: "Product",
     dataIndex: "product",
     key: "product",
-    render: (text) => <a>{text}</a>,
+    render: (text, row) => (
+      <Link to={`/dashboard/productpacksize/edit/${row.id}`}>{text}</Link>
+    ),
   },
   {
     title: "Pack Size",
@@ -34,11 +36,13 @@ const columns = [
   },
 ];
 
-const ProductSizeTable = () => {
+const ProductSizeTable = (props) => {
   const [packsize, setPackSize] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
-
+  const [url, setUrl] = useState(
+    `https://inventory-dev-295903.appspot.com/products/pack_sizes/`
+  );
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   let userToken = "token";
   userToken += " ";
@@ -59,10 +63,16 @@ const ProductSizeTable = () => {
       setPreviousButton(true);
     }
   };
-
+  const getQueryParams = () => {
+    let url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=True&${props.productId}`;
+    setUrl(url);
+  };
+  React.useEffect(() => {
+    props.productTableMethod_ref.current = getQueryParams;
+  }, [props]);
   useEffect(() => {
     axios
-      .get(`https://inventory-dev-295903.appspot.com/products/pack_sizes/`, {
+      .get(url, {
         headers,
       })
       .then((res) => {
@@ -70,11 +80,12 @@ const ProductSizeTable = () => {
         setPackSize(packSizeData);
         totalPages(packSizeData);
       });
-  }, []);
+  }, [url]);
   let data;
   if (packsize.results !== undefined) {
     data = [
       packsize.results.map((product, index) => ({
+        id: product.product_id,
         key: product.id,
         product: product.product.sku,
         packsize: product.size,

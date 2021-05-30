@@ -1,5 +1,5 @@
 import axios from "axios";
-
+var moment = require("moment");
 const download = (csvData, fileName) => {
   var downloadLink = document.createElement("a");
   var blob = new Blob(["\ufeff", csvData]);
@@ -26,6 +26,40 @@ export const exportList = (url, fileName) => {
     const csvData = res.data;
     download(csvData, fileName);
   });
+};
+export const getLocalUom = () => {
+  const uom = JSON.parse(localStorage.getItem("meta-data"));
+  return uom.uoms;
+};
+export const getLocalTax = () => {
+  const tax = JSON.parse(localStorage.getItem("meta-data"));
+  return tax.taxes;
+};
+export const getCategory = () => {
+  const category = JSON.parse(localStorage.getItem("meta-data"));
+  return category.group1s;
+};
+export const getCategoryName = (id) => {
+  const metaData = JSON.parse(localStorage.getItem("meta-data"));
+  const cat = metaData.group1s;
+  const filteredCat = cat.filter((catId) => catId.id === id);
+  console.log(filteredCat);
+  return filteredCat[0].name;
+  //  return category.group1s;
+};
+export const getCategoryId = (name) => {
+  //console.log();
+  const metaData = JSON.parse(localStorage.getItem("meta-data"));
+  const cat = metaData.group1s;
+  const filteredCat = cat.filter((catId) => catId.name === name.toString());
+  console.log(filteredCat);
+  return filteredCat[0].id;
+  //  return category.group1s;
+};
+export const dateFormatter = (value) => {
+  //console.log(date);
+  var date = new Date(value);
+  return moment(date).format("YYYY-DD-MM HH:mm");
 };
 export const queryParams = (props) => {
   let queryParams;

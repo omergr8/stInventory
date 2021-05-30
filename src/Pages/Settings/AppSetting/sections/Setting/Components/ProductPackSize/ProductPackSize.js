@@ -5,12 +5,7 @@ import { Divider } from "antd";
 const ProductPackSize = () => {
   return (
     <div>
-      <ContentBar incoming="ProductPackSize" title="Pack Size List" />
-      <div style={{ marginTop: "10px" }}>
-        <ProductSizeFilter />
-      </div>
-      <Divider />
-      <ProductSizeTable />
+      <ProductSizeFilter />
     </div>
   );
 };

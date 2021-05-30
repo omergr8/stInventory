@@ -8,7 +8,9 @@ import WarehouseLinks from "./Pages/Settings/AppSetting/sections/Setting/Compone
 import TaxList from "./Pages/Settings/AppSetting/sections/Setting/Components/TaxList/TaxList";
 import ProductCategory from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductCategory/ProductCategory";
 import ProductPackSize from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/ProductPackSize";
+import ProductSizeEdit from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/Components/ProductSizeEdit/ProductSizeEdit";
 import ArchievedProduct from "./Pages/Settings/AppSetting/sections/Setting/Components/ArchievedProduct/ArchievedProduct";
+import StockLevel from "./Pages/Settings/AppSetting/sections/Setting/Components/StockLevels/StockLevels";
 import User from "./Pages/Settings/User/User";
 import Billing from "./Pages/Settings/ShopifyBilling/ShopifyBilling";
 let adminDashboardRoutes = [];
@@ -78,6 +80,18 @@ adminDashboardRoutes = [
     path: "/warehouselink/edit/:id",
     name: "warehouselinksdetails",
     component: WarehouseLinksDetails,
+    layout: "/dashboard",
+  },
+  {
+    path: "/productpacksize/edit/:id",
+    name: "productsizeedit",
+    component: ProductSizeEdit,
+    layout: "/dashboard",
+  },
+  {
+    path: "/stocklevel/",
+    name: "stocklevel",
+    component: StockLevel,
     layout: "/dashboard",
   },
   {
