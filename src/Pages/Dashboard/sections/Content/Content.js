@@ -1,7 +1,4 @@
-import { Switch, Route, Redirect, withRouter } from "react-router-dom";
-import { Layout, Menu, Breadcrumb } from "antd";
-import routes from "../../../../routes";
-import AppSetting from "../../../Settings/AppSetting/AppSetting";
+import { Layout, Breadcrumb } from "antd";
 const { Content } = Layout;
 
 const ContentDash = (props) => {

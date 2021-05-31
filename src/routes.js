@@ -11,6 +11,8 @@ import ProductPackSize from "./Pages/Settings/AppSetting/sections/Setting/Compon
 import ProductSizeEdit from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/Components/ProductSizeEdit/ProductSizeEdit";
 import ArchievedProduct from "./Pages/Settings/AppSetting/sections/Setting/Components/ArchievedProduct/ArchievedProduct";
 import StockLevel from "./Pages/Settings/AppSetting/sections/Setting/Components/StockLevels/StockLevels";
+import DocumentsandPrints from "./Pages/Settings/AppSetting/sections/Setting/Components/DocumentandPrintConfig/DocumentandPrintConfig";
+import DocumentTypeEdit from "./Pages/Settings/AppSetting/sections/Setting/Components/DocumentandPrintConfig/Components/DocumentTypeEdit/DocumentTypeEdit";
 import User from "./Pages/Settings/User/User";
 import Billing from "./Pages/Settings/ShopifyBilling/ShopifyBilling";
 let adminDashboardRoutes = [];
@@ -92,6 +94,18 @@ adminDashboardRoutes = [
     path: "/stocklevel/",
     name: "stocklevel",
     component: StockLevel,
+    layout: "/dashboard",
+  },
+  {
+    path: "/documents-prints/",
+    name: "documentsandprints",
+    component: DocumentsandPrints,
+    layout: "/dashboard",
+  },
+  {
+    path: "/documents-print/edit/:id",
+    name: "documenttypeedit",
+    component: DocumentTypeEdit,
     layout: "/dashboard",
   },
   {

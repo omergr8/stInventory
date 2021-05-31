@@ -31,12 +31,16 @@ function handleChange(value) {
 }
 const syncInventory = (
   <Select placeholder="Sync all Inventory" onChange={handleChange} key="6">
-    <Option value="shopify">Shopify</Option>
+    <Option key="20" value="shopify">
+      Shopify
+    </Option>
   </Select>
 );
 const syncProduct = (
   <Select placeholder="Sync Product Listing" onChange={handleChange} key="5">
-    <Option value="shopify">Shopify</Option>
+    <Option key="21" value="shopify">
+      Shopify
+    </Option>
   </Select>
 );
 function handleMenuClick(e) {
@@ -45,7 +49,7 @@ function handleMenuClick(e) {
 
 const menu = (
   <Menu onClick={handleMenuClick}>
-    <Menu.Item key="1">Download sample</Menu.Item>
+    <Menu.Item key="23">Download sample</Menu.Item>
   </Menu>
 );
 const exportCSV = (incoming) => {
@@ -60,17 +64,17 @@ const ContentBar = (props) => {
   let description;
   if (props.incoming === "ProductListings") {
     extra = (
-      <React.Fragment>
-        <Button key="4" onClick={() => exportCSV("ProductListings")}>
+      <React.Fragment key="30">
+        <Button key="1" onClick={() => exportCSV("ProductListings")}>
           Export
         </Button>
-        <Button key="3">Import</Button>
+        <Button key="2">Import</Button>
         {syncInventory}
         {syncProduct}
-        <Button key="2">Reset filters</Button>
+        <Button key="3">Reset filters</Button>
         <Button
           onClick={() => props.productTableMethod_ref.current()}
-          key="1"
+          key="4"
           type="primary"
         >
           Apply
@@ -81,11 +85,11 @@ const ContentBar = (props) => {
     const ProductCategoryUrl =
       "https://inventory-dev-295903.appspot.com/products/groups/1/?format=csv&is_archived=false&paginate=False";
     extra = (
-      <React.Fragment>
+      <React.Fragment key="31">
         <Button
           onClick={() => exportList(ProductCategoryUrl, "Product Category")}
           className={classes.margin}
-          key="3"
+          key="5"
         >
           Export
         </Button>
@@ -95,7 +99,7 @@ const ContentBar = (props) => {
         <Button
           onClick={() => props.productTableMethod_ref.current()}
           className={classes.margin}
-          key="1"
+          key="6"
           type="primary"
         >
           Add New
@@ -106,18 +110,18 @@ const ContentBar = (props) => {
     const ProductCategoryUrl =
       "https://inventory-dev-295903.appspot.com/products/pack_sizes/?format=csv&paginate=False";
     extra = (
-      <React.Fragment>
+      <React.Fragment key="29">
         <Button
-          key="4"
+          key="7"
           onClick={() => exportList(ProductCategoryUrl, "Pack Sizes")}
         >
           Export
         </Button>
-        <Button key="3">Import</Button>
-        <Button key="2">Reset</Button>
+        <Button key="8">Import</Button>
+        <Button key="9">Reset</Button>
         <Button
           onClick={() => props.productTableMethod_ref.current()}
-          key="1"
+          key="10"
           type="primary"
         >
           Apply
@@ -125,63 +129,80 @@ const ContentBar = (props) => {
       </React.Fragment>
     );
   } else if (props.incoming === "ArchievedProduct") {
+    const ArchiveProductUrl =
+      "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
     extra = (
-      <React.Fragment>
-        <Button key="4">More Filters</Button>
-        <Button key="3">Export</Button>
-        <Button key="2">Reset</Button>
-        <Button key="1" type="primary">
+      <React.Fragment key="32">
+        <Button key="11">More Filters</Button>
+        <Button
+          key="12"
+          onClick={() => exportList(ArchiveProductUrl, "Archieved Product")}
+        >
+          Export
+        </Button>
+        <Button key="13">Reset</Button>
+        <Button
+          onClick={() => props.archiveProductTableMethod_ref.current()}
+          key="14"
+          type="primary"
+        >
           Apply
         </Button>
       </React.Fragment>
     );
   } else if (props.incoming === "WarehouseLink") {
     extra = (
-      <React.Fragment>
-        <Button icon={<AiOutlinePlus />} key="1">
+      <React.Fragment key="33">
+        <Button icon={<AiOutlinePlus />} key="23">
           New Link
         </Button>
       </React.Fragment>
     );
   } else if (props.incoming === "ProductSizeEdit") {
     description = (
-      <React.Fragment>
+      <React.Fragment key="34">
         <Descriptions size="small" column={5}>
-          <Descriptions.Item label={<h4>Created On</h4>}>
+          <Descriptions.Item key="24" label={<h4>Created On</h4>}>
             <h5 style={{ marginTop: "2px" }}>
-              {dateFormatter(props.productSizeObject.product.created)}
+              {props.productSizeObject === undefined ||
+              props.productSizeObject === null
+                ? null
+                : dateFormatter(props.productSizeObject.created)}
             </h5>
           </Descriptions.Item>
-          <Descriptions.Item label={<h4>Updated On</h4>}>
+          <Descriptions.Item key="25" label={<h4>Updated On</h4>}>
             <h5 style={{ marginTop: "2px" }}>
-              {dateFormatter(props.productSizeObject.product.updated)}
+              {props.productSizeObject === undefined ||
+              props.productSizeObject === null
+                ? null
+                : dateFormatter(props.productSizeObject.updated)}
             </h5>
           </Descriptions.Item>
         </Descriptions>
         <Descriptions size="small" column={12}>
-          <Descriptions.Item>
+          <Descriptions.Item key="26">
             <Link to={`/dashboard/stocklevel/`}>Stock Levels</Link>
           </Descriptions.Item>
 
-          <Descriptions.Item>
+          <Descriptions.Item key="27">
             <a>Inventory Log</a>
           </Descriptions.Item>
 
-          <Descriptions.Item>
+          <Descriptions.Item key="28">
             <a>Online Listings</a>
           </Descriptions.Item>
         </Descriptions>
       </React.Fragment>
     );
     extra = (
-      <React.Fragment>
+      <React.Fragment key="35">
         {props.requireSave ? null : <Button icon={<AiOutlineSave />} key="4" />}
         {props.isArchive ? (
           <Button
             type="danger"
             onClick={() => props.setArchive(false)}
             icon={<AiOutlineUndo />}
-            key="3"
+            key="15"
           >
             Undo Archieve
           </Button>
@@ -189,33 +210,60 @@ const ContentBar = (props) => {
           <Button
             onClick={() => props.setArchive(true)}
             icon={<FaFileArchive />}
-            key="3"
+            key="16"
           >
             Archieve
           </Button>
         )}
 
-        <Button onClick={props.delete} icon={<AiFillDelete />} key="2">
+        <Button onClick={props.delete} icon={<AiFillDelete />} key="17">
           Delete
         </Button>
         {props.requireSave ? (
           <Button
             style={{ backgroundColor: "#ffc107" }}
             icon={<CgDanger />}
-            key="1"
+            key="18"
             onClick={props.save}
           >
             Save
           </Button>
         ) : (
-          <Button icon={<AiFillSave />} key="1" type="primary">
+          <Button icon={<AiFillSave />} key="19" type="primary">
             Saved
           </Button>
         )}
       </React.Fragment>
     );
   }
-  console.log(props.productSizeObject);
+  const title = () => {
+    if (props.isArchive && !props.isBundle) {
+      return (
+        <Tag style={{ marginLeft: "20px" }} color="red">
+          Archived
+        </Tag>
+      );
+    } else if (props.isBundle && !props.isArchive) {
+      return (
+        <Tag style={{ marginLeft: "20px" }} color="red">
+          Bundle
+        </Tag>
+      );
+    } else if (props.isBundle && props.isArchive) {
+      return (
+        <React.Fragment>
+          <Tag style={{ marginLeft: "20px" }} color="red">
+            Bundle
+          </Tag>
+          <Tag style={{ marginLeft: "20px" }} color="red">
+            Archived
+          </Tag>
+        </React.Fragment>
+      );
+    } else {
+      return null;
+    }
+  };
   return (
     <div
       className="site-page-header-ghost-wrapper"
@@ -227,11 +275,7 @@ const ContentBar = (props) => {
         title={
           <div>
             {props.title}
-            {props.isArchive ? (
-              <Tag style={{ marginLeft: "20px" }} color="red">
-                Archived
-              </Tag>
-            ) : null}
+            {title()}
           </div>
         }
         extra={[extra]}

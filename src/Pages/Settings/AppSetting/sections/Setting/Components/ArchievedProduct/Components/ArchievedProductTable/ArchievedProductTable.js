@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import classes from "./ArchievedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
@@ -8,7 +9,9 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
-    render: (text) => <a>{text}</a>,
+    render: (text, row) => (
+      <Link to={`/dashboard/productpacksize/edit/${row.key}`}>{text}</Link>
+    ),
   },
   {
     title: "SKU",
@@ -34,10 +37,13 @@ const rowSelection = {
   },
 };
 
-const ArchievedProductTable = () => {
+const ArchievedProductTable = (props) => {
   const [archievedroduct, setArchievedroduct] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
+  const [url, setUrl] = useState(
+    `https://inventory-dev-295903.appspot.com/products/?is_archived=true`
+  );
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   let userToken = "token";
   userToken += " ";
@@ -59,21 +65,37 @@ const ArchievedProductTable = () => {
       setPreviousButton(true);
     }
   };
+  const getQueryParams = () => {
+    let queryParams;
+    if (props.searchInput === "" && props.productId === undefined) {
+      queryParams = "";
+    } else if (props.productId === undefined && props.searchInput !== "") {
+      queryParams = `&search=${props.searchInput}`;
+    } else if (props.searchInput === "" && props.productId !== undefined) {
+      queryParams = `&${props.productId}`;
+    } else {
+      console.log("both filled", props.productId, props.searchInput);
+      queryParams = `&search=${props.searchInput}&${props.productId}`;
+    }
+    let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
+    console.log(url);
+    setUrl(url);
+  };
+  React.useEffect(() => {
+    props.archiveProductTableMethod_ref.current = getQueryParams;
+  }, [props]);
   useEffect(() => {
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=true`,
-        {
-          headers,
-        }
-      )
+      .get(url, {
+        headers,
+      })
       .then((res) => {
         const ArchievedProductData = res.data;
         console.log(ArchievedProductData);
         setArchievedroduct(ArchievedProductData);
         totalPages(ArchievedProductData);
       });
-  }, []);
+  }, [url]);
   let data;
   if (archievedroduct.results !== undefined) {
     data = [

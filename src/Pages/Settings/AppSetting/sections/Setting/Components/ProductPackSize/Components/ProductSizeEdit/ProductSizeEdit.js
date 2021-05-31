@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useState, useReducer, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
   getToken,
@@ -9,94 +9,120 @@ import {
   getCategoryName,
   getCategoryId,
 } from "../../../../../../../../../Services/ListServices";
+import formReducer from "../../../../../../../../../Reducers/FormReducer";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import PurchaseinPackTable from "./Components/PurchaseinPackTable/PurchaseinPackTable";
-import { Form, Input, Select, Button, Checkbox, Table } from "antd";
+import { Form, Input, Select, Button, Checkbox, Row, Col } from "antd";
 var data = require("currency-codes/data");
 
 const { Option } = Select;
 const layout = {
   labelCol: {
-    span: 3,
+    span: 4,
   },
   wrapperCol: {
-    span: 12,
+    span: 10,
   },
 };
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
+const tailLayout = {
+  wrapperCol: { offset: 8, span: 16 },
+};
+const initialFormState = {
+  id: "",
+  name: "",
+  sku: "",
+  printname: "",
+  productuom: "",
+  tax: "",
+  category: "",
+  inventorytracking: "",
+  alertthreshold: "",
+  isarchived: Boolean,
+  isbundle: Boolean,
+  imgurl: "",
+  tags: "",
+  suppliersku: "",
+  purchaserate: "",
+  purchasecurrency: "",
+  moq: "",
+  grade: "",
+  ispurchasepack: Boolean,
+};
 const ProductSizeEdit = () => {
-  // console.log("rendering");
+  const [formState, dispatch] = useReducer(formReducer, initialFormState);
   const { id } = useParams();
-  //   const localUom = getLocalUom();
-  //   const localTax = getLocalTax();
-  //   console.log(localUom);
   const headers = getToken();
-  const [showtable, setShowTable] = useState(false);
   const [requiresave, setRequireSave] = useState(false);
   const [productsizedata, setProductSizeData] = useState([]);
-  const [sid, setSid] = useState();
-  const [name, setName] = useState("");
-  const [sku, setSku] = useState("");
-  const [printname, setPrintName] = useState("");
-  const [productuom, setProductUom] = useState([]);
-  const [uom, setUom] = useState("");
   const [ispurchasepack, setIsPurchasePack] = useState(Boolean);
-  const [tax, setTax] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [inventorytracking, setInventoryTracking] = useState([]);
-  const [alertthreshold, setAlertThreshold] = useState("");
-  const [tags, setTags] = useState([]);
-  const [suppliersku, setSupplierSku] = useState("");
-  const [purchaserate, setPurchaseRate] = useState("");
-  const [purchasecurrency, setPurchaseCurrency] = useState([]);
-  const [moq, setMoq] = useState("");
-  const [packsize, setPackSize] = useState("");
   const [isarchived, setIsArchived] = useState(Boolean);
-  const setStateData = (arrayData) => {
-    const data = arrayData[0];
-    const categoryName = getCategoryName(data.product.group1_id);
+
+  const callDispatcher = (data, name) => {
+    dispatch({
+      type: "HANDLE INPUT TEXT",
+      field: name,
+      payload: data,
+    });
+  };
+  const setStateData = (packSizeData) => {
+    const data = packSizeData;
+    const categoryName = getCategoryName(data.group1_id);
     let inventoryTrackingName;
-    if (data.product.tracking_type === 2) {
+    if (data.tracking_type === 2) {
       inventoryTrackingName = "Tracked";
-    } else if (data.product.tracking_type === 5) {
+    } else if (data.tracking_type === 5) {
       inventoryTrackingName = "Not Tracked";
     }
-    setSid(data.id);
-    setName(data.product.name);
-    setSku(data.product.sku);
-    setPrintName(data.product.print_name);
-    setProductUom(data.product.uom);
-    setUom(data.uom);
-    setTax(data.product.tax_id);
-    setCategory(categoryName);
-    setInventoryTracking(inventoryTrackingName);
-    setAlertThreshold(data.product.alert_threshold);
-    setTags(data.product.tags);
-    setSupplierSku(data.product.supplier_sku);
-    setPurchaseRate(data.purchase_rate);
-    setPurchaseCurrency(data.product.currency);
-    setMoq(data.product.moq);
-    setIsPurchasePack(data.product.is_purchased_in_pack);
-    setPackSize(data.size);
-    setIsArchived(data.product.is_archived);
+    callDispatcher(data.id, "id");
+    callDispatcher(data.name, "name");
+    callDispatcher(data.sku, "sku");
+    callDispatcher(data.print_name, "printname");
+    callDispatcher(data.uom, "productuom");
+    callDispatcher(data.tax_id, "tax");
+    callDispatcher(data.image_url, "imgurl");
+    callDispatcher(categoryName, "category");
+    callDispatcher(inventoryTrackingName, "inventorytracking");
+    callDispatcher(data.alert_threshold, "alertthreshold");
+    callDispatcher(data.tags, "tags");
+    callDispatcher(data.supplier_sku, "suppliersku");
+    callDispatcher(data.purchase_rate, "purchaserate");
+    callDispatcher(data.currency, "purchasecurrency");
+    callDispatcher(data.moq, "moq");
+    callDispatcher(data.is_archived, "isarchived");
+    callDispatcher(data.is_bundle, "isbundle");
+    callDispatcher(data.grade, "grade");
+    setIsPurchasePack(data.is_purchased_in_pack);
+    //setIsArchived(data.is_archived);
+    // setPackSize(data.size);
+    //setUom(data.uom);
+    //setSid(data.id);
   };
   const getProductSizeData = () => {
-    const url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product=${id}`;
+    // const url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product=${id}`;
+    const url = `https://inventory-dev-295903.appspot.com/products/${id}`;
     axios.get(url, { headers }).then((res) => {
       const packSizeData = res.data;
       setStateData(packSizeData);
-      setProductSizeData(packSizeData[0]);
-      console.log(packSizeData);
+      setProductSizeData(packSizeData);
     });
   };
   useEffect(() => {
-    getProductSizeData();
+    let unmounted = false;
+    // const url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product=${id}`;
+    const url = `https://inventory-dev-295903.appspot.com/products/${id}`;
+    axios.get(url, { headers }).then((res) => {
+      const packSizeData = res.data;
+      if (!unmounted) {
+        console.log(packSizeData);
+        setStateData(packSizeData);
+        setProductSizeData(packSizeData);
+      }
+    });
+    return () => {
+      unmounted = true;
+    };
   }, []);
   const setArchive = (archive) => {
-    console.log(archive);
     let url;
     if (archive) {
       url = `https://inventory-dev-295903.appspot.com/products/${id}/archive/`;
@@ -106,7 +132,6 @@ const ProductSizeEdit = () => {
     axios
       .put(url, "t", { headers })
       .then((res) => {
-        console.log(res);
         if (res) {
           getProductSizeData();
         }
@@ -117,23 +142,23 @@ const ProductSizeEdit = () => {
   };
   const updateProduct = () => {
     const prodObj = {
-      name: name,
-      print_name: printname,
-      sku: sku,
-      uom: productuom,
+      name: formState.name,
+      print_name: formState.printname,
+      sku: formState.sku,
+      uom: formState.productuom,
       image_url: "",
-      supplier_sku: suppliersku,
-      purchase_rate: purchaserate,
-      currency: purchasecurrency,
-      moq: moq,
+      supplier_sku: formState.suppliersku,
+      purchase_rate: formState.purchaserate,
+      currency: formState.purchasecurrency,
+      moq: formState.moq,
       is_purchased_in_pack: ispurchasepack,
-      tracking_type: inventorytracking === "Tracked" ? 2 : 5,
-      grade: productsizedata.product.grade,
-      is_bundle: productsizedata.product.is_bundle,
-      is_archived: isarchived,
-      alert_threshold: alertthreshold,
-      group1_id: getCategoryId(category),
-      tax_id: tax,
+      tracking_type: formState.inventorytracking === "Tracked" ? 2 : 5,
+      grade: formState.grade,
+      is_bundle: formState.is_bundle,
+      is_archived: formState.isarchived,
+      alert_threshold: formState.alertthreshold,
+      group1_id: getCategoryId(formState.category),
+      tax_id: formState.tax,
     };
     axios
       .put(
@@ -154,39 +179,26 @@ const ProductSizeEdit = () => {
       });
   };
   const deleteProduct = () => {
-    console.log(id);
     axios
       .delete(`https://inventory-dev-295903.appspot.com/products/${id}/`, {
         headers,
       })
       .then((res) => {
         if (res) {
-          getProductSizeData();
+          window.history.back();
+          console.log(res);
         }
       })
       .catch((err) => {
         console.log(err.response.data);
       });
   };
-  const onFinish = (values) => {
-    console.log(values);
-  };
-  function onChange(e) {
-    // setShowTable(e.target.checked);
-    setIsPurchasePack(e.target.checked);
-  }
-  function handleCategoryChange(value) {
-    console.log(value);
-    setCategory(value);
-  }
-  function handleInventoryChange(value, key) {
-    console.log(value);
 
-    setInventoryTracking(value);
+  function onChange(e) {
+    setIsPurchasePack(e.target.checked);
   }
 
   function valueChange(a, b) {
-    console.log("hello2");
     if (!requiresave) {
       setRequireSave(true);
     }
@@ -195,224 +207,272 @@ const ProductSizeEdit = () => {
   const fields = [
     {
       name: ["name"],
-      value: name,
+      value: formState.name,
     },
     {
       name: ["sku"],
-      value: sku,
+      value: formState.sku,
     },
     {
       name: ["printname"],
-      value: printname,
+      value: formState.printname,
     },
     {
       name: ["productuom"],
-      value: productuom,
+      value: formState.productuom,
     },
     {
       name: ["tax"],
-      value: tax !== null ? tax : "default",
+      value: formState.tax !== null ? formState.tax : "default",
     },
     {
       name: ["category"],
-      value: category,
+      value: formState.category,
     },
     {
       name: ["inventorytracking"],
-      value: inventorytracking,
+      value: formState.inventorytracking,
     },
     {
       name: ["alertthreshold"],
-      value: alertthreshold,
+      value: formState.alertthreshold,
     },
     {
       name: ["suppliersku"],
-      value: suppliersku,
+      value: formState.suppliersku,
     },
     {
       name: ["purchaserate"],
-      value: purchaserate,
+      value: formState.purchaserate,
     },
     {
       name: ["purchasecurrency"],
-      value: purchasecurrency,
+      value: formState.purchasecurrency,
     },
     {
       name: ["moq"],
-      value: moq,
+      value: formState.moq,
     },
   ];
+  const handleTextChange = (e) => {
+    dispatch({
+      type: "HANDLE INPUT TEXT",
+      field: e.target.name,
+      payload: e.target.value,
+    });
+  };
+  const handleSelectChange = (value, name) => {
+    dispatch({
+      type: "HANDLE INPUT TEXT",
+      field: name,
+      payload: value,
+    });
+  };
+  const customLabel = (value) => {
+    return <label style={{ fontWeight: "600" }}>{value}</label>;
+  };
   return (
     <React.Fragment>
       <ContentBar
-        title={name}
+        title={formState.name}
         incoming="ProductSizeEdit"
         productSizeObject={productsizedata}
         requireSave={requiresave}
         save={updateProduct}
         delete={deleteProduct}
-        isArchive={isarchived}
+        isArchive={formState.isarchived}
+        isBundle={formState.isbundle}
         setArchive={(value) => setArchive(value)}
       />
-      <Form
-        {...layout}
-        name="nest-messages"
-        onFinish={onFinish}
-        onValuesChange={valueChange}
-        fields={fields}
-      >
-        <Form.Item
-          name="name"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          label="Name"
-        >
-          <Input onChange={(e) => setName(e.target.value)} />
-        </Form.Item>
-        <Form.Item
-          name="sku"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          label="SKU"
-        >
-          <Input onChange={(e) => setSku(e.target.value)} />
-        </Form.Item>
-        <Form.Item name="printname" label="Print Name">
-          <Input onChange={(e) => setPrintName(e.target.value)} />
-        </Form.Item>
-        <Form.Item name="productuom" label="UOM">
-          <Select
-            style={{ width: 150 }}
-            onChange={(value) => setProductUom(value)}
+      <Row>
+        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+          <Form
+            {...layout}
+            name="nest-messages"
+            onValuesChange={valueChange}
+            fields={fields}
           >
-            {getLocalUom().map((uom, index) => (
-              <Option key={index} value={uom}>
-                {uom}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="tax" label="Tax">
-          <Select style={{ width: 150 }} onChange={(value) => setTax(value)}>
-            <Option value="default">Select Tax</Option>
-            {getLocalTax().map((uom, index) => (
-              <Option key={index} value={uom.name}>
-                {uom.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="category" label="Category">
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: "100%" }}
-            placeholder="Please select"
-            onChange={handleCategoryChange}
-          >
-            {getCategory().map((cat, index) => (
-              <Option
-                disabled={
-                  category.length > 0
-                    ? category.includes(cat.name)
-                      ? false
-                      : true
-                    : false
-                }
-                value={cat.name}
-                key={index}
+            <Form.Item
+              name="name"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              label={customLabel("Name")}
+            >
+              <Input name="name" onChange={(e) => handleTextChange(e)} />
+            </Form.Item>
+            <Form.Item
+              name="sku"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              label={customLabel("SKU")}
+            >
+              <Input name="sku" onChange={(e) => handleTextChange(e)} />
+            </Form.Item>
+            <Form.Item name="printname" label={customLabel("Print Name")}>
+              <Input name="printname" onChange={(e) => handleTextChange(e)} />
+            </Form.Item>
+            <Form.Item name="productuom" label={customLabel("UOM")}>
+              <Select
+                style={{ width: 150 }}
+                onChange={(value) => handleSelectChange(value, "productuom")}
               >
-                {cat.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="inventorytracking" label="Inventory Tracking">
-          <Select
-            mode="multiple"
-            allowClear
-            style={{ width: "100%" }}
-            placeholder="Please select"
-            onChange={handleInventoryChange}
-          >
-            <Option
-              disabled={
-                inventorytracking.length > 0
-                  ? inventorytracking.includes("Tracked")
-                    ? false
-                    : true
-                  : false
-              }
-              value="Tracked"
-              key={2}
+                {getLocalUom().map((uom, index) => (
+                  <Option key={index} value={uom}>
+                    {uom}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="tax" label={customLabel("Tax")}>
+              <Select
+                style={{ width: 150 }}
+                onChange={(value) => handleSelectChange(value, "tax")}
+              >
+                <Option value="default">Select Tax</Option>
+                {getLocalTax().map((uom, index) => (
+                  <Option key={index} value={uom.id}>
+                    {uom.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="category" label={customLabel("Category")}>
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                onChange={(value) => handleSelectChange(value, "category")}
+              >
+                {getCategory().map((cat, index) => (
+                  <Option
+                    disabled={
+                      formState.category.length > 0
+                        ? formState.category.includes(cat.name)
+                          ? false
+                          : true
+                        : false
+                    }
+                    value={cat.name}
+                    key={index}
+                  >
+                    {cat.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="inventorytracking"
+              label={customLabel("Inventory Tracking")}
             >
-              Tracked
-            </Option>
-            <Option
-              disabled={
-                inventorytracking.length > 0
-                  ? inventorytracking.includes("Not Tracked")
-                    ? false
-                    : true
-                  : false
-              }
-              value="Not Tracked"
-              key={5}
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Please select"
+                onChange={(value) =>
+                  handleSelectChange(value, "inventorytracking")
+                }
+              >
+                <Option
+                  disabled={
+                    formState.inventorytracking.length > 0
+                      ? formState.inventorytracking.includes("Tracked")
+                        ? false
+                        : true
+                      : false
+                  }
+                  value="Tracked"
+                  key={2}
+                >
+                  Tracked
+                </Option>
+                <Option
+                  disabled={
+                    formState.inventorytracking.length > 0
+                      ? formState.inventorytracking.includes("Not Tracked")
+                        ? false
+                        : true
+                      : false
+                  }
+                  value="Not Tracked"
+                  key={5}
+                >
+                  Not Tracked
+                </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="alertthreshold"
+              label={customLabel("Alert Threshold")}
             >
-              Not Tracked
-            </Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name="alertthreshold" label="Alert Threshold">
-          <Input onChange={(e) => setAlertThreshold(e.target.value)} />
-        </Form.Item>
-        <Form.Item label="Tags"></Form.Item>
-        <Form.Item>
-          <h2>Purchase details</h2>
-        </Form.Item>
-
-        <Form.Item name="suppliersku" label="Supplier SKU">
-          <Input onChange={(e) => setSupplierSku(e.target.value)} />
-        </Form.Item>
-        <Form.Item name="purchaserate" label="Purchase Rate">
-          <Input onChange={(e) => setPurchaseRate(e.target.value)} />
-        </Form.Item>
-        <Form.Item name="purchasecurrency" label="Purchase Currency">
-          <Select
-            defaultValue="lucy"
-            onChange={(value) => setPurchaseCurrency(value)}
-          >
-            {data.map((currency, index) => (
-              <Option value={currency.code} key={index}>
-                {currency.code} ({currency.currency})
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="moq" label="MOQ">
-          <Input onChange={(e) => setMoq(e.target.value)} />
-        </Form.Item>
-        <Form.Item label="Purchased in Packs">
-          <Checkbox checked={ispurchasepack} onChange={onChange} />
-          {ispurchasepack ? (
-            <PurchaseinPackTable
-              productId={id}
-              id={sid}
-              packSize={packsize}
-              productUom={productuom}
-              uom={uom}
-              purchaseRate={purchaserate}
-              save={updateProduct}
-            />
+              <Input
+                name="alertthreshold"
+                onChange={(e) => handleTextChange(e)}
+              />
+            </Form.Item>
+            <Form.Item label={customLabel("Tags")}></Form.Item>
+            <Form.Item>
+              <h2>Purchase details</h2>
+            </Form.Item>
+            <Form.Item name="suppliersku" label={customLabel("Supplier SKU")}>
+              <Input name="suppliersku" onChange={(e) => handleTextChange(e)} />
+            </Form.Item>
+            <Form.Item name="purchaserate" label={customLabel("Purchase Rate")}>
+              <Input
+                name="purchaserate"
+                onChange={(e) => handleTextChange(e)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="purchasecurrency"
+              label={customLabel("Purchase Currency")}
+            >
+              <Select
+                onChange={(value) =>
+                  handleSelectChange(value, "purchasecurrency")
+                }
+              >
+                {data.map((currency, index) => (
+                  <Option value={currency.code} key={index}>
+                    {currency.code} ({currency.currency})
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="moq" label={customLabel("MOQ")}>
+              <Input name="moq" onChange={(e) => handleTextChange(e)} />
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={24} xl={6}>
+          {formState.imgurl !== "" ? (
+            <img alt="product_image" width="400px" src={formState.imgurl} />
           ) : null}
-        </Form.Item>
-      </Form>
+        </Col>
+      </Row>
+      <div>
+        <label
+          style={{ fontWeight: "600", marginLeft: "20px", marginRight: "20px" }}
+        >
+          Purchase in Packs:
+        </label>
+        <Checkbox checked={ispurchasepack} onChange={onChange} />
+        {ispurchasepack ? (
+          <PurchaseinPackTable
+            productId={formState.id}
+            productUom={formState.productuom}
+            purchaseRate={formState.purchaserate}
+            save={updateProduct}
+          />
+        ) : null}
+      </div>
     </React.Fragment>
   );
 };

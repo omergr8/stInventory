@@ -38,13 +38,29 @@ const PurchaseinPackTable = (props) => {
       });
   };
   useEffect(() => {
-    fetchPurchasePackData();
+    let unmounted = false;
+    axios
+      .get(
+        `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product_id=${props.productId}`,
+        { headers }
+      )
+      .then((res) => {
+        if (!unmounted) {
+          console.log(res.data);
+          setPackSize(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+    return () => {
+      unmounted = true;
+    };
   }, []);
   useEffect(() => {
     setTableData(data);
   }, [packsize]);
 
-  console.log(data, tabledata);
   const addComponent = () => {
     //  console.log();
     const obj = {
@@ -78,8 +94,8 @@ const PurchaseinPackTable = (props) => {
       });
   };
   const remove = (id, productId) => {
-    // console.log(productId, id);
-    if (productId !== parseInt(props.productId)) {
+    //console.log(productId, id, props.productId);
+    if (id === undefined) {
       var filtered = tabledata.filter(function (el) {
         return el.id !== undefined;
       });
@@ -121,7 +137,9 @@ const PurchaseinPackTable = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        if (err.res !== undefined) {
+          console.log(err.response.data);
+        }
       });
   };
 

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { queryParams } from "../../../../../../../../../Services/ListServices";
-import { Table } from "antd";
-import { Button } from "antd";
+import { Table, Tag, Button } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import classes from "./ProductTable.module.css";
-import Filter from "../Filter/Filter";
+
 const columns = [
   {
     title: "Product	",
     dataIndex: "product",
-    render: (text) => <a>{text}</a>,
+    render: (text, row) => (
+      <Link to={`/dashboard/productpacksize/edit/${row.id}`}>{text}</Link>
+    ),
   },
   {
     title: "Sumtracker SKU",
@@ -39,14 +40,7 @@ const columns = [
   {
     title: "Properties",
     dataIndex: "properties",
-    render: (text) =>
-      text ? (
-        <div className={classes.bundle}>
-          <label>{text}</label>
-        </div>
-      ) : (
-        ""
-      ),
+    render: (text) => (text ? <Tag color="#87d068">{text}</Tag> : ""),
   },
   {
     title: "Last Update Time",
@@ -103,6 +97,7 @@ const ProductTable = (props) => {
     data = [
       product.results.map((product, index) => ({
         key: index,
+        id: product.product.id,
         product: product.product.name,
         sumtracker: product.product.sku,
         remote: product.remote_id,

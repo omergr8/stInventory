@@ -40,6 +40,7 @@ const ProductSizeTable = (props) => {
   const [packsize, setPackSize] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
+  const [didMount, setDidMount] = useState(false);
   const [url, setUrl] = useState(
     `https://inventory-dev-295903.appspot.com/products/pack_sizes/`
   );
@@ -71,15 +72,21 @@ const ProductSizeTable = (props) => {
     props.productTableMethod_ref.current = getQueryParams;
   }, [props]);
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(url, {
         headers,
       })
       .then((res) => {
         const packSizeData = res.data;
-        setPackSize(packSizeData);
-        totalPages(packSizeData);
+        if (!unmounted) {
+          setPackSize(packSizeData);
+          totalPages(packSizeData);
+        }
       });
+    return () => {
+      unmounted = true;
+    };
   }, [url]);
   let data;
   if (packsize.results !== undefined) {

@@ -61,6 +61,24 @@ export const dateFormatter = (value) => {
   var date = new Date(value);
   return moment(date).format("YYYY-DD-MM HH:mm");
 };
+export const getWarehouse = (value) => {
+  const getMeta = JSON.parse(localStorage.getItem("meta-data"));
+  const result = getMeta.warehouses.filter((obj) => obj.id === value);
+  //console.log(value, getMeta.warehouses, result);
+  if (result[0] !== undefined) {
+    return result[0].name;
+  } else {
+    return value;
+  }
+};
+export const getDocumentPrefix = (value) => {
+  const getMeta = JSON.parse(localStorage.getItem("meta-data"));
+  const result = getMeta.document_types.filter(
+    (obj) => obj.id === parseInt(value, 10)
+  );
+
+  return result[0].prefix;
+};
 export const queryParams = (props) => {
   let queryParams;
   if (

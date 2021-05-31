@@ -132,7 +132,7 @@ const Setting = () => {
               </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
-              <a href="!" className={classes.anchor}>
+              <Link className={classes.anchor} to="/dashboard/documents-prints">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaPrint />
@@ -145,7 +145,7 @@ const Setting = () => {
                     </p>
                   </div>
                 </div>
-              </a>
+              </Link>
             </Col>
             <Col lg={{ span: 7, offset: 1 }}>
               <Link
