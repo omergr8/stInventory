@@ -7,6 +7,7 @@ import {
 } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import DocumentDetails from "./Components/DocumentDetails/DocumentDetails";
+import PrintConfigs from "./Components/PrintConfigs/PrintConfigs";
 import { Tabs } from "antd";
 
 const { TabPane } = Tabs;
@@ -69,7 +70,10 @@ const DocumentTypeEdit = () => {
           />
         </TabPane>
         <TabPane tab="Print Configs" key="2">
-          Content of Tab Pane 2
+          <PrintConfigs
+            fetchDocument={fetchDocument}
+            documentData={printconfig}
+          />
         </TabPane>
       </Tabs>
     </div>
