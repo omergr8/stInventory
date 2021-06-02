@@ -20,7 +20,7 @@ const Setting = () => {
       <Box>
         <div className={classes.wrapper}>
           <Row>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/product-listing">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -36,7 +36,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/default-setting">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -52,7 +52,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/warehouses">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -68,7 +68,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/warehouselinks">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -84,7 +84,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/tax-list">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -98,7 +98,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/product-category">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -112,7 +112,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link
                 className={classes.anchor}
                 to="/dashboard/product-pack-size"
@@ -131,7 +131,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link className={classes.anchor} to="/dashboard/documents-prints">
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -147,7 +147,7 @@ const Setting = () => {
                 </div>
               </Link>
             </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
+            <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link
                 className={classes.anchor}
                 to="/dashboard/archieved-product"

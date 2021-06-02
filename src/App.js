@@ -18,20 +18,6 @@ function App() {
 
         <PrivateRoute path="/dashboard" component={Dashboard} />
         {!token ? <Redirect to="/login" /> : <Redirect to="/dashboard" />}
-        {/* <Route path="/dashboard" component={Dashboard} /> */}
-        {/* {token ? <Route path="/dashboard" component={Dashboard} /> : null} */}
-        {/* {token ? <Redirect to="/dashboard" /> : <Redirect to="/login" />} */}
-
-        {/* {token ? (
-          <React.Fragment>
-            <Route path="/dashboard" component={Dashboard} />
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            
-            <Redirect to="/login" />
-          </React.Fragment>
-        )} */}
       </Switch>
     </BrowserRouter>
   );

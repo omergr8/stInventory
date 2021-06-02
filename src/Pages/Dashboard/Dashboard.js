@@ -1,5 +1,6 @@
 import Content from "./sections/Content/Content";
 import { useHistory } from "react-router-dom";
+import React from "react";
 import { Spin, Alert, notification } from "antd";
 import Navbar from "../Common/Navbar/Navbar";
 import Sidebar from "../Common/Sidebar/Sidebar";
@@ -41,10 +42,12 @@ const Dashboard = () => {
     <div>
       <Layout>
         <Navbar />
-      </Layout>
-      <Layout style={{ marginTop: "52px" }}>
-        <Sidebar routes={routes} />
-        <Content>{switchRoutes}</Content>
+        <Layout style={{ marginTop: "53px" }}>
+          <Sidebar routes={routes} />
+          <Layout style={{ marginTop: "" }}>
+            <Content>{switchRoutes}</Content>
+          </Layout>
+        </Layout>
       </Layout>
     </div>
   );

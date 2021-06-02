@@ -5,7 +5,7 @@ const ContentDash = (props) => {
   return (
     <Layout
       className="site-layout"
-      style={{ marginLeft: 200, backgroundColor: "#FAFAFA" }}
+      style={{ marginLeft: 190, backgroundColor: "#FAFAFA" }}
     >
       <Breadcrumb style={{ margin: "26px 26px" }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>

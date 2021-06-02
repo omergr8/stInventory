@@ -270,6 +270,7 @@ const ContentBar = (props) => {
       style={{ marginBottom: "30px" }}
     >
       <PageHeader
+        style={{ backgroundColor: "#F5F5F5" }}
         ghost={false}
         onBack={() => window.history.back()}
         title={

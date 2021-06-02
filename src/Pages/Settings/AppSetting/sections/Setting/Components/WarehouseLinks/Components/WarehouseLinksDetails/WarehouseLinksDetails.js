@@ -4,13 +4,13 @@ import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import { Form, Input, Button, Select, notification } from "antd";
+import { Form, Input, Button, Select, notification, Row, Col } from "antd";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const { Option } = Select;
 const layout = {
   labelCol: {
-    span: 7,
+    span: 12,
   },
   wrapperCol: {
     span: 11,
@@ -18,7 +18,7 @@ const layout = {
 };
 const tailLayout = {
   wrapperCol: {
-    offset: 10,
+    offset: 12,
     span: 16,
   },
 };
@@ -154,66 +154,77 @@ export const WarehouseLinksDetails = () => {
       <div style={{ marginBottom: "60px" }}>
         <ContentBar title="Warehouse" />
       </div>
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-        <Form.Item label={customLabel("Channel")}>
-          <MetaFind id={channel} incoming="WarehouseDetailsChannel" />
-        </Form.Item>
-        <Form.Item label={customLabel("Channel Name")}>
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Please select"
-            value={<MetaFind id={channel} incoming="WarehouseDetailsChannel" />}
-            disabled
+      <Row>
+        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+          <Form
+            {...layout}
+            form={form}
+            name="control-hooks"
+            onFinish={onFinish}
           >
-            <Option key={1}>
+            <Form.Item label={customLabel("Channel")}>
               <MetaFind id={channel} incoming="WarehouseDetailsChannel" />
-            </Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label={customLabel("Sumtracker Warehouse")}>
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Please select"
-            onChange={handleChange}
-            defaultValue={1}
-          >
-            <Option value={1} key={1}>
-              {sumtrackerwarehouse}
-            </Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label={customLabel("Shopify Location")}>
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Please select"
-            defaultValue={1}
-            onFocus={() => onFocus(shopifylocationid)}
-          >
-            <Option value={1} key={1}>
-              {sumtrackerwarehouse}
-            </Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label={customLabel("Priority")}>
-          <Input
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-          />
-        </Form.Item>
+            </Form.Item>
+            <Form.Item label={customLabel("Channel Name")}>
+              <Select
+                mode="multiple"
+                allowClear
+                placeholder="Please select"
+                value={
+                  <MetaFind id={channel} incoming="WarehouseDetailsChannel" />
+                }
+                disabled
+              >
+                <Option key={1}>
+                  <MetaFind id={channel} incoming="WarehouseDetailsChannel" />
+                </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label={customLabel("Sumtracker Warehouse")}>
+              <Select
+                mode="multiple"
+                allowClear
+                placeholder="Please select"
+                onChange={handleChange}
+                defaultValue={1}
+              >
+                <Option value={1} key={1}>
+                  {sumtrackerwarehouse}
+                </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label={customLabel("Shopify Location")}>
+              <Select
+                mode="multiple"
+                allowClear
+                placeholder="Please select"
+                defaultValue={1}
+                onFocus={() => onFocus(shopifylocationid)}
+              >
+                <Option value={1} key={1}>
+                  {sumtrackerwarehouse}
+                </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label={customLabel("Priority")}>
+              <Input
+                value={priority}
+                onChange={(e) => setPriority(e.target.value)}
+              />
+            </Form.Item>
 
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
+            <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
 
-          <Button icon={<RiDeleteBinLine />} htmlType="button">
-            Delete
-          </Button>
-        </Form.Item>
-      </Form>
+              <Button icon={<RiDeleteBinLine />} htmlType="button">
+                Delete
+              </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
     </div>
   );
 };

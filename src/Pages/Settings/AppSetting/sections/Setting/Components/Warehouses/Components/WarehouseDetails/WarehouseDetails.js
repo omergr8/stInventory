@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button, notification, Row, Col } from "antd";
 import { FcAddressBook } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const layout = {
   labelCol: {
-    span: 7,
+    span: 10,
   },
   wrapperCol: {
     span: 11,
@@ -140,41 +140,50 @@ const WarehouseDetails = () => {
       <div style={{ marginBottom: "60px" }}>
         <ContentBar title="Warehouse" />
       </div>
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-        <Form.Item label={customLabel("Warehouse Name")}>
-          <Input
-            value={warehousename}
-            onChange={(e) => setWarehouseName(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item label={customLabel("Warehouse Code")}>
-          <Input
-            value={warehousecode}
-            onChange={(e) => setWarehouseCode(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item label={customLabel("Address")}>
-          <Input
-            addonAfter={<FcAddressBook />}
-            value={warehouseaddress}
-            disabled
-          />
-        </Form.Item>
-
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-          {undoButton()}
-          <Button
-            onClick={() => onEdit("archive")}
-            icon={<RiDeleteBinLine />}
-            htmlType="button"
+      <Row>
+        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+          <Form
+            {...layout}
+            form={form}
+            name="control-hooks"
+            onFinish={onFinish}
           >
-            Delete
-          </Button>
-        </Form.Item>
-      </Form>
+            <Form.Item label={customLabel("Warehouse Name")}>
+              <Input
+                value={warehousename}
+                onChange={(e) => setWarehouseName(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item label={customLabel("Warehouse Code")}>
+              <Input
+                value={warehousecode}
+                onChange={(e) => setWarehouseCode(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item label={customLabel("Address")}>
+              <Input
+                addonAfter={<FcAddressBook />}
+                value={warehouseaddress}
+                disabled
+              />
+            </Form.Item>
+
+            <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+              {undoButton()}
+              <Button
+                onClick={() => onEdit("archive")}
+                icon={<RiDeleteBinLine />}
+                htmlType="button"
+              >
+                Delete
+              </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
     </div>
   );
 };

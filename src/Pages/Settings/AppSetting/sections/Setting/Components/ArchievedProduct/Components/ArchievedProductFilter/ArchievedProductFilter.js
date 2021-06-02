@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, notification, Select, Divider } from "antd";
+import { Form, Input, notification, Select, Divider, Row, Col } from "antd";
 import ArchievedProductTable from "../ArchievedProductTable/ArchievedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import { getToken } from "../../../../../../../../../Services/ListServices";
@@ -80,7 +80,6 @@ const ArchievedProductFilter = () => {
         title="Archived Products List"
       />
       <Form
-        layout="inline"
         name="basic"
         initialValues={{
           remember: true,
@@ -88,61 +87,69 @@ const ArchievedProductFilter = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Form.Item
-          label="Product"
-          name="product"
-          rules={[
-            {
-              required: false,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Select
-            mode="multiple"
-            showSearch
-            allowClear
-            style={{ width: "400px" }}
-            placeholder="Search product/sku"
-            optionFilterProp="children"
-            onChange={onChangeProduct}
-            onFocus={fetchSearchData}
-            onSearch={onSearch}
-          >
-            {searchData.map((res, index) => (
-              <Option
-                key={index}
-                value={res.id}
-                disabled={
-                  productid !== undefined
-                    ? optionsSelected.includes(res.name)
-                      ? false
-                      : true
-                    : false
-                }
+        <Row gutter={18}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={10} key={1}>
+            <Form.Item
+              label="Product"
+              name="product"
+              rules={[
+                {
+                  required: false,
+                  message: "Please input your username!",
+                },
+              ]}
+              labelCol={{ span: 24 }}
+            >
+              <Select
+                mode="multiple"
+                showSearch
+                allowClear
+                style={{ width: "400px" }}
+                placeholder="Search product/sku"
+                optionFilterProp="children"
+                onChange={onChangeProduct}
+                onFocus={fetchSearchData}
+                onSearch={onSearch}
               >
-                {res.name}/ {res.print_name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Search"
-          name="search"
-          rules={[
-            {
-              required: false,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input
-            style={{ width: "300px" }}
-            placeholder="Any part of product name/sku"
-            value={searchinput}
-            onChange={(e) => setSearchInput(e.target.value)}
-          />
-        </Form.Item>
+                {searchData.map((res, index) => (
+                  <Option
+                    key={index}
+                    value={res.id}
+                    disabled={
+                      productid !== undefined
+                        ? optionsSelected.includes(res.name)
+                          ? false
+                          : true
+                        : false
+                    }
+                  >
+                    {res.name}/ {res.print_name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={10} key={2}>
+            <Form.Item
+              label="Search"
+              name="search"
+              rules={[
+                {
+                  required: false,
+                  message: "Please input your username!",
+                },
+              ]}
+              labelCol={{ span: 24 }}
+            >
+              <Input
+                style={{ width: "300px" }}
+                placeholder="Any part of product name/sku"
+                value={searchinput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
       <Divider />
       <div>

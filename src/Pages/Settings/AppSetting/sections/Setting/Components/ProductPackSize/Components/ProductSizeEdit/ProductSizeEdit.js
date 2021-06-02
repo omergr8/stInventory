@@ -18,10 +18,10 @@ var data = require("currency-codes/data");
 const { Option } = Select;
 const layout = {
   labelCol: {
-    span: 4,
+    span: 10,
   },
   wrapperCol: {
-    span: 10,
+    span: 15,
   },
 };
 
@@ -478,7 +478,12 @@ const ProductSizeEdit = () => {
       </Row>
       <div>
         <label
-          style={{ fontWeight: "600", marginLeft: "20px", marginRight: "20px" }}
+          style={{
+            fontWeight: "600",
+            fontSize: "16px",
+            marginLeft: "20px",
+            marginRight: "10px",
+          }}
         >
           Purchase in Packs:
         </label>

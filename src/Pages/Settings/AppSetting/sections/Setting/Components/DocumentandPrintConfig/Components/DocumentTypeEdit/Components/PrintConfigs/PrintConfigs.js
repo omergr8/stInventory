@@ -1,4 +1,13 @@
-import { Form, notification, Input, Button, Checkbox, Divider } from "antd";
+import {
+  Form,
+  notification,
+  Input,
+  Button,
+  Checkbox,
+  Divider,
+  Row,
+  Col,
+} from "antd";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -8,16 +17,15 @@ const { TextArea } = Input;
 const { Search } = Input;
 const layout = {
   labelCol: {
-    span: 8,
+    span: 11,
   },
   wrapperCol: {
-    span: 8,
+    span: 10,
   },
 };
 const tailLayout = {
   wrapperCol: {
-    offset: 8,
-    span: 16,
+    offset: 10,
   },
 };
 const initialFormState = {
@@ -146,174 +154,181 @@ const PrintConfigs = (props) => {
   };
   return (
     <div>
-      <Form
-        {...layout}
-        name="basic"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={save}
-      >
-        <Form.Item label={customLabel("Name to Print")}>
-          <Input
-            value={checkedItems["name"]}
-            onChange={handleInputChange}
-            name="name"
-          />
-        </Form.Item>
+      <Row>
+        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+          <Form
+            {...layout}
+            name="basic"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={save}
+          >
+            <Form.Item label={customLabel("Name to Print")}>
+              <Input
+                value={checkedItems["name"]}
+                onChange={handleInputChange}
+                name="name"
+              />
+            </Form.Item>
 
-        <Form.Item label={customLabel("Footer Terms")}>
-          {footerterms !== undefined
-            ? footerterms.map((data, index) => (
-                <div key={index}>
-                  <div
-                    style={{
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <Search
-                      placeholder="input search text"
-                      enterButton="Delete"
-                      size="large"
-                      value={data[0]}
-                      onSearch={() => remove(index)}
-                      onChange={(e) => handleFooter(e, index)}
-                      name="key"
-                    />
-                  </div>
-                  <div style={{ paddingBottom: "10px" }}>
-                    <TextArea
-                      name="value"
-                      onChange={(e) => handleFooter(e, index)}
-                      value={data[1]}
-                      rows={4}
-                    />
-                  </div>
-                </div>
-              ))
-            : null}
+            <Form.Item label={customLabel("Footer Terms")}>
+              {footerterms !== undefined
+                ? footerterms.map((data, index) => (
+                    <div key={index}>
+                      <div
+                        style={{
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <Search
+                          placeholder="input search text"
+                          enterButton="Delete"
+                          size="large"
+                          value={data[0]}
+                          onSearch={() => remove(index)}
+                          onChange={(e) => handleFooter(e, index)}
+                          name="key"
+                        />
+                      </div>
+                      <div style={{ paddingBottom: "10px" }}>
+                        <TextArea
+                          name="value"
+                          onChange={(e) => handleFooter(e, index)}
+                          value={data[1]}
+                          rows={4}
+                        />
+                      </div>
+                    </div>
+                  ))
+                : null}
 
-          <div>
-            <Button onClick={addFooter}>Add Footer Terms</Button>
-          </div>
-        </Form.Item>
-        <Form.Item></Form.Item>
-        <Divider>
-          <h4>Header & Footer</h4>
-        </Divider>
-        <Form.Item label={customLabel("Header Height")}>
-          <Input
-            value={checkedItems.print_config["header_height"]}
-            onChange={handleInputChange}
-            name="header_height"
-          />
-        </Form.Item>
-        <Form.Item label={customLabel("Custom Header")} name="remember">
-          <Checkbox
-            name="is_custom_header"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_custom_header"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("Footer Height")}>
-          <Input
-            value={checkedItems.print_config["footer_height"]}
-            onChange={handleInputChange}
-            name="footer_height"
-          />
-        </Form.Item>
-        <Form.Item label={customLabel("Custom Footer")} name="remember">
-          <Checkbox
-            name="is_custom_footer"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_custom_footer"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Divider>
-          <h4>Print information</h4>
-        </Divider>
-        <Form.Item label={customLabel("Amount in Words")} name="remember">
-          <Checkbox
-            name="is_amount_in_words"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_amount_in_words"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("SKU")} name="remember">
-          <Checkbox
-            name="is_print_sku"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_print_sku"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("Product Description")} name="remember">
-          <Checkbox
-            name="is_print_description"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_print_description"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("UOM")} name="remember">
-          <Checkbox
-            name="is_print_uom"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_print_uom"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("Supplier SKU")} name="remember">
-          <Checkbox
-            name="is_print_supplier_sku"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_print_supplier_sku"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("Dispatch Address")} name="remember">
-          <Checkbox
-            name="is_dispatch_address"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_dispatch_address"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("Payment Terms")} name="remember">
-          <Checkbox
-            name="is_print_payment_terms"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_print_payment_terms"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item label={customLabel("Tax columns")} name="remember">
-          <Checkbox
-            name="is_print_tax_columns"
-            onChange={handleChange}
-            checked={checkedItems.print_config["is_print_tax_columns"]}
-          >
-            Remember me
-          </Checkbox>
-        </Form.Item>
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+              <div>
+                <Button onClick={addFooter}>Add Footer Terms</Button>
+              </div>
+            </Form.Item>
+            <Form.Item></Form.Item>
+            <Divider>
+              <h4>Header & Footer</h4>
+            </Divider>
+            <Form.Item label={customLabel("Header Height")}>
+              <Input
+                value={checkedItems.print_config["header_height"]}
+                onChange={handleInputChange}
+                name="header_height"
+              />
+            </Form.Item>
+            <Form.Item label={customLabel("Custom Header")} name="remember">
+              <Checkbox
+                name="is_custom_header"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_custom_header"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("Footer Height")}>
+              <Input
+                value={checkedItems.print_config["footer_height"]}
+                onChange={handleInputChange}
+                name="footer_height"
+              />
+            </Form.Item>
+            <Form.Item label={customLabel("Custom Footer")} name="remember">
+              <Checkbox
+                name="is_custom_footer"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_custom_footer"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Divider>
+              <h4>Print information</h4>
+            </Divider>
+            <Form.Item label={customLabel("Amount in Words")} name="remember">
+              <Checkbox
+                name="is_amount_in_words"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_amount_in_words"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("SKU")} name="remember">
+              <Checkbox
+                name="is_print_sku"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_print_sku"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item
+              label={customLabel("Product Description")}
+              name="remember"
+            >
+              <Checkbox
+                name="is_print_description"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_print_description"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("UOM")} name="remember">
+              <Checkbox
+                name="is_print_uom"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_print_uom"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("Supplier SKU")} name="remember">
+              <Checkbox
+                name="is_print_supplier_sku"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_print_supplier_sku"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("Dispatch Address")} name="remember">
+              <Checkbox
+                name="is_dispatch_address"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_dispatch_address"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("Payment Terms")} name="remember">
+              <Checkbox
+                name="is_print_payment_terms"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_print_payment_terms"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item label={customLabel("Tax columns")} name="remember">
+              <Checkbox
+                name="is_print_tax_columns"
+                onChange={handleChange}
+                checked={checkedItems.print_config["is_print_tax_columns"]}
+              >
+                Remember me
+              </Checkbox>
+            </Form.Item>
+            <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
     </div>
   );
 };

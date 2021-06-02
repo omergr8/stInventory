@@ -104,9 +104,9 @@ const Filter = () => {
         name="advanced_search"
         className="ant-advanced-search-form"
       >
-        <Row gutter={18}>
-          <Col span={9} key={1}>
-            <Form.Item name="Product" label="Product">
+        <Row gutter={10}>
+          <Col span={8} key={1}>
+            <Form.Item name="Product" labelCol={{ span: 24 }} label="Product">
               <Select
                 mode="multiple"
                 showSearch
@@ -135,8 +135,8 @@ const Filter = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={5} key={2}>
-            <Form.Item name="Channel " label="Channel">
+          <Col span={4} key={2}>
+            <Form.Item name="Channel " labelCol={{ span: 24 }} label="Channel">
               <Select
                 mode="multiple"
                 allowClear
@@ -161,8 +161,13 @@ const Filter = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={5} key={3}>
-            <Form.Item name="Tracking Type " label="Tracking Type">
+          <Col span={4} key={3}>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              name="Tracking Type "
+              label="Tracking Type"
+            >
               <Select
                 mode="multiple"
                 allowClear
@@ -204,8 +209,13 @@ const Filter = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={5} key={4}>
-            <Form.Item name="Inventory Sync" label="Inventory Sync">
+          <Col span={4} key={4}>
+            <Form.Item
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              name="Inventory Sync"
+              label="Inventory Sync"
+            >
               <Select defaultValue="all" onChange={onChangeInventory}>
                 <Option>All</Option>
                 <Option value={true}>Sync On</Option>
