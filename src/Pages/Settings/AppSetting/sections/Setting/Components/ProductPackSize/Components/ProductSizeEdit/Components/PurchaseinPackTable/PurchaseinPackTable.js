@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../../../Services/ListServices";
-import { Table, Input, Button, Space, Form, Modal } from "antd";
-import { ImCancelCircle } from "react-icons/im";
+import { Table, Input, Button, notification } from "antd";
 import { RiSave3Fill } from "react-icons/ri";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import Text from "antd/lib/typography/Text";
 
 const PurchaseinPackTable = (props) => {
   const headers = getToken();
   const [packsize, setPackSize] = useState([]);
-  //   const [uom, setUom] = useState(props.uom);
-  //   const [purchaserate, setPurchaseRate] = useState(props.purchaseRate);
   const data = packsize.map((data, index) => ({
     key: data.id,
     id: data.id,
@@ -23,6 +19,19 @@ const PurchaseinPackTable = (props) => {
     purchaserate: data.purchase_rate,
   }));
   const [tabledata, setTableData] = useState([]);
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   const fetchPurchasePackData = () => {
     axios
       .get(
@@ -30,11 +39,10 @@ const PurchaseinPackTable = (props) => {
         { headers }
       )
       .then((res) => {
-        console.log(res.data);
         setPackSize(res.data);
       })
       .catch((err) => {
-        console.log(err.response.data);
+        Alert("bottomRight", "error", err.response);
       });
   };
   useEffect(() => {
@@ -46,12 +54,11 @@ const PurchaseinPackTable = (props) => {
       )
       .then((res) => {
         if (!unmounted) {
-          console.log(res.data);
           setPackSize(res.data);
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        Alert("bottomRight", "error", err.response);
       });
     return () => {
       unmounted = true;
@@ -62,7 +69,6 @@ const PurchaseinPackTable = (props) => {
   }, [packsize]);
 
   const addComponent = () => {
-    //  console.log();
     const obj = {
       key:
         tabledata[tabledata.length - 1] === undefined
@@ -86,23 +92,20 @@ const PurchaseinPackTable = (props) => {
     axios
       .delete(url, { headers })
       .then((res) => {
-        console.log(res);
+        Alert("bottomRight", "success", "Deleted Successfully.");
         fetchPurchasePackData();
       })
       .catch((err) => {
-        console.log(err.response.data);
+        Alert("bottomRight", "error", err.response);
       });
   };
   const remove = (id, productId) => {
-    //console.log(productId, id, props.productId);
     if (id === undefined) {
       var filtered = tabledata.filter(function (el) {
         return el.id !== undefined;
       });
-      //console.log("if", tabledata, id, filtered);
       setTableData(filtered);
     } else {
-      console.log("else");
       deletePackSize(
         `https://inventory-dev-295903.appspot.com/products/pack_sizes/${id}/`
       );
@@ -112,7 +115,6 @@ const PurchaseinPackTable = (props) => {
     let copyPackSize = [...packsize];
 
     const index = copyPackSize.findIndex((x) => x.id === data.id);
-    console.log(copyPackSize, copyPackSize, index);
     copyPackSize[index] = data;
     setPackSize(copyPackSize);
   };
@@ -123,13 +125,10 @@ const PurchaseinPackTable = (props) => {
       size: rowObject.packsize,
       purchase_rate: rowObject.purchaserate,
     };
-    console.log(packSizeObject);
     axios
       .post(url, packSizeObject, { headers })
       .then((res) => {
-        console.log(res);
         if (res) {
-          //updatePackData(res.data);
           const copyPackSizeArray = [...packsize];
           copyPackSizeArray.push(res.data);
           setPackSize(copyPackSizeArray);
@@ -138,7 +137,7 @@ const PurchaseinPackTable = (props) => {
       })
       .catch((err) => {
         if (err.res !== undefined) {
-          console.log(err.response.data);
+          Alert("bottomRight", "error", err.response);
         }
       });
   };
@@ -150,31 +149,29 @@ const PurchaseinPackTable = (props) => {
       size: rowObject.packsize,
       purchase_rate: rowObject.purchaserate,
     };
-    console.log(packSizeObject);
     axios
       .put(url, packSizeObject, { headers })
       .then((res) => {
-        console.log(res.data);
         if (res) {
+          Alert("bottomRight", "success", "Product Updated");
           updatePackData(res.data);
           props.save();
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        if (err.res !== undefined) {
+          Alert("bottomRight", "error", err.response);
+        }
       });
   };
   const save = (id, productId) => {
     const findRow = tabledata.find((sid) => sid.key === productId);
-    console.log(id, productId, tabledata, findRow);
     if (id !== undefined) {
-      console.log("update");
       putPackSize(
         `https://inventory-dev-295903.appspot.com/products/pack_sizes/${id}/`,
         findRow
       );
     } else {
-      console.log("new");
       postPackSize(
         `https://inventory-dev-295903.appspot.com/products/pack_sizes/`,
         findRow
@@ -186,7 +183,6 @@ const PurchaseinPackTable = (props) => {
     let index = copyArray.findIndex(
       (x) => x.key === parseInt(value.target.name)
     );
-    console.log(copyArray, index, parseInt(value.target.name), "a");
     let newObj;
     if (copyArray[index] !== undefined) {
       newObj = {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { queryParams } from "../../../../../../../../../Services/ListServices";
-import { Table, Tag, Button } from "antd";
+import { Table, Tag, Button, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import MetaFind from "../../../../../MetaFind/MetaFind";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 import classes from "./ProductTable.module.css";
 
 const columns = [
@@ -49,20 +50,21 @@ const columns = [
 ];
 
 const ProductTable = (props) => {
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const headers = getToken();
   const [product, setProduct] = useState({});
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const [url, setUrl] = useState(
     `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archieved=False`
   );
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
-  };
 
+  const errorAlert = (placement, error) => {
+    notification.error({
+      message: `Error Code: ${error.status} `,
+      description: [JSON.stringify(error.data)],
+      placement,
+    });
+  };
   const totalPages = (product) => {
     if (product.next !== null) {
       setNextButton(false);
@@ -80,16 +82,27 @@ const ProductTable = (props) => {
     let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archieved=False${queryParamsList}`;
     setUrl(url);
   };
-  React.useEffect(() => {
+  useEffect(() => {
     props.productTableMethod_ref.current = getQueryParams;
   }, [props]);
 
   useEffect(() => {
-    axios.get(url, { headers }).then((res) => {
-      const productLinks = res.data;
-      setProduct(productLinks);
-      totalPages(productLinks);
-    });
+    let unmounted = false;
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        if (!unmounted) {
+          const productLinks = res.data;
+          setProduct(productLinks);
+          totalPages(productLinks);
+        }
+      })
+      .catch((err) => {
+        errorAlert("bottomRight", err.response);
+      });
+    return () => {
+      unmounted = true;
+    };
   }, [url]);
 
   let data;
@@ -117,11 +130,22 @@ const ProductTable = (props) => {
   }
 
   const getPageData = (url) => {
-    axios.get(url, { headers }).then((res) => {
-      const productLinks = res.data;
-      setProduct(productLinks);
-      totalPages(productLinks);
-    });
+    let unmounted = false;
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        if (!unmounted) {
+          const productLinks = res.data;
+          setProduct(productLinks);
+          totalPages(productLinks);
+        }
+      })
+      .catch((err) => {
+        errorAlert("bottomRight", err.response);
+      });
+    return () => {
+      unmounted = true;
+    };
   };
   const handleTableChange = (pagination, filters, sorter) => {
     if (pagination === "next") {

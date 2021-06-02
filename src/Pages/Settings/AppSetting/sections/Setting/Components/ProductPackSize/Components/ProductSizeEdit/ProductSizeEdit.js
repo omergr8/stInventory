@@ -12,7 +12,7 @@ import {
 import formReducer from "../../../../../../../../../Reducers/FormReducer";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import PurchaseinPackTable from "./Components/PurchaseinPackTable/PurchaseinPackTable";
-import { Form, Input, Select, Button, Checkbox, Row, Col } from "antd";
+import { Form, Input, Select, notification, Checkbox, Row, Col } from "antd";
 var data = require("currency-codes/data");
 
 const { Option } = Select;
@@ -24,9 +24,7 @@ const layout = {
     span: 10,
   },
 };
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
+
 const initialFormState = {
   id: "",
   name: "",
@@ -55,7 +53,20 @@ const ProductSizeEdit = () => {
   const [requiresave, setRequireSave] = useState(false);
   const [productsizedata, setProductSizeData] = useState([]);
   const [ispurchasepack, setIsPurchasePack] = useState(Boolean);
-  const [isarchived, setIsArchived] = useState(Boolean);
+
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error" && error !== undefined)
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
 
   const callDispatcher = (data, name) => {
     dispatch({
@@ -92,52 +103,59 @@ const ProductSizeEdit = () => {
     callDispatcher(data.is_bundle, "isbundle");
     callDispatcher(data.grade, "grade");
     setIsPurchasePack(data.is_purchased_in_pack);
-    //setIsArchived(data.is_archived);
-    // setPackSize(data.size);
-    //setUom(data.uom);
-    //setSid(data.id);
   };
   const getProductSizeData = () => {
-    // const url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product=${id}`;
     const url = `https://inventory-dev-295903.appspot.com/products/${id}`;
-    axios.get(url, { headers }).then((res) => {
-      const packSizeData = res.data;
-      setStateData(packSizeData);
-      setProductSizeData(packSizeData);
-    });
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        const packSizeData = res.data;
+        setStateData(packSizeData);
+        setProductSizeData(packSizeData);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
   };
   useEffect(() => {
     let unmounted = false;
-    // const url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product=${id}`;
     const url = `https://inventory-dev-295903.appspot.com/products/${id}`;
-    axios.get(url, { headers }).then((res) => {
-      const packSizeData = res.data;
-      if (!unmounted) {
-        console.log(packSizeData);
-        setStateData(packSizeData);
-        setProductSizeData(packSizeData);
-      }
-    });
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        const packSizeData = res.data;
+        if (!unmounted) {
+          setStateData(packSizeData);
+          setProductSizeData(packSizeData);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
     return () => {
       unmounted = true;
     };
   }, []);
   const setArchive = (archive) => {
     let url;
+    let arch;
     if (archive) {
       url = `https://inventory-dev-295903.appspot.com/products/${id}/archive/`;
+      arch = "Product Archived";
     } else {
       url = `https://inventory-dev-295903.appspot.com/products/${id}/undo-archive/`;
+      arch = "Product Un-Archived";
     }
     axios
       .put(url, "t", { headers })
       .then((res) => {
         if (res) {
           getProductSizeData();
+          Alert("bottomRight", "success", arch);
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        Alert("bottomRight", "error", err.response);
       });
   };
   const updateProduct = () => {
@@ -170,12 +188,13 @@ const ProductSizeEdit = () => {
       )
       .then((res) => {
         if (res) {
+          Alert("bottomRight", "success", "Saved");
           setRequireSave(false);
           getProductSizeData();
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        Alert("bottomRight", "error", err.response);
       });
   };
   const deleteProduct = () => {
@@ -185,12 +204,12 @@ const ProductSizeEdit = () => {
       })
       .then((res) => {
         if (res) {
+          Alert("bottomRight", "success", "Deleted Successfully");
           window.history.back();
-          console.log(res);
         }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        Alert("bottomRight", "error", err.response);
       });
   };
 

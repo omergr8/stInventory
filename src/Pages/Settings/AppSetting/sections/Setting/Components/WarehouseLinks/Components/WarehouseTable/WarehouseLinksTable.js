@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 import axios from "axios";
-import WarehouseName from "./Components/WarehouseName/WarehouseName";
-import WarehouseChannel from "./Components/WarehouseChannel/WarehouseChannel";
 import MetaFind from "../../../../../MetaFind/MetaFind";
-import { Table, Tag, Space } from "antd";
-import { getByTestId } from "@testing-library/dom";
+import { Table, notification } from "antd";
 
 const columns = [
   {
@@ -40,17 +38,24 @@ const columns = [
 ];
 
 const WarehouseTable = () => {
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const headers = getToken();
   const [warehouselinks, setWarehouseLinks] = useState([]);
 
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
   };
-
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(
         `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/`,
@@ -59,12 +64,17 @@ const WarehouseTable = () => {
         }
       )
       .then((res) => {
-        const warehouse = res.data;
-        setWarehouseLinks(warehouse);
-        if (warehouse) {
-          console.log(warehouse);
+        if (!unmounted) {
+          const warehouse = res.data;
+          setWarehouseLinks(warehouse);
         }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+    return () => {
+      unmounted = true;
+    };
   }, [setWarehouseLinks]);
 
   const data = [

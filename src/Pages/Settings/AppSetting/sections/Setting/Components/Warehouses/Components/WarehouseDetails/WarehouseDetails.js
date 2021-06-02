@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, notification } from "antd";
 import { FcAddressBook } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 
@@ -26,14 +26,28 @@ const WarehouseDetails = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
   const headers = getToken();
-  const [warehousedetail, setWarehouseDetail] = useState([]);
   const [warehousename, setWarehouseName] = useState("");
   const [warehousecode, setWarehouseCode] = useState("");
   const [warehouseaddress, setWarehouseAddress] = useState("");
   const [isarchive, setIsArchive] = useState(Boolean);
+
   const [onedit, setOnEdit] = useState(true);
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
 
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(
         `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/`,
@@ -42,14 +56,20 @@ const WarehouseDetails = () => {
         }
       )
       .then((res) => {
-        const warehouse = res.data;
-        setWarehouseName(warehouse.name);
-        setWarehouseCode(warehouse.code);
-        setWarehouseAddress(warehouse.address.address_line_1);
-        setIsArchive(warehouse.is_archived);
-        setWarehouseDetail(warehouse);
-        console.log(warehouse);
+        if (!unmounted) {
+          const warehouse = res.data;
+          setWarehouseName(warehouse.name);
+          setWarehouseCode(warehouse.code);
+          setWarehouseAddress(warehouse.address.address_line_1);
+          setIsArchive(warehouse.is_archived);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+    return () => {
+      unmounted = true;
+    };
   }, [onedit]);
 
   const onFinish = (values) => {
@@ -57,7 +77,6 @@ const WarehouseDetails = () => {
       name: warehousename,
       code: warehousecode,
     };
-    console.log(warehouseDetails);
     axios
       .put(
         `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/`,
@@ -65,11 +84,10 @@ const WarehouseDetails = () => {
         { headers }
       )
       .then((res) => {
-        console.log(res);
+        Alert("bottomRight", "success");
       })
       .catch((err) => {
-        // what now?
-        console.log("ensure this field has no more than 20 characters");
+        Alert("bottomRight", "error", err.response);
       });
   };
   const onEdit = (value) => {
@@ -83,9 +101,8 @@ const WarehouseDetails = () => {
         { headers }
       )
       .then((res) => {
-        console.log(res);
+        Alert("bottomRight", "success");
         if (value === "archive") {
-          console.log("1");
           setOnEdit(false);
         } else if (value === "undo-archive") {
           if (onedit) {
@@ -93,19 +110,12 @@ const WarehouseDetails = () => {
           } else {
             setOnEdit(true);
           }
-
-          console.log("2");
         }
       })
       .catch((err) => {
-        // what now?
-        console.log(err);
+        Alert("bottomRight", "error", err.response);
       });
   };
-
-  //   const onReset = () => {
-  //     form.resetFields();
-  //   };
 
   const customLabel = (value) => {
     return <label style={{ fontWeight: "600" }}>{value}</label>;

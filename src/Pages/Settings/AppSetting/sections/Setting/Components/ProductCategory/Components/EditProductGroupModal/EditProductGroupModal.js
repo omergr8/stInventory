@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Modal, Button, Form, Input } from "antd";
+import { Modal, Button, Form, Input, notification } from "antd";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 
 const layout = {
@@ -26,6 +26,19 @@ const EditProductGroupModal = (props) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   const submit = () => {
     const groupObject = {
       name: name,
@@ -40,9 +53,12 @@ const EditProductGroupModal = (props) => {
         }
       )
       .then((res) => {
-        console.log(res);
+        Alert("bottomRight", "success");
         setIsModalVisible(false);
         props.fetchData();
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
 

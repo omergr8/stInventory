@@ -97,7 +97,7 @@ const ContentBar = (props) => {
           Import
         </Dropdown.Button>
         <Button
-          onClick={() => props.productTableMethod_ref.current()}
+          onClick={() => props.addNew()}
           className={classes.margin}
           key="6"
           type="primary"

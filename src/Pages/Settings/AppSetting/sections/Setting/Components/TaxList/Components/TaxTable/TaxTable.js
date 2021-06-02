@@ -1,19 +1,29 @@
-import { Table, Button, Space } from "antd";
+import { Table, Button, Space, notification } from "antd";
 import { AiFillDelete } from "react-icons/ai";
 import React, { useState, useEffect } from "react";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 import EditTaxModal from "../EditTaxModal/EditTaxModal";
 import AddTaxModal from "../AddTaxModel/AddTaxModel";
 import axios from "axios";
 
 const TaxTable = () => {
   const [tax, setTax] = useState([]);
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
+  const headers = getToken();
+
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Tax Deleted.`,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
   };
+
   const onDelete = (id) => {
     axios
       .delete(`https://inventory-dev-295903.appspot.com/settings/taxes/${id}`, {
@@ -21,7 +31,11 @@ const TaxTable = () => {
       })
       .then((res) => {
         console.log(res);
+        Alert("bottomRight", "success");
         fetchTaxData();
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   const fetchTaxData = () => {
@@ -33,10 +47,19 @@ const TaxTable = () => {
         const taxList = res.data;
         setTax(taxList);
         console.log(taxList);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   useEffect(() => {
-    fetchTaxData();
+    let unmounted = false;
+    if (!unmounted) {
+      fetchTaxData();
+    }
+    return () => {
+      unmounted = true;
+    };
   }, []);
   const columns = [
     {

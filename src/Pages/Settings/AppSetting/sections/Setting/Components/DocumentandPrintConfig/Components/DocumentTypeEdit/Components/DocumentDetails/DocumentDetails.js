@@ -1,11 +1,11 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import {
   getToken,
   getWarehouse,
 } from "../../../../../../../../../../../Services/ListServices";
-import { Form, Input, Select, Button } from "antd";
+import { Form, Input, Select, Button, notification } from "antd";
 import formReducer from "../../../../../../../../../../../Reducers/FormReducer";
 
 const { Option } = Select;
@@ -27,6 +27,20 @@ const DocumentDetails = (props) => {
   const [formState, dispatch] = useReducer(formReducer, initialFormState);
   const { id } = useParams();
   const headers = getToken();
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
+
   const callDispatcher = (data, name) => {
     dispatch({
       type: "HANDLE INPUT TEXT",
@@ -92,13 +106,12 @@ const DocumentDetails = (props) => {
       )
       .then((res) => {
         if (res) {
+          Alert("bottomRight", "success", "Settings Updated");
           props.fetchDocument();
         }
       })
       .catch((err) => {
-        if (err.response !== undefined) {
-          console.log(err.response.data);
-        }
+        Alert("bottomRight", "error", err.response);
       });
   };
   return (

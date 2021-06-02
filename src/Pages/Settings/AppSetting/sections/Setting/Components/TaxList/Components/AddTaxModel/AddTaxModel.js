@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-import { Table, Input, Button, Form, Modal } from "antd";
+import { Table, Input, Button, Form, Modal, notification } from "antd";
 import { ImCancelCircle } from "react-icons/im";
 const layout = {
   labelCol: {
@@ -18,6 +18,20 @@ const AddTaxModal = (props) => {
   const headers = getToken();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [taxname, setTaxName] = useState("");
+
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Tax Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   //To handle Change tax input
   const handleChangeTax = (value) => {
     let copyArray = [...tabledata];
@@ -148,8 +162,13 @@ const AddTaxModal = (props) => {
         { headers }
       )
       .then((response) => {
+        console.log(response);
+        Alert("bottomRight", "success");
         setIsModalVisible(false);
         props.fetchData();
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   const showModal = () => {

@@ -1,12 +1,8 @@
-import { Form, Space, Input, Button, Checkbox, Divider } from "antd";
-import React, { useState, useReducer, useEffect } from "react";
+import { Form, notification, Input, Button, Checkbox, Divider } from "antd";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  getToken,
-  getWarehouse,
-} from "../../../../../../../../../../../Services/ListServices";
-import formReducer from "../../../../../../../../../../../Reducers/FormReducer";
+import { getToken } from "../../../../../../../../../../../Services/ListServices";
 
 const { TextArea } = Input;
 const { Search } = Input;
@@ -52,13 +48,34 @@ const PrintConfigs = (props) => {
   const [checkedItems, setCheckedItems] = useState(initialFormState); //plain object as state
   const { id } = useParams();
   const headers = getToken();
-
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   useEffect(() => {
-    setCheckedItems(props.documentData);
-    setFooterTerms(
-      Object.entries(props.documentData.print_config.footer_terms)
-    );
-  }, [props.documentData]);
+    if (props.documentData.print_config !== null) {
+      setCheckedItems(props.documentData);
+      if (props.documentData.print_config.footer_terms !== null) {
+        setFooterTerms(
+          Object.entries(props.documentData.print_config.footer_terms)
+        );
+      }
+    } else {
+      const copyObj = { ...checkedItems };
+      const copyObj2 = props.documentData;
+      copyObj2.print_config = copyObj.print_config;
+      setCheckedItems(copyObj2);
+    }
+  }, [props]);
 
   const customLabel = (value) => {
     return <label style={{ fontWeight: "600" }}>{value}</label>;
@@ -118,13 +135,12 @@ const PrintConfigs = (props) => {
       )
       .then((res) => {
         if (res) {
-          console.log(res);
-          // props.fetchDocument();
+          Alert("bottomRight", "success", "Print Settings Saved");
         }
       })
       .catch((err) => {
         if (err.response !== undefined) {
-          console.log(err.response.data);
+          Alert("bottomRight", "error", err.response);
         }
       });
   };
@@ -149,7 +165,7 @@ const PrintConfigs = (props) => {
         <Form.Item label={customLabel("Footer Terms")}>
           {footerterms !== undefined
             ? footerterms.map((data, index) => (
-                <div>
+                <div key={index}>
                   <div
                     style={{
                       marginBottom: "10px",

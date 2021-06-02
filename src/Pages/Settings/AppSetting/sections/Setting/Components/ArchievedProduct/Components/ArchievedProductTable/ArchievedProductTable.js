@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import classes from "./ArchievedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
-import { Table, Button } from "antd";
+import { getToken } from "../../../../../../../../../Services/ListServices";
+import { Table, Button, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 const columns = [
   {
@@ -27,16 +28,6 @@ const columns = [
   },
 ];
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-};
-
 const ArchievedProductTable = (props) => {
   const [archievedroduct, setArchievedroduct] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
@@ -44,16 +35,22 @@ const ArchievedProductTable = (props) => {
   const [url, setUrl] = useState(
     `https://inventory-dev-295903.appspot.com/products/?is_archived=true`
   );
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
+  const headers = getToken();
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
   };
 
   const totalPages = (product) => {
-    console.log("total", product.next);
     if (product.next !== null) {
       setNextButton(false);
     } else {
@@ -74,27 +71,33 @@ const ArchievedProductTable = (props) => {
     } else if (props.searchInput === "" && props.productId !== undefined) {
       queryParams = `&${props.productId}`;
     } else {
-      console.log("both filled", props.productId, props.searchInput);
       queryParams = `&search=${props.searchInput}&${props.productId}`;
     }
     let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
-    console.log(url);
     setUrl(url);
   };
   React.useEffect(() => {
     props.archiveProductTableMethod_ref.current = getQueryParams;
   }, [props]);
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(url, {
         headers,
       })
       .then((res) => {
-        const ArchievedProductData = res.data;
-        console.log(ArchievedProductData);
-        setArchievedroduct(ArchievedProductData);
-        totalPages(ArchievedProductData);
+        if (!unmounted) {
+          const ArchievedProductData = res.data;
+          setArchievedroduct(ArchievedProductData);
+          totalPages(ArchievedProductData);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+    return () => {
+      unmounted = true;
+    };
   }, [url]);
   let data;
   if (archievedroduct.results !== undefined) {
@@ -112,14 +115,18 @@ const ArchievedProductTable = (props) => {
     data = data[0];
   }
   const getPageData = (url) => {
-    axios.get(url, { headers }).then((res) => {
-      const packSizeData = res.data;
-      setArchievedroduct(packSizeData);
-
-      totalPages(packSizeData);
-    });
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        const packSizeData = res.data;
+        setArchievedroduct(packSizeData);
+        totalPages(packSizeData);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
   };
-  const handleTableChange = (pagination, filters, sorter) => {
+  const handleTableChange = (pagination) => {
     if (pagination === "next") {
       getPageData(archievedroduct.next);
     } else if (pagination === "previous") {
@@ -151,7 +158,6 @@ const ArchievedProductTable = (props) => {
         pagination={false}
         rowSelection={{
           type: "checkbox",
-          ...rowSelection,
         }}
         columns={columns}
         dataSource={data}

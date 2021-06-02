@@ -1,8 +1,9 @@
-import { Form, Input, Select, Checkbox, Button } from "antd";
+import { Form, Input, Select, Checkbox, Button, notification } from "antd";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CountrySelector from "./Components/CountrySelector/CountrySelector";
 import TimeZoneSelector from "./Components/TimeZoneSelector/TimeZoneSelector";
+import { getToken } from "../../../../../../../Services/ListServices";
 const { Option } = Select;
 const layout = {
   labelCol: {
@@ -14,7 +15,7 @@ const layout = {
 };
 
 const DefaultSettings = () => {
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const headers = getToken();
   const [defaultSettings, setDefaultSettings] = useState({});
   const [country, setCountry] = useState("");
   const [timezone, setTimeZone] = useState("");
@@ -22,11 +23,19 @@ const DefaultSettings = () => {
   const [clientsetting, setClientSetting] = useState([]);
   const [hidesetupinstruction, setHideSetupInstruction] = useState(false);
   const [disableautoarchieve, setDisableAutoArchieve] = useState(false);
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
+
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data)],
+        placement,
+      });
   };
   const onFinish = (values) => {
     const oldArray = [...clientsetting];
@@ -69,7 +78,12 @@ const DefaultSettings = () => {
           headers,
         }
       )
-      .then((res) => {});
+      .then((res) => {
+        Alert("bottomRight", "success");
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
   };
   const handleCountryValue = (e) => {
     setCountry(e);
@@ -79,19 +93,28 @@ const DefaultSettings = () => {
   };
 
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(`https://inventory-dev-295903.appspot.com/settings/defaults/`, {
         headers,
       })
       .then((res) => {
-        const setting = res.data;
-        setCountry(setting.country_code);
-        setTimeZone(setting.timezone);
-        setClientSetting(setting.client_settings);
-        setPaymentMethod(setting.payment_methods);
-        setDefaultSettings(setting);
-        getClientSettingStatus(setting);
+        if (!unmounted) {
+          const setting = res.data;
+          setCountry(setting.country_code);
+          setTimeZone(setting.timezone);
+          setClientSetting(setting.client_settings);
+          setPaymentMethod(setting.payment_methods);
+          setDefaultSettings(setting);
+          getClientSettingStatus(setting);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+    return () => {
+      unmounted = true;
+    };
   }, []);
 
   const getClientSettingStatus = (setting) => {

@@ -1,25 +1,32 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import {
-  getDocumentPrefix,
-  getToken,
-} from "../../../../../../../../../Services/ListServices";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import DocumentDetails from "./Components/DocumentDetails/DocumentDetails";
 import PrintConfigs from "./Components/PrintConfigs/PrintConfigs";
-import { Tabs } from "antd";
+import { Tabs, notification } from "antd";
 
 const { TabPane } = Tabs;
-
-function callback(key) {
-  //console.log(key);
-}
 const DocumentTypeEdit = () => {
   const { id } = useParams();
   const headers = getToken();
   const [document, setDocument] = useState([]);
   const [printconfig, setPrintConfig] = useState([]);
+
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   const fetchDocument = () => {
     let unmounted = false;
     axios
@@ -32,37 +39,42 @@ const DocumentTypeEdit = () => {
         if (!unmounted) {
           setDocument(documentData);
         }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
     return () => {
       unmounted = true;
     };
   };
   const fetchPrintConfig = () => {
-    let unmounted = false;
     axios
       .get(
         `https://inventory-dev-295903.appspot.com/settings/documents/print/configs/${id}/`,
         { headers }
       )
       .then((res) => {
-        const printConfig = res.data;
-        if (!unmounted) {
-          setPrintConfig(printConfig);
-          console.log(printConfig);
-        }
+        const printConfigg = res.data;
+        setPrintConfig(printConfigg);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+  };
+  useEffect(() => {
+    let unmounted = false;
+    if (!unmounted) {
+      fetchDocument();
+      fetchPrintConfig();
+    }
     return () => {
       unmounted = true;
     };
-  };
-  useEffect(() => {
-    fetchDocument();
-    fetchPrintConfig();
   }, []);
   return (
     <div>
       <ContentBar title={document.prefix} />
-      <Tabs onChange={callback} type="card">
+      <Tabs type="card">
         <TabPane tab="Document Details" key="1">
           <DocumentDetails
             fetchDocument={fetchDocument}

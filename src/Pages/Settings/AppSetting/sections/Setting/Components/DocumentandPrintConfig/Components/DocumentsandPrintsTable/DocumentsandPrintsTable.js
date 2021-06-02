@@ -5,7 +5,7 @@ import {
   getToken,
   getWarehouse,
 } from "../../../../../../../../../Services/ListServices";
-import { Table, Tag, Space } from "antd";
+import { Table, notification } from "antd";
 
 const columns = [
   {
@@ -27,7 +27,19 @@ const columns = [
 const DocumentsandPrintsTable = () => {
   const headers = getToken();
   const [documenttypes, setDocumentTypes] = useState([]);
-
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   useEffect(() => {
     let unmounted = false;
     axios
@@ -43,6 +55,9 @@ const DocumentsandPrintsTable = () => {
           console.log(document);
           setDocumentTypes(document);
         }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
     return () => {
       unmounted = true;

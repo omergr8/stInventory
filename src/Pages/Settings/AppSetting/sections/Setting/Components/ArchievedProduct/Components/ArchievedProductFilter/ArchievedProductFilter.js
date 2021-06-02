@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Checkbox, Select, Divider } from "antd";
+import { Form, Input, notification, Select, Divider } from "antd";
 import ArchievedProductTable from "../ArchievedProductTable/ArchievedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import { getToken } from "../../../../../../../../../Services/ListServices";
@@ -10,7 +10,7 @@ const ArchievedProductFilter = () => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
   const [searchinput, setSearchInput] = useState("");
-  const [optionsSelected, setOptionsSelected] = useState([]);
+  const [optionsSelected] = useState([]);
   const archiveProductTableMethod_ref = React.useRef(null);
   function onChangeProduct(value) {
     let productId;
@@ -19,9 +19,21 @@ const ArchievedProductFilter = () => {
     }
     setProductId(productId);
   }
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   const fetchSearchData = () => {
     const headers = getToken();
-
     axios
       .get(
         `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=`,
@@ -31,6 +43,9 @@ const ArchievedProductFilter = () => {
         const searchDataResponse = res.data;
         console.log(searchDataResponse);
         setSearchData(searchDataResponse);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   const onSearch = (val) => {
@@ -44,6 +59,9 @@ const ArchievedProductFilter = () => {
         const searchDataResponse = res.data;
         console.log(searchDataResponse);
         setSearchData(searchDataResponse);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
 

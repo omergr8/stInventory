@@ -4,8 +4,7 @@ import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import { Form, Input, Button, Select } from "antd";
-import { FcAddressBook } from "react-icons/fc";
+import { Form, Input, Button, Select, notification } from "antd";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const { Option } = Select;
@@ -36,7 +35,21 @@ export const WarehouseLinksDetails = () => {
   const [shopifylocation, setShopifyLocation] = useState([]);
   const [priority, setPriority] = useState("");
 
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(
         `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/${id}/`,
@@ -45,15 +58,23 @@ export const WarehouseLinksDetails = () => {
         }
       )
       .then((res) => {
-        const warehouse = res.data;
-        setWarehouseLinks(warehouse);
-        setChannel(warehouse.channel);
-        setChannelName(warehouse.channel);
-        setSumtrackerWarehouse(warehouse.location_name);
-        setShopifyLocationId(warehouse.channel_id);
-        setPriority(warehouse.priority);
-        console.log(warehouse);
+        if (!unmounted) {
+          const warehouse = res.data;
+          setWarehouseLinks(warehouse);
+          setChannel(warehouse.channel);
+          setChannelName(warehouse.channel);
+          setSumtrackerWarehouse(warehouse.location_name);
+          setShopifyLocationId(warehouse.channel_id);
+          setPriority(warehouse.priority);
+          console.log(warehouse);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+    return () => {
+      unmounted = true;
+    };
   }, []);
 
   const onFinish = (values) => {
@@ -124,7 +145,7 @@ export const WarehouseLinksDetails = () => {
         console.log(shopifyLocation);
       })
       .catch((err) => {
-        console.log(err);
+        Alert("bottomRight", "error", err.response);
       });
   }
 

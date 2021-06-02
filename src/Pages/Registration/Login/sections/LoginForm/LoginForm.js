@@ -1,61 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { getToken } from "../../../../../Services/ListServices";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import classes from "../../Login.module.css";
-const NormalLoginForm = (props) => {
+const LoginForm = (props) => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-
-  useEffect(() => {
-    if (localStorage.getItem("user-info")) {
-      history.push("/dashboard");
-    }
-  }, []);
-  const getMetadata = (token) => {
-    let userToken = "token";
-    userToken += " ";
-    userToken += token;
-    const headers = {
-      Authorization: userToken,
-    };
+  const getMetadata = () => {
+    const headers = getToken();
+    let unmounted = false;
     axios
       .get(`https://inventory-dev-295903.appspot.com/settings/metadata/`, {
         headers,
       })
       .then((res) => {
-        const metaData = res.data;
-        localStorage.setItem("meta-data", JSON.stringify(metaData));
+        if (res && !unmounted) {
+          const metaData = res.data;
+          localStorage.setItem("meta-data", JSON.stringify(metaData));
+          if (localStorage.getItem("token")) {
+            history.push("/dashboard");
+          }
+        }
       });
+    return () => {
+      unmounted = true;
+    };
   };
   const login = () => {
-    let item = { username, password };
+    console.log("login");
+    let item = { username: username, password: password };
     props.handler();
-    let result = axios
-      .post("https://inventory-dev-295903.appspot.com/users/login/", {
-        username: username,
-        password: password,
-      })
+    let unmounted = false;
+    axios
+      .post("https://inventory-dev-295903.appspot.com/users/login/", item)
       .then((response) => {
         localStorage.setItem("user-info", JSON.stringify(response.data));
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        if (response) {
+        if (response && !unmounted) {
           props.handler();
-          getMetadata(response.data.token);
+          props.onSuccess();
+          getMetadata();
         }
-
-        setTimeout(() => {
-          history.push("/dashboard");
-        }, 1500);
+      })
+      .catch((err) => {
+        if (err) {
+          props.handler(err.response);
+        }
       });
+    return () => {
+      unmounted = true;
+    };
   };
-
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
-
   return (
     <div className={classes.container}>
       <Form
@@ -64,7 +62,7 @@ const NormalLoginForm = (props) => {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
+        onFinish={login}
       >
         <Form.Item
           name="username"
@@ -120,13 +118,17 @@ const NormalLoginForm = (props) => {
             type="submit"
             htmlType="submit"
             className={classes.submitButton}
-            onClick={login}
           >
             Log in
           </Button>
         </Form.Item>
       </Form>
+      {/* {isauth ? (
+        <Redirect exact from="/login" to="/dashboard" />
+      ) : (
+        <h1>null</h1>
+      )} */}
     </div>
   );
 };
-export default NormalLoginForm;
+export default LoginForm;

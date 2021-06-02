@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Select, Divider } from "antd";
+import { Form, notification, Select, Divider } from "antd";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import ProductSizeTable from "../ProductSizeTable/ProductSizeTable";
@@ -15,12 +15,19 @@ const ProductSizeFilter = () => {
   const [productid, setProductId] = useState();
   const [optionsSelected, setOptionsSelected] = useState([]);
   const productTableMethod_ref = React.useRef(null);
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
   };
 
   function onChangeProduct(value) {
@@ -40,8 +47,10 @@ const ProductSizeFilter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
-        console.log(searchDataResponse);
         setSearchData(searchDataResponse);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   const onSearch = (val) => {
@@ -53,8 +62,10 @@ const ProductSizeFilter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
-        console.log(searchDataResponse);
         setSearchData(searchDataResponse);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   return (
@@ -72,8 +83,6 @@ const ProductSizeFilter = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Form.Item label="Product" name="product">
           <Select

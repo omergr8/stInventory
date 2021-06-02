@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Table, Tag, Space } from "antd";
+import { Table, Tag, notification } from "antd";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 
 const columns = [
   {
@@ -47,24 +48,41 @@ const columns = [
 ];
 
 const WarehouseTable = () => {
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const headers = getToken();
   const [warehouses, setWarehouses] = useState([]);
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
+
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
   };
+
   useEffect(() => {
+    let unmounted = false;
     axios
       .get(`https://inventory-dev-295903.appspot.com/settings/warehouses/`, {
         headers,
       })
       .then((res) => {
-        const warehouse = res.data;
-        setWarehouses(warehouse);
-        console.log(warehouse);
+        if (!unmounted) {
+          const warehouse = res.data;
+          setWarehouses(warehouse);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
+    return () => {
+      unmounted = true;
+    };
   }, []);
   const data = [
     warehouses.map((warehouse, index) => ({

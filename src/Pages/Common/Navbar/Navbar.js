@@ -16,37 +16,39 @@ const menuHelp = (
     </Menu.Item>
   </Menu>
 );
-const logout = () => {
-  localStorage.clear();
-};
-const menuUser = (
-  <Menu>
-    <Menu.Item key="0">
-      <a href="#">Profile</a>
-    </Menu.Item>
-    <Menu.Item key="1">
-      <a href="#" onClick={logout}>
-        Log Out
-      </a>
-    </Menu.Item>
-  </Menu>
-);
 
 const Navbar = () => {
   const history = useHistory();
   let userr = JSON.parse(localStorage.getItem("user-info"));
   const [user, setUser] = useState(userr);
 
-  useEffect(() => {
-    console.log("navbar");
-    setUser(JSON.parse(localStorage.getItem("user-info")));
-    if (localStorage.getItem("user-info")) {
-      history.push("/dashboard");
-    } else {
-      console.log("i am else", history);
-      history.push("/");
-    }
-  }, [localStorage.getItem("user-info")]);
+  // useEffect(() => {
+  //   console.log("navbar");
+  //   setUser(JSON.parse(localStorage.getItem("user-info")));
+  //   if (localStorage.getItem("user-info")) {
+  //     history.push("/dashboard");
+  //   } else {
+  //     console.log("i am else", history);
+  //     history.push("/");
+  //   }
+  // }, [localStorage.getItem("user-info")]);
+  const logout = () => {
+    localStorage.clear();
+    history.push("/login");
+  };
+
+  const menuUser = (
+    <Menu>
+      <Menu.Item key="0">
+        <a href="#">Profile</a>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <a href="#" onClick={logout}>
+          Log Out
+        </a>
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <ul className={classes.ul}>
       <div className={classes.container}>

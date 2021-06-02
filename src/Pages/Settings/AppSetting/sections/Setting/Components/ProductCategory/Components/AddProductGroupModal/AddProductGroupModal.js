@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form, Input } from "antd";
+import { Modal, Button, Form, Input, notification } from "antd";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 const layout = {
@@ -17,7 +17,19 @@ const AddProductGroupModal = (props) => {
   useEffect(() => {
     setIsModalVisible(props.showModal);
   }, [props.showModal]);
-
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Saved. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   const handleOk = () => {
     setIsModalVisible(false);
     props.closeModal();
@@ -40,9 +52,12 @@ const AddProductGroupModal = (props) => {
         }
       )
       .then((res) => {
-        console.log(res);
+        Alert("bottomRight", "success");
         setIsModalVisible(false);
         props.fetchData();
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   return (

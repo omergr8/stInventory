@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import classes from "./ProductSizeTable.module.css";
-import { Table, Button, Space } from "antd";
+import { Table, Button, notification } from "antd";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
@@ -40,19 +41,12 @@ const ProductSizeTable = (props) => {
   const [packsize, setPackSize] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
-  const [didMount, setDidMount] = useState(false);
   const [url, setUrl] = useState(
     `https://inventory-dev-295903.appspot.com/products/pack_sizes/`
   );
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
-  };
+  const headers = getToken();
+
   const totalPages = (product) => {
-    console.log("total", product.next);
     if (product.next !== null) {
       setNextButton(false);
     } else {
@@ -62,6 +56,26 @@ const ProductSizeTable = (props) => {
       setPreviousButton(false);
     } else {
       setPreviousButton(true);
+    }
+  };
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Settings Saved. `,
+        placement,
+      });
+    } else if (type === "error" && error !== undefined) {
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+    } else if (type === "error" && error === undefined) {
+      notification.error({
+        message: `Error Code: ${error} `,
+
+        placement,
+      });
     }
   };
   const getQueryParams = () => {
@@ -82,6 +96,13 @@ const ProductSizeTable = (props) => {
         if (!unmounted) {
           setPackSize(packSizeData);
           totalPages(packSizeData);
+        }
+      })
+      .catch((err) => {
+        if (err.response !== undefined) {
+          Alert("bottomRight", "error", err.response);
+        } else {
+          Alert("bottomRight", "error", "Undefined Error");
         }
       });
     return () => {
@@ -104,12 +125,16 @@ const ProductSizeTable = (props) => {
     data = data[0];
   }
   const getPageData = (url) => {
-    axios.get(url, { headers }).then((res) => {
-      const packSizeData = res.data;
-      setPackSize(packSizeData);
-
-      totalPages(packSizeData);
-    });
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        const packSizeData = res.data;
+        setPackSize(packSizeData);
+        totalPages(packSizeData);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
   };
   const handleTableChange = (pagination, filters, sorter) => {
     if (pagination === "next") {

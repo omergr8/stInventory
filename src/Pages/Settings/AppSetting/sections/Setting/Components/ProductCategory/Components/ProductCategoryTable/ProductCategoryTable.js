@@ -5,7 +5,7 @@ import ContentBar from "../../../../../ContentBar/ContentBar";
 import AddProductGroupModal from "../AddProductGroupModal/AddProductGroupModal";
 import EditProductGroupModal from "../EditProductGroupModal/EditProductGroupModal";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-import { Table, Button, Space } from "antd";
+import { Table, Button, Space, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { AiFillDelete } from "react-icons/ai";
 
@@ -15,7 +15,19 @@ const ProductCategoryTable = () => {
   const [previousButtonState, setPreviousButton] = useState(true);
   const [showmodal, setShowModal] = useState(false);
   const headers = getToken();
-
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: `Deleted Successfully. `,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
   const deleteProduct = (id) => {
     axios
       .delete(
@@ -25,8 +37,11 @@ const ProductCategoryTable = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        Alert("bottomRight", "success");
         fetchData();
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   const fetchData = () => {
@@ -39,11 +54,19 @@ const ProductCategoryTable = () => {
         const productCategory = res.data;
         setProductCategory(productCategory);
         totalPages(productCategory);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
   };
   useEffect(() => {
-    console.log("useeffect");
-    fetchData();
+    let unmounted = false;
+    if (!unmounted) {
+      fetchData();
+    }
+    return () => {
+      unmounted = true;
+    };
   }, []);
 
   const columns = [
@@ -112,11 +135,16 @@ const ProductCategoryTable = () => {
   };
 
   const getPageData = (url) => {
-    axios.get(url, { headers }).then((res) => {
-      const productCategoryData = res.data;
-      setProductCategory(productCategoryData);
-      totalPages(productCategoryData);
-    });
+    axios
+      .get(url, { headers })
+      .then((res) => {
+        const productCategoryData = res.data;
+        setProductCategory(productCategoryData);
+        totalPages(productCategoryData);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
   };
   const handleTableChange = (pagination) => {
     if (pagination === "next") {

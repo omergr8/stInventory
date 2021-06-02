@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Row, Col, Input, Select } from "antd";
+import { Form, Row, Col, notification, Select } from "antd";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import ProductTable from "../ProductTable/ProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
@@ -14,7 +14,7 @@ const Filter = () => {
   const [inventorysync, setInventorySync] = useState();
   const [optionsSelected, setOptionsSelected] = useState([]);
   const localChannel = JSON.parse(localStorage.getItem("meta-data"));
-  const [channel, setChannel] = useState(localChannel.channels);
+  const [channel] = useState(localChannel.channels);
   const [form] = Form.useForm();
   const productTableMethod_ref = React.useRef(null);
 
@@ -43,17 +43,20 @@ const Filter = () => {
     setTrackingId(trackingId);
   }
   function onChangeInventory(value) {
-    //  setOptionsSelected(value);
     let inventory;
     if (value.length !== 0) {
       inventory = `has_inventory_sync=${value}`;
     }
     setInventorySync(inventory);
   }
-  const applyFilter = () => {
-    console.log("i am pressed");
-  };
 
+  const errorAlert = (placement, error) => {
+    notification.error({
+      message: `Error Code: ${error.status} `,
+      description: [JSON.stringify(error.data)],
+      placement,
+    });
+  };
   const onSearch = (val) => {
     const headers = getToken();
     axios
@@ -65,6 +68,9 @@ const Filter = () => {
         const searchDataResponse = res.data;
         console.log(searchDataResponse);
         setSearchData(searchDataResponse);
+      })
+      .catch((err) => {
+        errorAlert("bottomRight", err.response);
       });
   };
   const fetchSearchData = () => {
@@ -79,13 +85,15 @@ const Filter = () => {
         const searchDataResponse = res.data;
         console.log(searchDataResponse);
         setSearchData(searchDataResponse);
+      })
+      .catch((err) => {
+        errorAlert("bottomRight", err.response);
       });
   };
   return (
     <div>
       <div style={{ marginBottom: "20px" }}>
         <ContentBar
-          applyFilter={applyFilter}
           productTableMethod_ref={productTableMethod_ref}
           incoming="ProductListings"
           title="Product Listings"
