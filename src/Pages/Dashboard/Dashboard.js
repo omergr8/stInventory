@@ -15,6 +15,7 @@ const switchRoutes = (
       if (prop.layout === "/dashboard") {
         return (
           <Route
+            exact
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}

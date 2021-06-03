@@ -8,11 +8,11 @@ import { Spin, notification } from "antd";
 const Login = (props) => {
   const [waiting, setWaiting] = useState(false);
   const history = useHistory();
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      history.push("/dashboard");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     history.push("/dashboard");
+  //   }
+  // }, []);
 
   const showSpinner = (error) => {
     if (waiting === false) {

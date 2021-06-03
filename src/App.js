@@ -15,9 +15,8 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/login" component={Login} />
-
         <PrivateRoute path="/dashboard" component={Dashboard} />
-        {!token ? <Redirect to="/login" /> : <Redirect to="/dashboard" />}
+        {/* {!token ? <Redirect to="/login" /> : <Redirect to="/dashboard" />} */}
       </Switch>
     </BrowserRouter>
   );
