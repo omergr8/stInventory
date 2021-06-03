@@ -1,6 +1,6 @@
 import classes from "./ContentBar.module.css";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   exportList,
   dateFormatter,
@@ -62,6 +62,8 @@ const exportCSV = (incoming) => {
 const ContentBar = (props) => {
   let extra;
   let description;
+  const history = useHistory();
+
   if (props.incoming === "ProductListings") {
     extra = (
       <React.Fragment key="30">
@@ -153,7 +155,13 @@ const ContentBar = (props) => {
   } else if (props.incoming === "WarehouseLink") {
     extra = (
       <React.Fragment key="33">
-        <Button icon={<AiOutlinePlus />} key="23">
+        <Button
+          onClick={() => {
+            history.push("/dashboard/warehouselink/new");
+          }}
+          icon={<AiOutlinePlus />}
+          key="23"
+        >
           New Link
         </Button>
       </React.Fragment>

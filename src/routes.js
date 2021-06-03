@@ -5,6 +5,7 @@ import Warehouses from "./Pages/Settings/AppSetting/sections/Setting/Components/
 import WarehouseDetails from "./Pages/Settings/AppSetting/sections/Setting/Components/Warehouses/Components/WarehouseDetails/WarehouseDetails";
 import WarehouseLinksDetails from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/Components/WarehouseLinksDetails/WarehouseLinksDetails";
 import WarehouseLinks from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/WarehouseLinks";
+import AddNewWarehouseLink from "./Pages/Settings/AppSetting/sections/Setting/Components/WarehouseLinks/Components/AddNewWarehouseLink/AddNewWarehouseLink";
 import TaxList from "./Pages/Settings/AppSetting/sections/Setting/Components/TaxList/TaxList";
 import ProductCategory from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductCategory/ProductCategory";
 import ProductPackSize from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/ProductPackSize";
@@ -84,6 +85,12 @@ if (token) {
       path: "/warehouselink/edit/:id",
       name: "warehouselinksdetails",
       component: WarehouseLinksDetails,
+      layout: "/dashboard",
+    },
+    {
+      path: "/warehouselink/new",
+      name: "addnewwarehouselink",
+      component: AddNewWarehouseLink,
       layout: "/dashboard",
     },
     {

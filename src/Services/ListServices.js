@@ -43,34 +43,38 @@ export const getCategoryName = (id) => {
   const metaData = JSON.parse(localStorage.getItem("meta-data"));
   const cat = metaData.group1s;
   const filteredCat = cat.filter((catId) => catId.id === id);
-  console.log(filteredCat);
   return filteredCat[0].name;
-  //  return category.group1s;
 };
 export const getCategoryId = (name) => {
-  //console.log();
   const metaData = JSON.parse(localStorage.getItem("meta-data"));
   const cat = metaData.group1s;
   const filteredCat = cat.filter((catId) => catId.name === name.toString());
-  console.log(filteredCat);
   return filteredCat[0].id;
-  //  return category.group1s;
 };
 export const dateFormatter = (value) => {
-  //console.log(date);
   var date = new Date(value);
   return moment(date).format("YYYY-DD-MM HH:mm");
 };
 export const getWarehouse = (value) => {
   const getMeta = JSON.parse(localStorage.getItem("meta-data"));
   const result = getMeta.warehouses.filter((obj) => obj.id === value);
-  //console.log(value, getMeta.warehouses, result);
   if (result[0] !== undefined) {
     return result[0].name;
   } else {
     return value;
   }
 };
+export const getAllWarehouses = () => {
+  const getMeta = JSON.parse(localStorage.getItem("meta-data"));
+  const result = getMeta.warehouses;
+  return result;
+};
+export const getAllChannels = () => {
+  const getMeta = JSON.parse(localStorage.getItem("meta-data"));
+  const result = getMeta.channels;
+  return result;
+};
+
 export const getDocumentPrefix = (value) => {
   const getMeta = JSON.parse(localStorage.getItem("meta-data"));
   const result = getMeta.document_types.filter(

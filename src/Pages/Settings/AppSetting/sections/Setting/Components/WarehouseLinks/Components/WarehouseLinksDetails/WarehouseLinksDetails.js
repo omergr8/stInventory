@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import {
+  getToken,
+  getAllWarehouses,
+} from "../../../../../../../../../Services/ListServices";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import { Form, Input, Button, Select, notification, Row, Col } from "antd";
@@ -29,16 +32,16 @@ export const WarehouseLinksDetails = () => {
   const headers = getToken();
   const [warehouselinks, setWarehouseLinks] = useState([]);
   const [channel, setChannel] = useState(Number);
-  const [channelname, setChannelName] = useState(Number);
   const [sumtrackerwarehouse, setSumtrackerWarehouse] = useState([]);
   const [shopifylocationid, setShopifyLocationId] = useState(Number);
   const [shopifylocation, setShopifyLocation] = useState([]);
+  const [locationid, setLocationId] = useState([]);
   const [priority, setPriority] = useState("");
 
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
-        message: `Settings Saved. `,
+        message: error,
         placement,
       });
     } else if (type === "error")
@@ -62,11 +65,10 @@ export const WarehouseLinksDetails = () => {
           const warehouse = res.data;
           setWarehouseLinks(warehouse);
           setChannel(warehouse.channel);
-          setChannelName(warehouse.channel);
-          setSumtrackerWarehouse(warehouse.location_name);
+          setSumtrackerWarehouse(warehouse.warehouse_id);
           setShopifyLocationId(warehouse.channel_id);
+          setLocationId(warehouse.location_name);
           setPriority(warehouse.priority);
-          console.log(warehouse);
         }
       })
       .catch((err) => {
@@ -76,60 +78,54 @@ export const WarehouseLinksDetails = () => {
       unmounted = true;
     };
   }, []);
+  const onDelete = () => {
+    axios
+      .delete(
+        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/${id}/`,
 
-  const onFinish = (values) => {
-    //      const warehouseDetails = {
-    //        name: warehousename,
-    //        code: warehousecode,
-    //      };
-    //      console.log(warehouseDetails);
-    //      axios
-    //        .put(
-    //          `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/`,
-    //          warehouseDetails,
-    //          { headers }
-    //        )
-    //        .then((res) => {
-    //          console.log(res);
-    //        })
-    //        .catch((err) => {
-    //          // what now?
-    //          console.log("ensure this field has no more than 20 characters");
-    //        });
-    //    };
-    //    const onEdit = (value) => {
-    //      const action = value;
-    //      axios
-    //        .put(
-    //          `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/${action}/`,
-    //          { name: "hh" },
-    //          { headers }
-    //        )
-    //        .then((res) => {
-    //          console.log(res);
-    //          if (value === "archive") {
-    //            console.log("1");
-    //            setOnEdit(false);
-    //          } else if (value === "undo-archive") {
-    //            if (onedit) {
-    //              setOnEdit(false);
-    //            } else {
-    //              setOnEdit(true);
-    //            }
-    //            console.log("2");
-    //          }
-    //        })
-    //        .catch((err) => {
-    //          // what now?
-    //          console.log(err);
-    //        });
+        { headers }
+      )
+      .then((res) => {
+        Alert("bottomRight", "success", "Warehouse Deleted Successfully");
+        window.history.back();
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
+
+  const onFinish = () => {
+    const linkObj = {
+      warehouse: sumtrackerwarehouse,
+      warehouse_id: sumtrackerwarehouse,
+      channel: shopifylocationid,
+      channel_id: shopifylocationid,
+      priority: priority,
+    };
+
+    axios
+      .put(
+        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/${id}/`,
+        linkObj,
+        { headers }
+      )
+      .then((res) => {
+        Alert("bottomRight", "success", "Warehouse Updated Successfully");
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
   };
 
   const customLabel = (value) => {
     return <label style={{ fontWeight: "600" }}>{value}</label>;
   };
-  function handleChange(value) {
-    console.log(`selected ${value}`);
+  function handleChange(value, name) {
+    if (name === "warehouse") {
+      setSumtrackerWarehouse(value);
+    } else if (name === "location") {
+      setLocationId(value);
+    }
   }
   function onFocus(id) {
     axios
@@ -140,9 +136,8 @@ export const WarehouseLinksDetails = () => {
         }
       )
       .then((res) => {
-        const shopifyLocation = res.data;
-        setShopifyLocation(shopifyLocation);
-        console.log(shopifyLocation);
+        setShopifyLocation(res.data);
+        setLocationId(warehouselinks.location_id);
       })
       .catch((err) => {
         Alert("bottomRight", "error", err.response);
@@ -182,28 +177,30 @@ export const WarehouseLinksDetails = () => {
             </Form.Item>
             <Form.Item label={customLabel("Sumtracker Warehouse")}>
               <Select
-                mode="multiple"
-                allowClear
                 placeholder="Please select"
-                onChange={handleChange}
-                defaultValue={1}
+                name="Sumtracker Warehouse"
+                onChange={(value) => handleChange(value, "warehouse")}
+                value={sumtrackerwarehouse}
               >
-                <Option value={1} key={1}>
-                  {sumtrackerwarehouse}
-                </Option>
+                {getAllWarehouses().map((warehouse, index) => (
+                  <Option value={warehouse.id} key={index}>
+                    {warehouse.code}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item label={customLabel("Shopify Location")}>
               <Select
-                mode="multiple"
-                allowClear
                 placeholder="Please select"
-                defaultValue={1}
+                onChange={(value) => handleChange(value, "location")}
                 onFocus={() => onFocus(shopifylocationid)}
+                value={locationid}
               >
-                <Option value={1} key={1}>
-                  {sumtrackerwarehouse}
-                </Option>
+                {shopifylocation.map((location, index) => (
+                  <Option value={location.id} key={index}>
+                    {location.name}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item label={customLabel("Priority")}>
@@ -218,7 +215,11 @@ export const WarehouseLinksDetails = () => {
                 Save
               </Button>
 
-              <Button icon={<RiDeleteBinLine />} htmlType="button">
+              <Button
+                onClick={onDelete}
+                icon={<RiDeleteBinLine />}
+                htmlType="button"
+              >
                 Delete
               </Button>
             </Form.Item>

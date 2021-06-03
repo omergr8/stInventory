@@ -66,7 +66,6 @@ const Filter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
-        console.log(searchDataResponse);
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
@@ -83,7 +82,6 @@ const Filter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
-        console.log(searchDataResponse);
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
