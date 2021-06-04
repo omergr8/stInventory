@@ -304,18 +304,20 @@ const ContentBar = (props) => {
     );
   }
   const title = () => {
-    if (props.user.is_admin) {
-      return (
-        <Tag style={{ marginLeft: "20px" }} color="blue">
-          Admin
-        </Tag>
-      );
-    } else if (!props.user.is_admin) {
-      return (
-        <Tag style={{ marginLeft: "20px" }} color="blue">
-          User
-        </Tag>
-      );
+    if (props.incoming === "user") {
+      if (props.user.is_admin) {
+        return (
+          <Tag style={{ marginLeft: "20px" }} color="blue">
+            Admin
+          </Tag>
+        );
+      } else if (!props.user.is_admin) {
+        return (
+          <Tag style={{ marginLeft: "20px" }} color="blue">
+            User
+          </Tag>
+        );
+      }
     } else if (props.isArchive && !props.isBundle) {
       return (
         <Tag style={{ marginLeft: "20px" }} color="red">
@@ -353,7 +355,14 @@ const ContentBar = (props) => {
         ghost={false}
         onBack={() => window.history.back()}
         title={
-          <div>
+          <div
+            style={{
+              width: "700px",
+              wordWrap: "break-word",
+              textOverflow: "clip",
+              whiteSpace: "normal",
+            }}
+          >
             {props.title}
             {title()}
           </div>
