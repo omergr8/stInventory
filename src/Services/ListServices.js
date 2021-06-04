@@ -1,5 +1,19 @@
 import axios from "axios";
+import { notification } from "antd";
 var moment = require("moment");
+const Alert = (placement, type, error) => {
+  if (type === "success") {
+    notification.success({
+      message: error,
+      placement,
+    });
+  } else if (type === "error")
+    notification.error({
+      message: `Error Code: ${error.status} `,
+      description: [JSON.stringify(error.data.errors)],
+      placement,
+    });
+};
 const download = (csvData, fileName) => {
   var downloadLink = document.createElement("a");
   var blob = new Blob(["\ufeff", csvData]);
@@ -26,6 +40,26 @@ export const exportList = (url, fileName) => {
     const csvData = res.data;
     download(csvData, fileName);
   });
+};
+export const importList = (file, url) => {
+  let inputFR = new FileReader();
+  inputFR.readAsText(file);
+  inputFR.onload = () => {
+    let body = new Blob([inputFR.result], { type: "text/csv" });
+    axios
+      .post(url, body, {
+        headers: {
+          "Content-Type": "text/csv",
+          Authorization: `token ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      })
+      .then((res) => {
+        Alert("bottomRight", "success", "Imported Successfully");
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
 };
 export const getLocalUom = () => {
   const uom = JSON.parse(localStorage.getItem("meta-data"));
@@ -73,6 +107,15 @@ export const getAllChannels = () => {
   const getMeta = JSON.parse(localStorage.getItem("meta-data"));
   const result = getMeta.channels;
   return result;
+};
+export const checkUserPermission = (permission, uid) => {
+  const metaData = JSON.parse(localStorage.getItem("meta-data"));
+  const users = metaData.users;
+  const user = users.filter((user) => user.id === parseInt(uid));
+  if (user[0].user_permissions !== undefined) {
+    let random = user[0].user_permissions.some((per) => per === permission);
+    return random;
+  }
 };
 
 export const getDocumentPrefix = (value) => {

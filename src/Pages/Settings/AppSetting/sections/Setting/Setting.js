@@ -148,10 +148,7 @@ const Setting = () => {
               </Link>
             </Col>
             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-              <Link
-                className={classes.anchor}
-                to="/dashboard/archieved-product"
-              >
+              <Link className={classes.anchor} to="/dashboard/archived-product">
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaCube />

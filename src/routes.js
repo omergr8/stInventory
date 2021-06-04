@@ -10,7 +10,7 @@ import TaxList from "./Pages/Settings/AppSetting/sections/Setting/Components/Tax
 import ProductCategory from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductCategory/ProductCategory";
 import ProductPackSize from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/ProductPackSize";
 import ProductSizeEdit from "./Pages/Settings/AppSetting/sections/Setting/Components/ProductPackSize/Components/ProductSizeEdit/ProductSizeEdit";
-import ArchievedProduct from "./Pages/Settings/AppSetting/sections/Setting/Components/ArchievedProduct/ArchievedProduct";
+import ArchivedProduct from "./Pages/Settings/AppSetting/sections/Setting/Components/ArchivedProduct/ArchivedProduct";
 import StockLevel from "./Pages/Settings/AppSetting/sections/Setting/Components/StockLevels/StockLevels";
 import DocumentsandPrints from "./Pages/Settings/AppSetting/sections/Setting/Components/DocumentandPrintConfig/DocumentandPrintConfig";
 import DocumentTypeEdit from "./Pages/Settings/AppSetting/sections/Setting/Components/DocumentandPrintConfig/Components/DocumentTypeEdit/DocumentTypeEdit";
@@ -70,9 +70,9 @@ if (token) {
       layout: "/dashboard",
     },
     {
-      path: "/archieved-product",
-      name: "archievedroduct",
-      component: ArchievedProduct,
+      path: "/archived-product",
+      name: "archivedroduct",
+      component: ArchivedProduct,
       layout: "/dashboard",
     },
     {
@@ -118,7 +118,7 @@ if (token) {
       layout: "/dashboard",
     },
     {
-      path: "/user",
+      path: "/user/:id",
       name: "user",
       component: User,
       layout: "/dashboard",

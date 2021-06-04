@@ -19,14 +19,14 @@ const Card = () => {
     Authorization: userToken,
   };
   useEffect(() => {
-    console.log("hi theree");
+    ("hi theree");
     axios
       .get(`https://inventory-dev-295903.appspot.com/settings/billing/plans/`, {
         headers,
       })
       .then((res) => {
         const billingPlan = res.data;
-        console.log(billingPlan);
+
         setPlans(billingPlan);
       });
   }, [setPlans]);

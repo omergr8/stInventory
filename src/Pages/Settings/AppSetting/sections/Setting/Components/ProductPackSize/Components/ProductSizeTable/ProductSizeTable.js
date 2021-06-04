@@ -82,8 +82,13 @@ const ProductSizeTable = (props) => {
     let url = `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=True&${props.productId}`;
     setUrl(url);
   };
+  const reset = () => {
+    props.reset();
+    setUrl("https://inventory-dev-295903.appspot.com/products/pack_sizes/");
+  };
   React.useEffect(() => {
     props.productTableMethod_ref.current = getQueryParams;
+    props.reset_ref.current = reset;
   }, [props]);
   useEffect(() => {
     let unmounted = false;

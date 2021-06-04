@@ -31,7 +31,7 @@ const DefaultSettings = () => {
   const [paymentmethod, setPaymentMethod] = useState([]);
   const [clientsetting, setClientSetting] = useState([]);
   const [hidesetupinstruction, setHideSetupInstruction] = useState(false);
-  const [disableautoarchieve, setDisableAutoArchieve] = useState(false);
+  const [disableautoarchive, setDisableAutoArchive] = useState(false);
 
   const Alert = (placement, type, error) => {
     if (type === "success") {
@@ -56,9 +56,9 @@ const DefaultSettings = () => {
         oldArray.splice(index, 1);
       }
     }
-    if (disableautoarchieve && oldArray.includes(2) === false) {
+    if (disableautoarchive && oldArray.includes(2) === false) {
       oldArray.push(2);
-    } else if (!disableautoarchieve) {
+    } else if (!disableautoarchive) {
       const index = oldArray.indexOf(2);
       if (index > -1) {
         oldArray.splice(index, 1);
@@ -144,7 +144,7 @@ const DefaultSettings = () => {
             client_settings.client_settings[i].description ===
             "Disable Auto Archive"
           ) {
-            setDisableAutoArchieve(true);
+            setDisableAutoArchive(true);
           }
         } else if (find) {
           if (
@@ -156,7 +156,7 @@ const DefaultSettings = () => {
             client_settings.client_settings[i].description ===
             "Disable Auto Archive"
           ) {
-            setDisableAutoArchieve(false);
+            setDisableAutoArchive(false);
           }
         }
       }
@@ -165,8 +165,8 @@ const DefaultSettings = () => {
   const onChangeHideSetup = (e) => {
     setHideSetupInstruction(e.target.checked);
   };
-  const onChangeAutoArchieve = (e) => {
-    setDisableAutoArchieve(e.target.checked);
+  const onChangeAutoArchive = (e) => {
+    setDisableAutoArchive(e.target.checked);
   };
 
   return (
@@ -238,15 +238,15 @@ const DefaultSettings = () => {
             />
           </Form.Item>
           <Form.Item
-            name={["user", "autoarchieve"]}
+            name={["user", "autoarchive"]}
             label={
               <label style={{ fontWeight: "600" }}>Disable Auto Archive</label>
             }
             labelCol={{ span: 12 }}
           >
             <Checkbox
-              onChange={onChangeAutoArchieve}
-              checked={disableautoarchieve}
+              onChange={onChangeAutoArchive}
+              checked={disableautoarchive}
             />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>

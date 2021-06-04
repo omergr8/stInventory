@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
+import AddressModal from "../AddressModal/AddressModal";
 import { Form, Input, Button, notification, Row, Col } from "antd";
 import { FcAddressBook } from "react-icons/fc";
 import { RiDeleteBinLine } from "react-icons/ri";
 
+const { TextArea } = Input;
 const layout = {
   labelCol: {
     span: 10,
@@ -60,7 +62,7 @@ const WarehouseDetails = () => {
           const warehouse = res.data;
           setWarehouseName(warehouse.name);
           setWarehouseCode(warehouse.code);
-          setWarehouseAddress(warehouse.address.address_line_1);
+          setWarehouseAddress(warehouse.address);
           setIsArchive(warehouse.is_archived);
         }
       })
@@ -116,7 +118,19 @@ const WarehouseDetails = () => {
         Alert("bottomRight", "error", err.response);
       });
   };
-
+  const updateAddress = (value) => {
+    setWarehouseAddress(value);
+  };
+  const getAddress = (address) => {
+    const addresss = `${address.label}\n${address.contact_id}\n${address.name}
+${address.company_name}\n${address.first_name}\n${address.last_name}
+    \n${address.phone}\n${address.email}\n${address.tax_num}\n${address.address_line_1}
+    \n${address.address_line_2}\n${address.city}\n${address.state}
+    \n${address.pincode}\n${address.country}\n${address.contact}`;
+    const nullRemovedAddress = addresss.replaceAll("null", "");
+    const emptyRemoveAddress = nullRemovedAddress.replace(/(^[ \t]*\n)/gm, "");
+    return emptyRemoveAddress;
+  };
   const customLabel = (value) => {
     return <label style={{ fontWeight: "600" }}>{value}</label>;
   };
@@ -161,10 +175,17 @@ const WarehouseDetails = () => {
               />
             </Form.Item>
             <Form.Item label={customLabel("Address")}>
-              <Input
+              <TextArea
                 addonAfter={<FcAddressBook />}
-                value={warehouseaddress}
+                value={getAddress(warehouseaddress)}
+                rows={
+                  (getAddress(warehouseaddress).match(/\n/g) || "").length + 1
+                }
                 disabled
+              />
+              <AddressModal
+                updateAddress={(value) => updateAddress(value)}
+                address={warehouseaddress}
               />
             </Form.Item>
 

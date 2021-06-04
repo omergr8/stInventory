@@ -1,8 +1,9 @@
 import classes from "./ContentBar.module.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import {
   exportList,
+  importList,
   dateFormatter,
 } from "../../../../../Services/ListServices";
 import {
@@ -13,10 +14,10 @@ import {
   Select,
   Descriptions,
   Tag,
+  Upload,
 } from "antd";
 import {
   AiOutlinePlus,
-  AiOutlineCopy,
   AiFillDelete,
   AiFillSave,
   AiOutlineSave,
@@ -26,54 +27,98 @@ import { FaFileArchive } from "react-icons/fa";
 import { CgDanger } from "react-icons/cg";
 const { Option } = Select;
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-const syncInventory = (
-  <Select placeholder="Sync all Inventory" onChange={handleChange} key="6">
-    <Option key="20" value="shopify">
-      Shopify
-    </Option>
-  </Select>
-);
-const syncProduct = (
-  <Select placeholder="Sync Product Listing" onChange={handleChange} key="5">
-    <Option key="21" value="shopify">
-      Shopify
-    </Option>
-  </Select>
-);
-function handleMenuClick(e) {
-  console.log("click", e);
-}
+function handleMenuClick(e) {}
 
 const menu = (
   <Menu onClick={handleMenuClick}>
     <Menu.Item key="23">Download sample</Menu.Item>
   </Menu>
 );
+
 const exportCSV = (incoming) => {
   if (incoming === "ProductListings") {
     const url =
-      "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?paginate=False&format=csv&is_archieved=False";
+      "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?paginate=False&format=csv&is_archived=False";
     exportList(url, "Product Listing");
   }
 };
+
 const ContentBar = (props) => {
   let extra;
   let description;
   const history = useHistory();
+  const [allchannels, setAllChannels] = useState(props.channels);
+  function handleChange(value, type) {
+    props.sync(value, type);
+  }
 
-  if (props.incoming === "ProductListings") {
+  useEffect(() => {
+    if (props.incoming === "ProductListings") {
+      setAllChannels(props.channels);
+    }
+  }, [props.allchannel]);
+  const syncInventory = (
+    <Select
+      placeholder="Sync all Inventory"
+      onSelect={(value) => handleChange(value, "inventory")}
+      key="6"
+    >
+      {allchannels !== undefined
+        ? allchannels.map((value, index) => (
+            <Option key={index} value={value.id}>
+              {value.name}
+            </Option>
+          ))
+        : null}
+    </Select>
+  );
+  const syncProduct = (
+    <Select
+      placeholder="Sync Product Listing"
+      onSelect={(value) => handleChange(value, "product")}
+      key="5"
+    >
+      {allchannels !== undefined
+        ? allchannels.map((value, index) => (
+            <Option key={index} value={value.id}>
+              {value.name}
+            </Option>
+          ))
+        : null}
+    </Select>
+  );
+  if (props.incoming === "user") {
+    description = (
+      <React.Fragment key="34">
+        <Descriptions size="small" column={24}>
+          <Descriptions.Item>
+            <h4>Email: </h4> &nbsp; <label> {props.user.email}</label>
+          </Descriptions.Item>
+        </Descriptions>
+      </React.Fragment>
+    );
+  } else if (props.incoming === "ProductListings") {
     extra = (
       <React.Fragment key="30">
         <Button key="1" onClick={() => exportCSV("ProductListings")}>
           Export
         </Button>
-        <Button key="2">Import</Button>
+        <Upload
+          action={(file) =>
+            importList(
+              file,
+              "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/import/"
+            )
+          }
+          showUploadList={false}
+        >
+          <Button key="2">Import</Button>
+        </Upload>
         {syncInventory}
         {syncProduct}
-        <Button key="3">Reset filters</Button>
+        <Button onClick={() => props.reset_ref.current()} key="3">
+          Reset filters
+        </Button>
         <Button
           onClick={() => props.productTableMethod_ref.current()}
           key="4"
@@ -119,8 +164,20 @@ const ContentBar = (props) => {
         >
           Export
         </Button>
-        <Button key="8">Import</Button>
-        <Button key="9">Reset</Button>
+        <Upload
+          action={(file) =>
+            importList(
+              file,
+              "https://inventory-dev-295903.appspot.com/products/pack_sizes/import/"
+            )
+          }
+          showUploadList={false}
+        >
+          <Button key="8">Import</Button>
+        </Upload>
+        <Button onClick={() => props.reset_ref.current()} key="9">
+          Reset
+        </Button>
         <Button
           onClick={() => props.productTableMethod_ref.current()}
           key="10"
@@ -130,7 +187,7 @@ const ContentBar = (props) => {
         </Button>
       </React.Fragment>
     );
-  } else if (props.incoming === "ArchievedProduct") {
+  } else if (props.incoming === "ArchivedProduct") {
     const ArchiveProductUrl =
       "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
     extra = (
@@ -138,11 +195,13 @@ const ContentBar = (props) => {
         <Button key="11">More Filters</Button>
         <Button
           key="12"
-          onClick={() => exportList(ArchiveProductUrl, "Archieved Product")}
+          onClick={() => exportList(ArchiveProductUrl, "Archived Product")}
         >
           Export
         </Button>
-        <Button key="13">Reset</Button>
+        <Button onClick={() => props.reset_ref.current()} key="13">
+          Reset
+        </Button>
         <Button
           onClick={() => props.archiveProductTableMethod_ref.current()}
           key="14"
@@ -212,7 +271,7 @@ const ContentBar = (props) => {
             icon={<AiOutlineUndo />}
             key="15"
           >
-            Undo Archieve
+            Undo Archive
           </Button>
         ) : (
           <Button
@@ -220,7 +279,7 @@ const ContentBar = (props) => {
             icon={<FaFileArchive />}
             key="16"
           >
-            Archieve
+            Archive
           </Button>
         )}
 
@@ -245,7 +304,19 @@ const ContentBar = (props) => {
     );
   }
   const title = () => {
-    if (props.isArchive && !props.isBundle) {
+    if (props.user.is_admin) {
+      return (
+        <Tag style={{ marginLeft: "20px" }} color="blue">
+          Admin
+        </Tag>
+      );
+    } else if (!props.user.is_admin) {
+      return (
+        <Tag style={{ marginLeft: "20px" }} color="blue">
+          User
+        </Tag>
+      );
+    } else if (props.isArchive && !props.isBundle) {
       return (
         <Tag style={{ marginLeft: "20px" }} color="red">
           Archived

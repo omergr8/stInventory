@@ -5,10 +5,10 @@ import { Table, Input, Button, notification, Form, Modal } from "antd";
 import { ImCancelCircle } from "react-icons/im";
 const layout = {
   labelCol: {
-    span: 5,
+    span: 7,
   },
   wrapperCol: {
-    span: 18,
+    span: 16,
   },
 };
 
@@ -38,7 +38,7 @@ const EditTaxModal = (props) => {
   };
   const handleChangeTax = (value) => {
     let copyArray = [...tabledata];
-    console.log(copyArray);
+    copyArray;
     let index = copyArray.findIndex((x) => x.key === value.target.name);
     let newObj = {
       key: copyArray[index].key,
@@ -68,7 +68,7 @@ const EditTaxModal = (props) => {
     if (value.target.value <= 100) {
       setTableData(copyArray);
     } else {
-      console.log("delete");
+      ("delete");
     }
   };
   const [tabledata, setTableData] = useState(data);
@@ -79,7 +79,7 @@ const EditTaxModal = (props) => {
       name: "",
       percentage: "",
     };
-    console.log(obj);
+    obj;
     setTableData([...tabledata, obj]);
   };
   const remove = (id) => {
@@ -150,7 +150,7 @@ const EditTaxModal = (props) => {
       .toFixed(2);
   };
   const handleOk = () => {
-    console.log(tabledata);
+    tabledata;
     const taxDataObject = getTaxDataObject();
     const taxModalObject = {
       name: taxname,

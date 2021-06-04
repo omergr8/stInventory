@@ -46,7 +46,7 @@ const Login = (props) => {
   };
   return (
     <div className={classes.alignCenter}>
-      <Spin spinning={waiting}>
+      <Spin size="large" spinning={waiting}>
         <div className={classes.logo}>
           <img src={logo} width="200px" alt="logo" />
         </div>

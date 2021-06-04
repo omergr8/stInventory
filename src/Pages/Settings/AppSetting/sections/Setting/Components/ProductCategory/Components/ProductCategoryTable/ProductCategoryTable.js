@@ -121,7 +121,7 @@ const ProductCategoryTable = () => {
     setShowModal(false);
   };
   const totalPages = (product) => {
-    console.log("total", product.next);
+    "total", product.next;
     if (product.next !== null) {
       setNextButton(false);
     } else {

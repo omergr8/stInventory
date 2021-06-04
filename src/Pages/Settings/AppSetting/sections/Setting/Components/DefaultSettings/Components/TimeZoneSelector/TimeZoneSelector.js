@@ -3,7 +3,7 @@ import { minimalTimezoneSet } from "compact-timezone-list";
 const { Option } = Select;
 
 function handleChange(value) {
-  console.log(`selected ${value}`);
+  `selected ${value}`;
 }
 
 const TimeZoneSelector = (props) => {

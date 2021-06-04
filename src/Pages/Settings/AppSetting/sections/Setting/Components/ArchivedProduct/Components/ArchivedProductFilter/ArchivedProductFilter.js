@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { Form, Input, notification, Select, Divider, Row, Col } from "antd";
-import ArchievedProductTable from "../ArchievedProductTable/ArchievedProductTable";
+import ArchivedProductTable from "../ArchivedProductTable/ArchivedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import axios from "axios";
 const { Option } = Select;
 
-const ArchievedProductFilter = () => {
+const ArchivedProductFilter = () => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
   const [searchinput, setSearchInput] = useState("");
   const [optionsSelected] = useState([]);
+  const [form] = Form.useForm();
   const archiveProductTableMethod_ref = React.useRef(null);
+  const reset_ref = React.useRef(null);
   function onChangeProduct(value) {
     let productId;
     if (value.length !== 0) {
@@ -41,12 +43,15 @@ const ArchievedProductFilter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
-        console.log(searchDataResponse);
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
         Alert("bottomRight", "error", err.response);
       });
+  };
+  const reset = () => {
+    form.resetFields();
+    setProductId(undefined);
   };
   const onSearch = (val) => {
     const headers = getToken();
@@ -57,7 +62,7 @@ const ArchievedProductFilter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
-        console.log(searchDataResponse);
+
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
@@ -65,22 +70,20 @@ const ArchievedProductFilter = () => {
       });
   };
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
+  const onFinish = (values) => {};
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
   return (
     <div>
       <ContentBar
         archiveProductTableMethod_ref={archiveProductTableMethod_ref}
-        incoming="ArchievedProduct"
+        reset_ref={reset_ref}
+        incoming="ArchivedProduct"
         title="Archived Products List"
       />
       <Form
         name="basic"
+        form={form}
         initialValues={{
           remember: true,
         }}
@@ -89,17 +92,7 @@ const ArchievedProductFilter = () => {
       >
         <Row gutter={18}>
           <Col xs={24} sm={24} md={24} lg={24} xl={10} key={1}>
-            <Form.Item
-              label="Product"
-              name="product"
-              rules={[
-                {
-                  required: false,
-                  message: "Please input your username!",
-                },
-              ]}
-              labelCol={{ span: 24 }}
-            >
+            <Form.Item label="Product" name="product" labelCol={{ span: 24 }}>
               <Select
                 mode="multiple"
                 showSearch
@@ -153,13 +146,15 @@ const ArchievedProductFilter = () => {
       </Form>
       <Divider />
       <div>
-        <ArchievedProductTable
+        <ArchivedProductTable
           archiveProductTableMethod_ref={archiveProductTableMethod_ref}
+          reset_ref={reset_ref}
           productId={productid}
           searchInput={searchinput}
+          reset={reset}
         />
       </div>
     </div>
   );
 };
-export default ArchievedProductFilter;
+export default ArchivedProductFilter;

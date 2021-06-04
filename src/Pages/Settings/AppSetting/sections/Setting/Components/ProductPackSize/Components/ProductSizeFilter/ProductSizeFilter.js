@@ -14,8 +14,9 @@ const ProductSizeFilter = () => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
   const [optionsSelected, setOptionsSelected] = useState([]);
+  const [form] = Form.useForm();
   const productTableMethod_ref = React.useRef(null);
-
+  const reset_ref = React.useRef(null);
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -53,6 +54,10 @@ const ProductSizeFilter = () => {
         Alert("bottomRight", "error", err.response);
       });
   };
+  const reset = () => {
+    form.resetFields();
+    setProductId(undefined);
+  };
   const onSearch = (val) => {
     const headers = getToken();
     axios
@@ -73,12 +78,14 @@ const ProductSizeFilter = () => {
       <div style={{ marginBottom: "30px" }}>
         <ContentBar
           productTableMethod_ref={productTableMethod_ref}
+          reset_ref={reset_ref}
           incoming="ProductPackSize"
           title="Pack Size List"
         />
       </div>
       <Form
         {...layout}
+        form={form}
         name="basic"
         initialValues={{
           remember: true,
@@ -118,6 +125,8 @@ const ProductSizeFilter = () => {
         <ProductSizeTable
           productId={productid}
           productTableMethod_ref={productTableMethod_ref}
+          reset_ref={reset_ref}
+          reset={reset}
         />
       </div>
     </div>

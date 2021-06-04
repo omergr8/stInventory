@@ -1,64 +1,149 @@
-import React, { useState } from "react";
-import { Table, Radio, Divider } from "antd";
-const columns = [
-  {
-    title: "#",
-    dataIndex: "number",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Function",
-    dataIndex: "function",
-  },
+import React, { useState, useEffect } from "react";
+import { Table, Divider, Checkbox, notification } from "antd";
+import axios from "axios";
+import {
+  getToken,
+  checkUserPermission,
+} from "../../../../../Services/ListServices";
+import { useParams } from "react-router";
+
+const settingsData = [
+  { key: "1", number: 1, function: "Get low stock alerts" },
 ];
-const data = [
-  {
-    key: "1",
-    number: 1,
-    function: "Can change stock levels",
-  },
-  {
-    key: "2",
-    number: 2,
-    function: "Can change stock levels",
-  },
-]; // rowSelection object indicates the need for row selection
-
-let rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  getCheckboxProps: (record) => ({
-    disabled: true, // Column configuration not to be checked
-    name: record.name,
-  }),
-};
-
 const PermissionTable = (props) => {
   const [selectionType, setSelectionType] = useState("checkbox");
-  //const [permission, setPermission] = useState(props.permission);
-  const [isAdmin, setIsAdmin] = useState(props.isAdmin);
+  const [permission, setPermission] = useState([]);
+  const [settings, setSettings] = useState([]);
+  const headers = getToken();
+  const { id } = useParams();
 
-  if (isAdmin) {
-    console.log(isAdmin);
+  const permissionData = [
+    {
+      key: "1",
+      number: 1,
+      per: permission !== undefined ? permission[0] : 1,
+      function: "Can change stock levels",
+    },
+    {
+      key: "2",
+      number: 2,
+      per: permission !== undefined ? permission[1] : 1,
+      function: "Can change settings",
+    },
+  ];
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
+  };
+  useEffect(() => {
+    setPermission(props.permission.user_permissions);
+    setSettings(props.permission.user_settings);
+    permission, props.permission;
+  }, [props]);
+  const save = (type) => {
+    let copyObj = { ...props.permission };
+    if (type === "value") {
+      copyObj.user_settings = [1];
+    } else if (type === "empty") {
+      copyObj.user_settings = [];
+    }
 
-    rowSelection = null;
-  }
+    copyObj;
+
+    axios
+      .put(`https://inventory-dev-295903.appspot.com/users/${id}/`, copyObj, {
+        headers,
+      })
+      .then((response) => {
+        Alert("bottomRight", "success", "Saved.");
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
+  const handleChange = (value) => {
+    value.target.checked;
+    if (!value.target.checked) {
+      ("if");
+      setSettings([]);
+      save("empty");
+    } else if (value.target.checked) {
+      setSettings([1]);
+      save("value");
+    }
+  };
+  const permissionColumns = [
+    {
+      title: "#",
+      dataIndex: "number",
+      disabled: true,
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Function",
+      dataIndex: "function",
+    },
+    {
+      title: "",
+      dataIndex: "check",
+      render: (text, row) => (
+        <Checkbox checked={checkUserPermission(row.per, id)} disabled={true} />
+      ),
+    },
+  ];
+  const settingsColumns = [
+    {
+      title: "#",
+      dataIndex: "number",
+      disabled: true,
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Function",
+      dataIndex: "function",
+    },
+    {
+      title: "",
+      dataIndex: "check",
+      render: (text, row) => (
+        <Checkbox
+          onChange={handleChange}
+          checked={
+            settings !== undefined
+              ? settings.length !== 0
+                ? true
+                : false
+              : null
+          }
+        />
+      ),
+    },
+  ];
+
   return (
     <div>
       <Table
+        bordered
         pagination={false}
-        rowSelection={{
-          type: selectionType,
-          hideSelectAll: true,
-          ...rowSelection,
-        }}
-        columns={columns}
-        dataSource={data}
+        columns={permissionColumns}
+        dataSource={permissionData}
+      />
+      <Divider />
+      <h3 style={{ textDecoration: "underline" }}>Settings</h3>
+      <Table
+        bordered
+        pagination={false}
+        columns={settingsColumns}
+        dataSource={settingsData}
       />
     </div>
   );

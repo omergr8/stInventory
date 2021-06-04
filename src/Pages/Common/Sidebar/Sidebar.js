@@ -25,8 +25,6 @@ const Sidebar = (props) => {
     if (rootKeys.indexOf(latestOpenKey) === -1) {
       setOpenKeys(items);
     } else {
-      console.log(latestOpenKey, [latestOpenKey], openKeys);
-
       setOpenKeys(latestOpenKey ? [latestOpenKey] : "");
     }
   };

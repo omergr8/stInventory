@@ -3,7 +3,7 @@ const MetaFind = (props) => {
   const getMeta = JSON.parse(localStorage.getItem("meta-data"));
   //const [category, getCategory] = useState("");
   let data;
-  if (props.incoming === "ArchievedProductTable") {
+  if (props.incoming === "ArchivedProductTable") {
     const result = getMeta.group1s.filter((obj) => obj.id === props.id);
     data = <p>{result[0].name}</p>;
   } else if (
@@ -16,7 +16,6 @@ const MetaFind = (props) => {
     props.incoming === "WarehouseDetailsChannel" &&
     props.id !== undefined
   ) {
-    console.log(props);
     const result = getMeta.channels.filter((obj) => obj.id === props.id);
     if (result[0] !== undefined) {
       data = result[0].name;

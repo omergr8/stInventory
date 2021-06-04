@@ -1,108 +1,129 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PermissionTable from "./sections/Table/Table";
-import {
-  Form,
-  Input,
-  Button,
-  Radio,
-  Select,
-  Cascader,
-  DatePicker,
-  InputNumber,
-  TreeSelect,
-  Switch,
-} from "antd";
+import ContentBar from "../AppSetting/sections/ContentBar/ContentBar";
+import { Form, Input, Button, Radio, notification, Row, Col } from "antd";
+import { getToken } from "../../../Services/ListServices";
+import { useParams } from "react-router";
+import { Content } from "antd/lib/layout/layout";
 
 const User = () => {
-  let userr = JSON.parse(localStorage.getItem("user-info"));
-  const [user, setUser] = useState(userr);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-
-  let oldResponse = JSON.parse(localStorage.getItem("user-info"));
-  console.log(oldResponse);
-  const save = () => {
-    const headers = {
-      Authorization: userToken,
-    };
-    console.log(headers);
-    axios
-      .put(
-        "https://inventory-dev-295903.appspot.com/users/18/",
-        {
-          first_name: firstName,
-          last_name: lastName,
-        },
-        { headers }
-      )
-      .then((response) => {
-        oldResponse.user = response.data;
-        localStorage.setItem("user-info", JSON.stringify(oldResponse));
-
-        //  localStorage.setItem("user-info.user", JSON.stringify(response.data));
+  const { id } = useParams();
+  const [user, setUser] = useState({});
+  const headers = getToken();
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
       });
   };
+  let oldResponse = JSON.parse(localStorage.getItem("user-info"));
+
+  useEffect(() => {
+    axios
+      .get(`https://inventory-dev-295903.appspot.com/users/${id}/`, { headers })
+      .then((res) => {
+        setUser(res.data);
+      });
+  }, []);
+  const save = () => {
+    axios
+      .put(`https://inventory-dev-295903.appspot.com/users/${id}/`, user, {
+        headers,
+      })
+      .then((response) => {
+        oldResponse.user = response.data;
+        Alert("bottomRight", "success", "Saved.");
+        localStorage.setItem("user-info", JSON.stringify(oldResponse));
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    let copyObj = { ...user };
+    if (name === "firstname") {
+      copyObj.first_name = value;
+    } else if (name === "lastname") {
+      copyObj.last_name = value;
+    } else if (name === "active") {
+      copyObj.is_active = value;
+    }
+    setUser(copyObj);
+  };
+
   return (
     <div>
-      <Form
-        labelCol={{
-          span: 4,
-        }}
-        wrapperCol={{
-          span: 14,
-        }}
-        layout="horizontal"
-      >
-        <Form.Item label="First Name">
-          <Input
-            defaultValue={user.user.first_name}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item label="Last Name">
-          <Input
-            defaultValue={user.user.last_name}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </Form.Item>
-        <Form.Item label="Email">
-          <Input disabled={true} defaultValue={user.user.email} />
-        </Form.Item>
-        <Form.Item name="radio-button" label="Active">
-          <Radio.Group
-            disabled={!user.user.is_admin}
-            defaultValue={user.user.is_active.toString()}
+      <ContentBar
+        title={`User ${user.first_name} ${user.last_name}`}
+        incoming="user"
+        user={user}
+      />
+      <Row gutter={18}>
+        <Col xs={24} sm={24} md={24} lg={20} xl={20}>
+          <Form
+            labelCol={{
+              span: 4,
+            }}
+            wrapperCol={{
+              span: 14,
+            }}
+            layout="horizontal"
           >
-            <Radio.Button value="true">Yes</Radio.Button>
-            <Radio.Button value="false">No</Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="Change Password">
-          <a href="">Click Here</a>
-        </Form.Item>
-        <Form.Item label="Permissions">
-          <PermissionTable
-            permission={user.user.user_permission}
-            isAdmin={user.user.is_admin}
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            block
-            size="large"
-            type="submit"
-            htmlType="submit"
-            onClick={save}
-          >
+            <Form.Item label="First Name">
+              <Input
+                value={user.first_name}
+                name="firstname"
+                onChange={handleChange}
+              />
+            </Form.Item>
+            <Form.Item label="Last Name">
+              <Input
+                value={user.last_name}
+                name="lastname"
+                onChange={handleChange}
+              />
+            </Form.Item>
+            <Form.Item label="Email">
+              <Input disabled={true} value={user.email} />
+            </Form.Item>
+            <Form.Item label="Active">
+              <Radio.Group
+                disabled={!user.is_admin}
+                onChange={handleChange}
+                value={user.is_active}
+                name="active"
+              >
+                <Radio.Button value={true}>Yes</Radio.Button>
+                <Radio.Button value={false}>No</Radio.Button>
+              </Radio.Group>
+              {/* <h2>hello{user.is_active}</h2> */}
+            </Form.Item>
+            <Form.Item label="Change Password">
+              <a href="">Click Here</a>
+            </Form.Item>
+            <Form.Item label="Permissions">
+              <PermissionTable permission={user} />
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={4} xl={4}>
+          {" "}
+          <Button block size="large" type="primary" onClick={save}>
             Save
           </Button>
-        </Form.Item>
-      </Form>
+        </Col>
+      </Row>
     </div>
   );
 };

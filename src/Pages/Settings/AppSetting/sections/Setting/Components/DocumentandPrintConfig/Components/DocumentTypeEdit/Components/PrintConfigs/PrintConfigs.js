@@ -17,17 +17,13 @@ const { TextArea } = Input;
 const { Search } = Input;
 const layout = {
   labelCol: {
-    span: 11,
+    span: 10,
   },
   wrapperCol: {
     span: 10,
   },
 };
-const tailLayout = {
-  wrapperCol: {
-    offset: 10,
-  },
-};
+
 const initialFormState = {
   id: Number,
   content_type_id: Number,
@@ -72,7 +68,11 @@ const PrintConfigs = (props) => {
   useEffect(() => {
     if (props.documentData.print_config !== null) {
       setCheckedItems(props.documentData);
-      if (props.documentData.print_config.footer_terms !== null) {
+      if (
+        props.documentData.print_config.footer_terms !== null &&
+        props.documentData.print_config.footer_terms !== undefined
+      ) {
+        props.documentData.print_config.footer_terms;
         setFooterTerms(
           Object.entries(props.documentData.print_config.footer_terms)
         );
@@ -81,6 +81,8 @@ const PrintConfigs = (props) => {
       const copyObj = { ...checkedItems };
       const copyObj2 = props.documentData;
       copyObj2.print_config = copyObj.print_config;
+      ("else");
+      // setFooterTerms({});
       setCheckedItems(copyObj2);
     }
   }, [props]);
@@ -91,7 +93,12 @@ const PrintConfigs = (props) => {
 
   const addFooter = () => {
     const footerObj = [];
-    setFooterTerms([...footerterms, footerObj]);
+    footerterms;
+    if (footerterms === undefined) {
+      setFooterTerms([footerObj]);
+    } else {
+      setFooterTerms([...footerterms, footerObj]);
+    }
   };
   const remove = (id) => {
     const copyFooterTerms = [...footerterms];
@@ -132,9 +139,18 @@ const PrintConfigs = (props) => {
     }
   };
   const save = () => {
-    const arrayToObj = Object.fromEntries(footerterms);
+    let arrayToObj;
+    //  (footerterms);
+    if (footerterms !== undefined) {
+      arrayToObj = Object.fromEntries(footerterms);
+    } else {
+      arrayToObj = null;
+    }
+
     const copyObj = { ...checkedItems };
+    // ("save", copyObj);
     copyObj.print_config.footer_terms = arrayToObj;
+
     axios
       .put(
         `https://inventory-dev-295903.appspot.com/settings/documents/print/configs/${id}/`,
@@ -155,14 +171,13 @@ const PrintConfigs = (props) => {
   return (
     <div>
       <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+        <Col xs={24} sm={24} md={24} lg={20} xl={20}>
           <Form
             {...layout}
             name="basic"
             initialValues={{
               remember: true,
             }}
-            onFinish={save}
           >
             <Form.Item label={customLabel("Name to Print")}>
               <Input
@@ -223,9 +238,7 @@ const PrintConfigs = (props) => {
                 name="is_custom_header"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_custom_header"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("Footer Height")}>
               <Input
@@ -239,9 +252,7 @@ const PrintConfigs = (props) => {
                 name="is_custom_footer"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_custom_footer"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Divider>
               <h4>Print information</h4>
@@ -251,18 +262,14 @@ const PrintConfigs = (props) => {
                 name="is_amount_in_words"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_amount_in_words"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("SKU")} name="remember">
               <Checkbox
                 name="is_print_sku"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_print_sku"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item
               label={customLabel("Product Description")}
@@ -272,61 +279,50 @@ const PrintConfigs = (props) => {
                 name="is_print_description"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_print_description"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("UOM")} name="remember">
               <Checkbox
                 name="is_print_uom"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_print_uom"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("Supplier SKU")} name="remember">
               <Checkbox
                 name="is_print_supplier_sku"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_print_supplier_sku"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("Dispatch Address")} name="remember">
               <Checkbox
                 name="is_dispatch_address"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_dispatch_address"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("Payment Terms")} name="remember">
               <Checkbox
                 name="is_print_payment_terms"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_print_payment_terms"]}
-              >
-                Remember me
-              </Checkbox>
+              />
             </Form.Item>
             <Form.Item label={customLabel("Tax columns")} name="remember">
               <Checkbox
                 name="is_print_tax_columns"
                 onChange={handleChange}
                 checked={checkedItems.print_config["is_print_tax_columns"]}
-              >
-                Remember me
-              </Checkbox>
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
+              />
             </Form.Item>
           </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={2} xl={2}>
+          {" "}
+          <Button onClick={save} type="primary" htmlType="submit">
+            Save
+          </Button>
         </Col>
       </Row>
     </div>

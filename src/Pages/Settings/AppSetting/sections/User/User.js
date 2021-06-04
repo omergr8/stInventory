@@ -6,13 +6,15 @@ import { RiUserSettingsLine } from "react-icons/ri";
 import { Row, Col } from "antd";
 
 const Setting = () => {
+  let userr = JSON.parse(localStorage.getItem("user-info"));
+  const id = userr.user.id;
   return (
     <div>
       <Box>
         <div className={classes.wrapper}>
           <Row>
             <Col lg={{ span: 7, offset: 1 }}>
-              <Link to="/dashboard/user">
+              <Link to={`/dashboard/user/${id}`}>
                 <a href="!" className={classes.anchor}>
                   <div className={classes.first}>
                     <div className={classes.icon}>

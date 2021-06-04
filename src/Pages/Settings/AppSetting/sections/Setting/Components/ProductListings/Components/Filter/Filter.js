@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Form, Row, Col, notification, Select } from "antd";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import {
+  getToken,
+  getAllChannels,
+} from "../../../../../../../../../Services/ListServices";
 import ProductTable from "../ProductTable/ProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import axios from "axios";
@@ -10,6 +13,7 @@ const Filter = () => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
   const [channelid, setChannelId] = useState();
+  const [allchannels, setAllChannels] = useState(getAllChannels());
   const [trackingid, setTrackingId] = useState();
   const [inventorysync, setInventorySync] = useState();
   const [optionsSelected, setOptionsSelected] = useState([]);
@@ -17,6 +21,7 @@ const Filter = () => {
   const [channel] = useState(localChannel.channels);
   const [form] = Form.useForm();
   const productTableMethod_ref = React.useRef(null);
+  const reset_ref = React.useRef(null);
 
   function onChangeProduct(value) {
     let productId;
@@ -44,19 +49,64 @@ const Filter = () => {
   }
   function onChangeInventory(value) {
     let inventory;
-    if (value.length !== 0) {
-      inventory = `has_inventory_sync=${value}`;
+    if (value !== undefined && value !== null) {
+      if (value.length !== 0) {
+        inventory = `has_inventory_sync=${value}`;
+      }
     }
     setInventorySync(inventory);
   }
-
-  const errorAlert = (placement, error) => {
-    notification.error({
-      message: `Error Code: ${error.status} `,
-      description: [JSON.stringify(error.data)],
-      placement,
-    });
+  const Alert = (placement, type, error) => {
+    if (type === "success") {
+      notification.success({
+        message: error,
+        placement,
+      });
+    } else if (type === "error")
+      notification.error({
+        message: `Error Code: ${error.status} `,
+        description: [JSON.stringify(error.data.errors)],
+        placement,
+      });
   };
+  const reset = () => {
+    form.resetFields();
+    setProductId(undefined);
+    setChannelId(undefined);
+    setTrackingId(undefined);
+    setInventorySync(undefined);
+  };
+  const sync = (value, type) => {
+    const headers = getToken();
+    if (type === "inventory") {
+      axios
+        .post(
+          `https://inventory-dev-295903.appspot.com/ecom/settings/channels/hard_refresh_inventory/${value}/`,
+          {},
+          { headers }
+        )
+        .then((res) => {
+          Alert("bottomRight", "success", "Inventory Synced.");
+        })
+        .catch((err) => {
+          Alert("bottomRight", "error", err.response);
+        });
+    } else if (type === "product") {
+      axios
+        .post(
+          `https://inventory-dev-295903.appspot.com/ecom/settings/channels/sync_products/${value}/`,
+          {},
+          { headers }
+        )
+        .then((res) => {
+          Alert("bottomRight", "success", "Product Synced.");
+        })
+        .catch((err) => {
+          Alert("bottomRight", "error", err.response);
+        });
+    }
+  };
+
   const onSearch = (val) => {
     const headers = getToken();
     axios
@@ -69,7 +119,7 @@ const Filter = () => {
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
-        errorAlert("bottomRight", err.response);
+        Alert("bottomRight", "error", err.response);
       });
   };
   const fetchSearchData = () => {
@@ -85,7 +135,7 @@ const Filter = () => {
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
-        errorAlert("bottomRight", err.response);
+        Alert("bottomRight", "error", err.response);
       });
   };
   return (
@@ -93,8 +143,11 @@ const Filter = () => {
       <div style={{ marginBottom: "20px" }}>
         <ContentBar
           productTableMethod_ref={productTableMethod_ref}
+          reset_ref={reset_ref}
+          channels={allchannels}
           incoming="ProductListings"
           title="Product Listings"
+          sync={(value, type) => sync(value, type)}
         />
       </div>
       <Form
@@ -217,7 +270,6 @@ const Filter = () => {
               <Select defaultValue="all" onChange={onChangeInventory}>
                 <Option>All</Option>
                 <Option value={true}>Sync On</Option>
-
                 <Option value={false}>Sync Off</Option>
               </Select>
             </Form.Item>
@@ -229,7 +281,9 @@ const Filter = () => {
         channelId={channelid}
         trackingId={trackingid}
         inventorySync={inventorysync}
+        reset_ref={reset_ref}
         productTableMethod_ref={productTableMethod_ref}
+        reset={reset}
       />
     </div>
   );

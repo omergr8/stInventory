@@ -3,7 +3,7 @@ import { Menu, Dropdown } from "antd";
 import { CaretDownFilled, QuestionCircleFilled } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import Button from "antd-button-color";
-import classes from "./Navbar.module.css";
+import classes from "./Toolbar.module.css";
 import logo from "../../../Assets/logo-sumtracker-light.svg";
 
 const menuHelp = (
@@ -17,21 +17,11 @@ const menuHelp = (
   </Menu>
 );
 
-const Navbar = () => {
+const Toolbar = () => {
   const history = useHistory();
   let userr = JSON.parse(localStorage.getItem("user-info"));
   const [user, setUser] = useState(userr);
 
-  // useEffect(() => {
-  //   console.log("navbar");
-  //   setUser(JSON.parse(localStorage.getItem("user-info")));
-  //   if (localStorage.getItem("user-info")) {
-  //     history.push("/dashboard");
-  //   } else {
-  //     console.log("i am else", history);
-  //     history.push("/");
-  //   }
-  // }, [localStorage.getItem("user-info")]);
   const logout = () => {
     localStorage.clear();
     history.push("/login");
@@ -112,4 +102,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Toolbar;

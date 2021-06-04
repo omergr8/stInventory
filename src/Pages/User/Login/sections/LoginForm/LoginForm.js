@@ -30,7 +30,7 @@ const LoginForm = (props) => {
     };
   };
   const login = () => {
-    console.log("login");
+    ("login");
     let item = { username: username, password: password };
     props.handler();
     let unmounted = false;

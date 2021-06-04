@@ -5,10 +5,10 @@ import { Table, Input, Button, Form, Modal, notification } from "antd";
 import { ImCancelCircle } from "react-icons/im";
 const layout = {
   labelCol: {
-    span: 5,
+    span: 7,
   },
   wrapperCol: {
-    span: 18,
+    span: 16,
   },
 };
 
@@ -67,7 +67,7 @@ const AddTaxModal = (props) => {
     if (value.target.value <= 100) {
       setTableData(copyArray);
     } else {
-      console.log("delete");
+      ("delete");
     }
   };
 
@@ -162,7 +162,7 @@ const AddTaxModal = (props) => {
         { headers }
       )
       .then((response) => {
-        console.log(response);
+        response;
         Alert("bottomRight", "success");
         setIsModalVisible(false);
         props.fetchData();

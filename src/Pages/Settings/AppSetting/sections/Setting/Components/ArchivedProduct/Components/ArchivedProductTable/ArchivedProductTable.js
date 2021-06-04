@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import classes from "./ArchievedProductTable.module.css";
+import classes from "./ArchivedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Table, Button, notification } from "antd";
@@ -10,6 +10,7 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
+    width: "35%",
     render: (text, row) => (
       <Link to={`/dashboard/productpacksize/edit/${row.key}`}>{text}</Link>
     ),
@@ -28,8 +29,8 @@ const columns = [
   },
 ];
 
-const ArchievedProductTable = (props) => {
-  const [archievedroduct, setArchievedroduct] = useState([]);
+const ArchivedProductTable = (props) => {
+  const [archivedroduct, setArchivedroduct] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const [url, setUrl] = useState(
@@ -76,8 +77,15 @@ const ArchievedProductTable = (props) => {
     let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
     setUrl(url);
   };
+  const reset = () => {
+    props.reset();
+    setUrl(
+      "https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True"
+    );
+  };
   React.useEffect(() => {
     props.archiveProductTableMethod_ref.current = getQueryParams;
+    props.reset_ref.current = reset;
   }, [props]);
   useEffect(() => {
     let unmounted = false;
@@ -87,9 +95,9 @@ const ArchievedProductTable = (props) => {
       })
       .then((res) => {
         if (!unmounted) {
-          const ArchievedProductData = res.data;
-          setArchievedroduct(ArchievedProductData);
-          totalPages(ArchievedProductData);
+          const ArchivedProductData = res.data;
+          setArchivedroduct(ArchivedProductData);
+          totalPages(ArchivedProductData);
         }
       })
       .catch((err) => {
@@ -100,15 +108,15 @@ const ArchievedProductTable = (props) => {
     };
   }, [url]);
   let data;
-  if (archievedroduct.results !== undefined) {
+  if (archivedroduct.results !== undefined) {
     data = [
-      archievedroduct.results.map((product, index) => ({
+      archivedroduct.results.map((product, index) => ({
         key: product.id,
         name: product.name,
         sku: product.sku,
         uom: product.uom,
         category: (
-          <MetaFind id={product.group1_id} incoming="ArchievedProductTable" />
+          <MetaFind id={product.group1_id} incoming="ArchivedProductTable" />
         ),
       })),
     ];
@@ -119,7 +127,7 @@ const ArchievedProductTable = (props) => {
       .get(url, { headers })
       .then((res) => {
         const packSizeData = res.data;
-        setArchievedroduct(packSizeData);
+        setArchivedroduct(packSizeData);
         totalPages(packSizeData);
       })
       .catch((err) => {
@@ -128,9 +136,9 @@ const ArchievedProductTable = (props) => {
   };
   const handleTableChange = (pagination) => {
     if (pagination === "next") {
-      getPageData(archievedroduct.next);
+      getPageData(archivedroduct.next);
     } else if (pagination === "previous") {
-      getPageData(archievedroduct.previous);
+      getPageData(archivedroduct.previous);
     }
   };
   const pageButtons = (
@@ -166,4 +174,4 @@ const ArchievedProductTable = (props) => {
     </div>
   );
 };
-export default ArchievedProductTable;
+export default ArchivedProductTable;

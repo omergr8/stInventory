@@ -3,9 +3,7 @@ import User from "./sections/User/User";
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 const AppSetting = () => {
-  function callback(key) {
-    console.log(key);
-  }
+  function callback(key) {}
   return (
     <div>
       <Tabs onChange={callback} type="card">

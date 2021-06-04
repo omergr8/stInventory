@@ -2,7 +2,7 @@ import Content from "./sections/Content/Content";
 import { useHistory } from "react-router-dom";
 import React from "react";
 import { Spin, Alert, notification } from "antd";
-import Navbar from "../Common/Navbar/Navbar";
+import Toolbar from "../Common/Toolbar/Toolbar";
 import Sidebar from "../Common/Sidebar/Sidebar";
 import routes from "../../routes";
 import { Switch, Route } from "react-router-dom";
@@ -42,7 +42,7 @@ const Dashboard = () => {
   return (
     <div>
       <Layout>
-        <Navbar />
+        <Toolbar />
         <Layout style={{ marginTop: "53px" }}>
           <Sidebar routes={routes} />
           <Layout style={{ marginTop: "" }}>

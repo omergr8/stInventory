@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
-import Login from "./Pages/Registration/Login/Login";
+import Login from "./Pages/User/Login/Login";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import PrivateRoute from "./PrivateRoutes";
 import AppSetting from "./Pages/Settings/AppSetting/AppSetting";
@@ -10,7 +10,7 @@ import "antd-button-color/dist/css/style.css";
 
 function App() {
   const token = localStorage.getItem("token");
-  console.log(token);
+
   return (
     <BrowserRouter>
       <Switch>

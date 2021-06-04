@@ -4,7 +4,7 @@ const countryList = require("country-list");
 const { Option } = Select;
 
 function handleChange(value) {
-  console.log(`selected ${value}`);
+  `selected ${value}`;
 }
 
 const CountrySelector = (props) => {

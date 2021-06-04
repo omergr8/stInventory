@@ -55,7 +55,7 @@ const ProductTable = (props) => {
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archieved=False`
+    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False`
   );
 
   const errorAlert = (placement, error) => {
@@ -79,11 +79,18 @@ const ProductTable = (props) => {
   };
   const getQueryParams = () => {
     const queryParamsList = queryParams(props);
-    let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archieved=False${queryParamsList}`;
+    let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False${queryParamsList}`;
     setUrl(url);
+  };
+  const reset = () => {
+    props.reset();
+    setUrl(
+      "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False"
+    );
   };
   useEffect(() => {
     props.productTableMethod_ref.current = getQueryParams;
+    props.reset_ref.current = reset;
   }, [props]);
 
   useEffect(() => {
@@ -119,7 +126,7 @@ const ProductTable = (props) => {
         properties: product.product.is_bundle
           ? "B"
           : product.product.is_archived
-          ? "Archieved"
+          ? "Archived"
           : product.product.is_ebay_inventory_item
           ? "Uses Inventory API"
           : "",
