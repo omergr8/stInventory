@@ -72,7 +72,6 @@ const PrintConfigs = (props) => {
         props.documentData.print_config.footer_terms !== null &&
         props.documentData.print_config.footer_terms !== undefined
       ) {
-        props.documentData.print_config.footer_terms;
         setFooterTerms(
           Object.entries(props.documentData.print_config.footer_terms)
         );
@@ -81,7 +80,6 @@ const PrintConfigs = (props) => {
       const copyObj = { ...checkedItems };
       const copyObj2 = props.documentData;
       copyObj2.print_config = copyObj.print_config;
-      ("else");
       // setFooterTerms({});
       setCheckedItems(copyObj2);
     }
@@ -93,7 +91,6 @@ const PrintConfigs = (props) => {
 
   const addFooter = () => {
     const footerObj = [];
-    footerterms;
     if (footerterms === undefined) {
       setFooterTerms([footerObj]);
     } else {

@@ -52,7 +52,6 @@ const DocumentsandPrintsTable = () => {
       .then((res) => {
         const document = res.data;
         if (!unmounted) {
-          document;
           setDocumentTypes(document);
         }
       })

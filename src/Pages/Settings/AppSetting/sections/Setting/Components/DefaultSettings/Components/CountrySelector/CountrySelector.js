@@ -3,9 +3,7 @@ import { Select } from "antd";
 const countryList = require("country-list");
 const { Option } = Select;
 
-function handleChange(value) {
-  `selected ${value}`;
-}
+function handleChange(value) {}
 
 const CountrySelector = (props) => {
   return (

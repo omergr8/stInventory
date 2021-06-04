@@ -30,7 +30,6 @@ const TaxTable = () => {
         headers,
       })
       .then((res) => {
-        res;
         Alert("bottomRight", "success");
         fetchTaxData();
       })
@@ -46,7 +45,6 @@ const TaxTable = () => {
       .then((res) => {
         const taxList = res.data;
         setTax(taxList);
-        taxList;
       })
       .catch((err) => {
         Alert("bottomRight", "error", err.response);
@@ -108,7 +106,6 @@ const TaxTable = () => {
     })),
   ];
 
-  data;
   return (
     <div>
       <div style={{ marginTop: "30px" }}>

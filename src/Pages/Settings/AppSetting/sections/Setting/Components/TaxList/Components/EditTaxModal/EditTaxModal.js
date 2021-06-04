@@ -38,7 +38,7 @@ const EditTaxModal = (props) => {
   };
   const handleChangeTax = (value) => {
     let copyArray = [...tabledata];
-    copyArray;
+
     let index = copyArray.findIndex((x) => x.key === value.target.name);
     let newObj = {
       key: copyArray[index].key,
@@ -68,7 +68,6 @@ const EditTaxModal = (props) => {
     if (value.target.value <= 100) {
       setTableData(copyArray);
     } else {
-      ("delete");
     }
   };
   const [tabledata, setTableData] = useState(data);
@@ -79,7 +78,7 @@ const EditTaxModal = (props) => {
       name: "",
       percentage: "",
     };
-    obj;
+
     setTableData([...tabledata, obj]);
   };
   const remove = (id) => {
@@ -150,7 +149,6 @@ const EditTaxModal = (props) => {
       .toFixed(2);
   };
   const handleOk = () => {
-    tabledata;
     const taxDataObject = getTaxDataObject();
     const taxModalObject = {
       name: taxname,

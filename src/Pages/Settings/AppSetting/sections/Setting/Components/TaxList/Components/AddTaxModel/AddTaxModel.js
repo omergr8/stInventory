@@ -67,7 +67,6 @@ const AddTaxModal = (props) => {
     if (value.target.value <= 100) {
       setTableData(copyArray);
     } else {
-      ("delete");
     }
   };
 
@@ -162,7 +161,6 @@ const AddTaxModal = (props) => {
         { headers }
       )
       .then((response) => {
-        response;
         Alert("bottomRight", "success");
         setIsModalVisible(false);
         props.fetchData();

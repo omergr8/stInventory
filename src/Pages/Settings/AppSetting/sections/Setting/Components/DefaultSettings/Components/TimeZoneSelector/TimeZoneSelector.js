@@ -2,9 +2,7 @@ import { Select } from "antd";
 import { minimalTimezoneSet } from "compact-timezone-list";
 const { Option } = Select;
 
-function handleChange(value) {
-  `selected ${value}`;
-}
+function handleChange(value) {}
 
 const TimeZoneSelector = (props) => {
   return (

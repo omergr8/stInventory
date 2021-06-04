@@ -47,7 +47,6 @@ const PermissionTable = (props) => {
   useEffect(() => {
     setPermission(props.permission.user_permissions);
     setSettings(props.permission.user_settings);
-    permission, props.permission;
   }, [props]);
   const save = (type) => {
     let copyObj = { ...props.permission };
@@ -56,8 +55,6 @@ const PermissionTable = (props) => {
     } else if (type === "empty") {
       copyObj.user_settings = [];
     }
-
-    copyObj;
 
     axios
       .put(`https://inventory-dev-295903.appspot.com/users/${id}/`, copyObj, {
@@ -71,9 +68,7 @@ const PermissionTable = (props) => {
       });
   };
   const handleChange = (value) => {
-    value.target.checked;
     if (!value.target.checked) {
-      ("if");
       setSettings([]);
       save("empty");
     } else if (value.target.checked) {
