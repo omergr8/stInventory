@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, notification, Select, Divider } from "antd";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
@@ -17,6 +17,7 @@ const ProductSizeFilter = () => {
   const [form] = Form.useForm();
   const productTableMethod_ref = React.useRef(null);
   const reset_ref = React.useRef(null);
+  const import_ref = React.useRef(null);
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -48,6 +49,7 @@ const ProductSizeFilter = () => {
       )
       .then((res) => {
         const searchDataResponse = res.data;
+
         setSearchData(searchDataResponse);
       })
       .catch((err) => {
@@ -73,12 +75,14 @@ const ProductSizeFilter = () => {
         Alert("bottomRight", "error", err.response);
       });
   };
+
   return (
     <div>
       <div style={{ marginBottom: "30px" }}>
         <ContentBar
           productTableMethod_ref={productTableMethod_ref}
           reset_ref={reset_ref}
+          import_ref={import_ref}
           incoming="ProductPackSize"
           title="Pack Size List"
         />
@@ -96,8 +100,8 @@ const ProductSizeFilter = () => {
             mode="multiple"
             showSearch
             allowClear
+            filterOption={false}
             placeholder="Search product/sku"
-            optionFilterProp="children"
             onChange={onChangeProduct}
             onFocus={fetchSearchData}
             onSearch={onSearch}
@@ -126,6 +130,7 @@ const ProductSizeFilter = () => {
           productId={productid}
           productTableMethod_ref={productTableMethod_ref}
           reset_ref={reset_ref}
+          import_ref={import_ref}
           reset={reset}
         />
       </div>

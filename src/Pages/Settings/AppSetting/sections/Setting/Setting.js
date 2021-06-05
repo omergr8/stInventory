@@ -21,7 +21,10 @@ const Setting = () => {
         <div className={classes.wrapper}>
           <Row>
             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-              <Link className={classes.anchor} to="/dashboard/product-listing">
+              <Link
+                className={classes.anchor}
+                to="/dashboard/product-listing?is_archived=False"
+              >
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FiTruck />
@@ -115,7 +118,7 @@ const Setting = () => {
             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
               <Link
                 className={classes.anchor}
-                to="/dashboard/product-pack-size"
+                to="/dashboard/product-pack-size?paginate=True"
               >
                 <div className={classes.first}>
                   <div className={classes.icon}>
@@ -148,7 +151,10 @@ const Setting = () => {
               </Link>
             </Col>
             <Col xs={24} sm={24} md={24} lg={12} xl={8}>
-              <Link className={classes.anchor} to="/dashboard/archived-product">
+              <Link
+                className={classes.anchor}
+                to="/dashboard/archived-product/?is_archived=True"
+              >
                 <div className={classes.first}>
                   <div className={classes.icon}>
                     <FaCube />

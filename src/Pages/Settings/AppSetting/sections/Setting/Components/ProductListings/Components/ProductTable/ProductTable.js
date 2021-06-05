@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { queryParams } from "../../../../../../../../../Services/ListServices";
 import { Table, Tag, Button, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
@@ -54,10 +55,17 @@ const ProductTable = (props) => {
   const [product, setProduct] = useState({});
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
+  const history = useHistory();
+  const search = useLocation().search;
   const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False`
+    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/${search}`
   );
 
+  useEffect(() => {
+    setUrl(
+      `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/${search}`
+    );
+  }, [search]);
   const errorAlert = (placement, error) => {
     notification.error({
       message: `Error Code: ${error.status} `,
@@ -79,11 +87,15 @@ const ProductTable = (props) => {
   };
   const getQueryParams = () => {
     const queryParamsList = queryParams(props);
-    let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False${queryParamsList}`;
-    setUrl(url);
+    history.push(
+      `/dashboard/product-listing?is_archived=False${queryParamsList}`
+    );
+    // let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False${queryParamsList}`;
+    // setUrl(url);
   };
   const reset = () => {
     props.reset();
+    history.push(`/dashboard/product-listing?is_archived=False`);
     setUrl(
       "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False"
     );

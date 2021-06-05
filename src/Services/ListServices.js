@@ -54,6 +54,7 @@ export const importList = (file, url) => {
         },
       })
       .then((res) => {
+        // refreshAfterImport(res);
         Alert("bottomRight", "success", "Imported Successfully");
       })
       .catch((err) => {
@@ -214,6 +215,10 @@ export const queryParams = (props) => {
     props.inventorySync !== undefined
   ) {
     queryParams = `&${props.channelId}&${props.inventorySync}`;
+  }
+
+  if (queryParams === undefined) {
+    queryParams = "";
   }
   return queryParams;
 };

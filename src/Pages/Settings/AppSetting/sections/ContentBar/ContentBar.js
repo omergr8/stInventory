@@ -1,6 +1,7 @@
 import classes from "./ContentBar.module.css";
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
+import MoreFilters from "../Setting/Components/ArchivedProduct/Components/MoreFilters/MoreFilters";
 import {
   exportList,
   importList,
@@ -48,6 +49,13 @@ const ContentBar = (props) => {
   let description;
   const history = useHistory();
   const [allchannels, setAllChannels] = useState(props.channels);
+
+  const customRequestPackSize = (file) => {
+    props.import_ref.current(file.file);
+  };
+  const customRequestCategory = (file) => {
+    props.categoryImport(file.file);
+  };
   function handleChange(value, type) {
     props.sync(value, type);
   }
@@ -61,6 +69,7 @@ const ContentBar = (props) => {
     <Select
       placeholder="Sync all Inventory"
       onSelect={(value) => handleChange(value, "inventory")}
+      style={{ width: 160 }}
       key="6"
     >
       {allchannels !== undefined
@@ -75,6 +84,7 @@ const ContentBar = (props) => {
   const syncProduct = (
     <Select
       placeholder="Sync Product Listing"
+      style={{ width: 180 }}
       onSelect={(value) => handleChange(value, "product")}
       key="5"
     >
@@ -104,9 +114,9 @@ const ContentBar = (props) => {
           Export
         </Button>
         <Upload
-          action={(file) =>
+          customRequest={(file) =>
             importList(
-              file,
+              file.file,
               "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/import/"
             )
           }
@@ -140,9 +150,12 @@ const ContentBar = (props) => {
         >
           Export
         </Button>
-        <Dropdown.Button className={classes.margin} key="2" overlay={menu}>
-          Import
-        </Dropdown.Button>
+
+        <Upload customRequest={customRequestCategory} showUploadList={false}>
+          <Dropdown.Button className={classes.margin} key="2" overlay={menu}>
+            Import
+          </Dropdown.Button>
+        </Upload>
         <Button
           onClick={() => props.addNew()}
           className={classes.margin}
@@ -164,15 +177,7 @@ const ContentBar = (props) => {
         >
           Export
         </Button>
-        <Upload
-          action={(file) =>
-            importList(
-              file,
-              "https://inventory-dev-295903.appspot.com/products/pack_sizes/import/"
-            )
-          }
-          showUploadList={false}
-        >
+        <Upload customRequest={customRequestPackSize} showUploadList={false}>
           <Button key="8">Import</Button>
         </Upload>
         <Button onClick={() => props.reset_ref.current()} key="9">
@@ -192,7 +197,7 @@ const ContentBar = (props) => {
       "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
     extra = (
       <React.Fragment key="32">
-        <Button key="11">More Filters</Button>
+        <MoreFilters />
         <Button
           key="12"
           onClick={() => exportList(ArchiveProductUrl, "Archived Product")}
@@ -208,6 +213,14 @@ const ContentBar = (props) => {
           type="primary"
         >
           Apply
+        </Button>
+      </React.Fragment>
+    );
+  } else if (props.incoming === "Warehouses") {
+    extra = (
+      <React.Fragment key="33">
+        <Button onClick={props.addWarehouse} icon={<AiOutlinePlus />} key="23">
+          Add Warehouse
         </Button>
       </React.Fragment>
     );

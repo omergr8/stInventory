@@ -18,15 +18,28 @@ const ProductCategoryTable = () => {
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
-        message: `Deleted Successfully. `,
+        message: error,
         placement,
       });
-    } else if (type === "error")
+    } else if (type === "error" && error !== undefined) {
       notification.error({
         message: `Error Code: ${error.status} `,
         description: [JSON.stringify(error.data.errors)],
         placement,
       });
+    } else if (type === "error" && error === undefined) {
+      notification.error({
+        message: `Error Code: ${error} `,
+
+        placement,
+      });
+    } else if (type === "errorSuccess" && error !== undefined) {
+      notification.error({
+        message: `Error Code: 500 `,
+        description: [JSON.stringify(error)],
+        placement,
+      });
+    }
   };
   const deleteProduct = (id) => {
     axios
@@ -37,7 +50,7 @@ const ProductCategoryTable = () => {
         }
       )
       .then((res) => {
-        Alert("bottomRight", "success");
+        Alert("bottomRight", "success", "Deleted Successfully.");
         fetchData();
       })
       .catch((err) => {
@@ -152,11 +165,44 @@ const ProductCategoryTable = () => {
       getPageData(productcategory.previous);
     }
   };
-
+  const categoryImport = (file) => {
+    let inputFR = new FileReader();
+    inputFR.readAsText(file);
+    inputFR.onload = () => {
+      let body = new Blob([inputFR.result], { type: "text/csv" });
+      axios
+        .post(
+          "https://inventory-dev-295903.appspot.com/products/groups/1/import/",
+          body,
+          {
+            headers: {
+              "Content-Type": "text/csv",
+              Authorization: `token ${JSON.parse(
+                localStorage.getItem("token")
+              )}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res) {
+            fetchData();
+          }
+          if (res.data.errors) {
+            Alert("bottomRight", "errorSuccess", res.data.errors);
+          } else {
+            Alert("bottomRight", "success", "imported successfully");
+          }
+        })
+        .catch((err) => {
+          Alert("bottomRight", "error", err.response);
+        });
+    };
+  };
   return (
     <div>
       <ContentBar
         addNew={addNew}
+        categoryImport={(file) => categoryImport(file)}
         incoming="ProductCategory"
         title="Product Categories"
       />

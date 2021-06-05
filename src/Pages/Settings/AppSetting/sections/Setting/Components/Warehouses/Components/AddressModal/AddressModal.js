@@ -19,7 +19,6 @@ const customLabel = (value) => {
 };
 
 const AddressModal = (props) => {
-  const { id } = useParams();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [warehouseaddress, setWarehouseAddress] = useState(props.address);
   const headers = getToken();
@@ -42,7 +41,7 @@ const AddressModal = (props) => {
   const onFinish = () => {
     axios
       .put(
-        `https://inventory-dev-295903.appspot.com/contacts/addresses/${id}/`,
+        `https://inventory-dev-295903.appspot.com/contacts/addresses/${warehouseaddress.id}/`,
         warehouseaddress,
         { headers }
       )

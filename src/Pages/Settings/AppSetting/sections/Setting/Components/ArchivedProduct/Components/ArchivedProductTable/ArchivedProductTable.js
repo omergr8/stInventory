@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import classes from "./ArchivedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
@@ -33,10 +33,17 @@ const ArchivedProductTable = (props) => {
   const [archivedroduct, setArchivedroduct] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
+  const search = useLocation().search;
+  const history = useHistory();
   const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/products/?is_archived=true`
+    `https://inventory-dev-295903.appspot.com/products/${search}`
   );
   const headers = getToken();
+
+  useEffect(() => {
+    setUrl(`https://inventory-dev-295903.appspot.com/products/${search}`);
+  }, [search]);
+
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -74,14 +81,16 @@ const ArchivedProductTable = (props) => {
     } else {
       queryParams = `&search=${props.searchInput}&${props.productId}`;
     }
-    let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
-    setUrl(url);
+    history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
+    // let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
+    // setUrl(url);
   };
   const reset = () => {
     props.reset();
-    setUrl(
-      "https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True"
-    );
+    history.push(`/dashboard/archived-product/?is_archived=True`);
+    // setUrl(
+    //   "https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True"
+    // );
   };
   React.useEffect(() => {
     props.archiveProductTableMethod_ref.current = getQueryParams;

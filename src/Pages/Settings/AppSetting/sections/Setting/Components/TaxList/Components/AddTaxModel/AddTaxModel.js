@@ -148,6 +148,7 @@ const AddTaxModal = (props) => {
   };
   const handleOk = () => {
     const taxDataObject = getTaxDataObject();
+    delete taxDataObject[""];
     const taxModalObject = {
       name: taxname,
       tax_type: "2",

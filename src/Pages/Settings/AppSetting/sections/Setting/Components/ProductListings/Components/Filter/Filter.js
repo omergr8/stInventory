@@ -9,7 +9,7 @@ import ContentBar from "../../../../../ContentBar/ContentBar";
 import axios from "axios";
 const { Option } = Select;
 
-const Filter = () => {
+const Filter = (props) => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
   const [channelid, setChannelId] = useState();
@@ -22,12 +22,15 @@ const Filter = () => {
   const [form] = Form.useForm();
   const productTableMethod_ref = React.useRef(null);
   const reset_ref = React.useRef(null);
-
   function onChangeProduct(value) {
     let productId;
     if (value.length !== 0) {
       productId = `product=${value}`;
     }
+    // else {
+    //   productId = "";
+    // }
+
     setProductId(productId);
   }
   function onChangeChannel(value) {
@@ -71,10 +74,10 @@ const Filter = () => {
   };
   const reset = () => {
     form.resetFields();
-    setProductId(undefined);
-    setChannelId(undefined);
-    setTrackingId(undefined);
-    setInventorySync(undefined);
+    setProductId();
+    setChannelId();
+    setTrackingId();
+    setInventorySync();
   };
   const sync = (value, type) => {
     const headers = getToken();
@@ -163,7 +166,7 @@ const Filter = () => {
                 showSearch
                 allowClear
                 placeholder="Search product/sku"
-                optionFilterProp="children"
+                filterOption={false}
                 onChange={onChangeProduct}
                 onFocus={fetchSearchData}
                 onSearch={onSearch}

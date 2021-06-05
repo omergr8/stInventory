@@ -45,6 +45,7 @@ if (token) {
       component: Warehouses,
       layout: "/dashboard",
     },
+
     {
       path: "/warehouselinks",
       name: "warehouseLinks",

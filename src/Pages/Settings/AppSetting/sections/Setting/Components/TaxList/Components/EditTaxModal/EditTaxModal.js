@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Table, Input, Button, notification, Form, Modal } from "antd";
@@ -23,6 +23,10 @@ const EditTaxModal = (props) => {
     name: key,
     percentage: value,
   }));
+  const [tabledata, setTableData] = useState(data);
+  useEffect(() => {
+    setTableData(data);
+  }, [props]);
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -58,9 +62,8 @@ const EditTaxModal = (props) => {
       key: copyArray[index].key,
       no: copyArray[index].no,
       name: copyArray[index].name,
-      percentage: JSON.stringify(value.target.value / 100),
+      percentage: value.target.value / 100,
     };
-
     if (index !== -1) {
       copyArray[index] = newObj;
     }
@@ -70,13 +73,13 @@ const EditTaxModal = (props) => {
     } else {
     }
   };
-  const [tabledata, setTableData] = useState(data);
+
   const addComponent = () => {
     const obj = {
       key: tabledata[tabledata.length - 1].key + 1,
       no: tabledata[tabledata.length - 1].no + 1,
       name: "",
-      percentage: "",
+      percentage: 0,
     };
 
     setTableData([...tabledata, obj]);
@@ -110,7 +113,7 @@ const EditTaxModal = (props) => {
         <Input
           onChange={handleChangeTaxPercentage}
           name={row.key}
-          value={text * 100}
+          value={(text * 100).toFixed(0)}
         />
       ),
     },
@@ -144,18 +147,22 @@ const EditTaxModal = (props) => {
   };
   const getTaxPercentage = () => {
     const taxData = getTaxDataObject();
+    delete taxData[""];
     return Object.keys(taxData)
       .reduce((sum, key) => sum + parseFloat(taxData[key] || 0), 0)
       .toFixed(2);
   };
   const handleOk = () => {
     const taxDataObject = getTaxDataObject();
+    delete taxDataObject[""];
+
     const taxModalObject = {
       name: taxname,
       tax_type: "2",
       tax_rate: getTaxPercentage(),
       tax_data: taxDataObject,
     };
+
     axios
       .put(
         `https://inventory-dev-295903.appspot.com/settings/taxes/${props.id}/`,

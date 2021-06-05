@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ContentBar from "../../../../../ContentBar/ContentBar";
+import AddWarehouseModal from "../AddWarehouseModal/AddWarehouseModal";
 import { Link } from "react-router-dom";
-import { Table, Tag, notification } from "antd";
+import { Table, Tag, notification, Button } from "antd";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 
 const columns = [
@@ -64,22 +66,24 @@ const WarehouseTable = () => {
         placement,
       });
   };
-
-  useEffect(() => {
-    let unmounted = false;
+  const fetchWarehouses = () => {
     axios
       .get(`https://inventory-dev-295903.appspot.com/settings/warehouses/`, {
         headers,
       })
       .then((res) => {
-        if (!unmounted) {
-          const warehouse = res.data;
-          setWarehouses(warehouse);
-        }
+        const warehouse = res.data;
+        setWarehouses(warehouse);
       })
       .catch((err) => {
         Alert("bottomRight", "error", err.response);
       });
+  };
+  useEffect(() => {
+    let unmounted = false;
+    if (!unmounted) {
+      fetchWarehouses();
+    }
     return () => {
       unmounted = true;
     };
@@ -98,8 +102,24 @@ const WarehouseTable = () => {
       isArchived: warehouse.is_archived,
     })),
   ];
+  const [modal, setModal] = useState(false);
+  const setModalFalse = () => {
+    setModal(false);
+  };
   return (
     <div>
+      <ContentBar
+        addWarehouse={() => setModal(true)}
+        title="Warehouse List"
+        incoming="Warehouses"
+      />
+      <div>
+        <AddWarehouseModal
+          modal={modal}
+          setModalFalse={setModalFalse}
+          fetchWarehouses={fetchWarehouses}
+        />
+      </div>
       <div>
         <h4>
           Total <span>{warehouses.length}</span> Warehouses
