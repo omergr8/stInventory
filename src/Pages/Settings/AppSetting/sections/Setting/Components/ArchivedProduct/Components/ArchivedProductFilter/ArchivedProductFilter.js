@@ -15,6 +15,7 @@ const ArchivedProductFilter = () => {
   const [form] = Form.useForm();
   const archiveProductTableMethod_ref = React.useRef(null);
   const reset_ref = React.useRef(null);
+  const more_ref = React.useRef(null);
   function onChangeProduct(value) {
     let productId;
     if (value.length !== 0) {
@@ -71,14 +72,14 @@ const ArchivedProductFilter = () => {
       });
   };
 
-  const onFinish = (values) => {};
+  const moreFilters = () => {};
 
-  const onFinishFailed = (errorInfo) => {};
   return (
     <div>
       <ContentBar
         archiveProductTableMethod_ref={archiveProductTableMethod_ref}
         reset_ref={reset_ref}
+        more_ref={more_ref}
         incoming="ArchivedProduct"
         title="Archived Products List"
       />
@@ -88,8 +89,6 @@ const ArchivedProductFilter = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Row gutter={18}>
           <Col xs={24} sm={24} md={24} lg={24} xl={10} key={1}>
@@ -145,7 +144,11 @@ const ArchivedProductFilter = () => {
           </Col>
         </Row>
       </Form>
-      <MoreFilters productId={productid} searchInput={searchinput} />
+      <MoreFilters
+        more_ref={more_ref}
+        productId={productid}
+        searchInput={searchinput}
+      />
       <Divider />
       <div>
         <ArchivedProductTable

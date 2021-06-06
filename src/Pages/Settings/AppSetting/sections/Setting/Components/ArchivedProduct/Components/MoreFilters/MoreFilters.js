@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Modal, Button, Form, Input, Select, Radio } from "antd";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -35,7 +35,9 @@ const MoreFilters = (props) => {
   const showModal = () => {
     setIsModalVisible(true);
   };
-
+  React.useEffect(() => {
+    props.more_ref.current = showModal;
+  }, [props]);
   const setQueryParams = () => {
     let queryParams;
 
@@ -82,9 +84,6 @@ const MoreFilters = (props) => {
 
   return (
     <>
-      <Button icon={<AiOutlinePlus />} onClick={showModal}>
-        More Filters
-      </Button>
       <Modal
         title="Filter"
         visible={isModalVisible}

@@ -199,7 +199,12 @@ const ContentBar = (props) => {
       "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
     extra = (
       <React.Fragment key="32">
-        {/* <MoreFilters /> */}
+        <Button
+          onClick={() => props.more_ref.current()}
+          icon={<AiOutlinePlus />}
+        >
+          More Filters
+        </Button>
         <Button
           key="12"
           onClick={() => exportList(ArchiveProductUrl, "Archived Product")}
