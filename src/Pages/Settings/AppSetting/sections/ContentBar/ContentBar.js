@@ -71,6 +71,7 @@ const ContentBar = (props) => {
       onSelect={(value) => handleChange(value, "inventory")}
       style={{ width: 160 }}
       key="6"
+      value={"Sync all Inventory"}
     >
       {allchannels !== undefined
         ? allchannels.map((value, index) => (
@@ -85,6 +86,7 @@ const ContentBar = (props) => {
     <Select
       placeholder="Sync Product Listing"
       style={{ width: 180 }}
+      value="Sync Product Listing"
       onSelect={(value) => handleChange(value, "product")}
       key="5"
     >
@@ -197,7 +199,7 @@ const ContentBar = (props) => {
       "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
     extra = (
       <React.Fragment key="32">
-        <MoreFilters />
+        {/* <MoreFilters /> */}
         <Button
           key="12"
           onClick={() => exportList(ArchiveProductUrl, "Archived Product")}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, notification, Select, Divider, Row, Col } from "antd";
 import ArchivedProductTable from "../ArchivedProductTable/ArchivedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
+import MoreFilters from "../MoreFilters/MoreFilters";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import axios from "axios";
 const { Option } = Select;
@@ -144,6 +145,7 @@ const ArchivedProductFilter = () => {
           </Col>
         </Row>
       </Form>
+      <MoreFilters productId={productid} searchInput={searchinput} />
       <Divider />
       <div>
         <ArchivedProductTable

@@ -129,7 +129,12 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
     \n${address.pincode}\n${address.country}\n${address.contact}`;
     const nullRemovedAddress = addresss.replaceAll("null", "");
     const emptyRemoveAddress = nullRemovedAddress.replace(/(^[ \t]*\n)/gm, "");
-    return emptyRemoveAddress;
+
+    if (address) {
+      return emptyRemoveAddress;
+    } else {
+      return undefined;
+    }
   };
   const customLabel = (value) => {
     return <label style={{ fontWeight: "600" }}>{value}</label>;
@@ -179,7 +184,10 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
                 addonAfter={<FcAddressBook />}
                 value={getAddress(warehouseaddress)}
                 rows={
-                  (getAddress(warehouseaddress).match(/\n/g) || "").length + 1
+                  getAddress(warehouseaddress) !== undefined
+                    ? (getAddress(warehouseaddress).match(/\n/g) || "").length +
+                      1
+                    : ""
                 }
                 disabled
               />

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-import { Table, Input, Button, notification, Form, Modal } from "antd";
+import {
+  Table,
+  Input,
+  InputNumber,
+  Button,
+  notification,
+  Form,
+  Modal,
+} from "antd";
 import { ImCancelCircle } from "react-icons/im";
 const layout = {
   labelCol: {
@@ -55,22 +63,24 @@ const EditTaxModal = (props) => {
     }
     setTableData(copyArray);
   };
-  const handleChangeTaxPercentage = (value) => {
+  const handleChangeTaxPercentage = (value, name) => {
+    //console.log(value, name);
     let copyArray = [...tabledata];
-    let index = copyArray.findIndex((x) => x.key === value.target.name);
+    let index = copyArray.findIndex((x) => x.key === name);
     let newObj = {
       key: copyArray[index].key,
       no: copyArray[index].no,
       name: copyArray[index].name,
-      percentage: value.target.value / 100,
+      percentage: parseFloat((value / 100).toFixed(7)),
     };
+    //console.log(data, newObj);
     if (index !== -1) {
       copyArray[index] = newObj;
     }
-
-    if (value.target.value <= 100) {
+    //setTableData(copyArray);
+    if (value <= 100) {
+      // console.log();
       setTableData(copyArray);
-    } else {
     }
   };
 
@@ -110,10 +120,12 @@ const EditTaxModal = (props) => {
       dataIndex: "percentage",
       key: "percentage",
       render: (text, row) => (
-        <Input
-          onChange={handleChangeTaxPercentage}
+        <InputNumber
+          min={0}
+          max={100}
+          onChange={(value) => handleChangeTaxPercentage(value, row.key)}
           name={row.key}
-          value={(text * 100).toFixed(0)}
+          value={(text * 100).toFixed(5).replace(/[.,]00000$/, "")}
         />
       ),
     },
@@ -148,9 +160,12 @@ const EditTaxModal = (props) => {
   const getTaxPercentage = () => {
     const taxData = getTaxDataObject();
     delete taxData[""];
-    return Object.keys(taxData)
-      .reduce((sum, key) => sum + parseFloat(taxData[key] || 0), 0)
-      .toFixed(2);
+    const taxPercentage = Object.keys(taxData).reduce(
+      (sum, key) => sum + parseFloat(taxData[key] || 0),
+      0
+    );
+    //console.log(taxPercentage.toFixed(7));
+    return taxPercentage.toFixed(6);
   };
   const handleOk = () => {
     const taxDataObject = getTaxDataObject();
@@ -162,7 +177,7 @@ const EditTaxModal = (props) => {
       tax_rate: getTaxPercentage(),
       tax_data: taxDataObject,
     };
-
+    //console.log(taxModalObject);
     axios
       .put(
         `https://inventory-dev-295903.appspot.com/settings/taxes/${props.id}/`,

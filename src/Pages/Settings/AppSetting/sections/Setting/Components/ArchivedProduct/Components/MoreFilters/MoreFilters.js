@@ -26,7 +26,7 @@ const optionsWithDisabled = [
   { label: "No", value: "False" },
 ];
 
-const MoreFilters = () => {
+const MoreFilters = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isbundle, setIsBundle] = useState("all");
   const [category, setCategory] = useState();
@@ -54,7 +54,14 @@ const MoreFilters = () => {
     } else if (tags !== "" && isbundle !== "all" && category !== undefined) {
       queryParams = `&is_bundle=${isbundle}&group1=${category}`;
     }
-    console.log(queryParams);
+    if (props.productId !== undefined && props.searchInput === "") {
+      queryParams = queryParams + `&${props.productId}`;
+    } else if (props.searchInput !== "" && props.productId === undefined) {
+      queryParams = queryParams + `&search=${props.searchInput}`;
+    } else if (props.searchInput !== "" && props.productId !== undefined) {
+      queryParams =
+        queryParams + `&search=${props.searchInput}` + `&${props.productId}`;
+    }
     history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
   };
   const handleOk = () => {
@@ -66,7 +73,6 @@ const MoreFilters = () => {
     setIsModalVisible(false);
   };
   function onChange(value) {
-    console.log(`selected ${value}`);
     setCategory(value);
   }
 

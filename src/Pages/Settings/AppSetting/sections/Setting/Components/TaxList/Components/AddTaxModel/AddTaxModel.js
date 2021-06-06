@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-import { Table, Input, Button, Form, Modal, notification } from "antd";
+import {
+  Table,
+  Input,
+  InputNumber,
+  Button,
+  Form,
+  Modal,
+  notification,
+} from "antd";
 import { ImCancelCircle } from "react-icons/im";
 const layout = {
   labelCol: {
@@ -32,6 +40,11 @@ const AddTaxModal = (props) => {
         placement,
       });
   };
+  useEffect(() => {
+    // console.log("mounted", taxname);
+    setTableData([]);
+    setTaxName("");
+  }, [isModalVisible]);
   //To handle Change tax input
   const handleChangeTax = (value) => {
     let copyArray = [...tabledata];
@@ -50,23 +63,23 @@ const AddTaxModal = (props) => {
     setTableData(copyArray);
   };
   //To handle change percentage input.
-  const handleChangeTaxPercentage = (value) => {
+  const handleChangeTaxPercentage = (value, name) => {
     let copyArray = [...tabledata];
-    let index = copyArray.findIndex((x) => x.key === value.target.name);
+
+    let index = copyArray.findIndex((x) => x.key === name);
     let newObj = {
       key: copyArray[index].key,
       no: copyArray[index].no,
       name: copyArray[index].name,
-      percentage: JSON.stringify(value.target.value / 100),
+      percentage: parseFloat((value / 100).toFixed(7)),
     };
-
+    // console.log(newObj, value / 100);
     if (index !== -1) {
       copyArray[index] = newObj;
     }
 
-    if (value.target.value <= 100) {
+    if (value <= 100) {
       setTableData(copyArray);
-    } else {
     }
   };
 
@@ -82,7 +95,7 @@ const AddTaxModal = (props) => {
           ? 1
           : tabledata[tabledata.length - 1].no + 1,
       name: "",
-      percentage: "",
+      percentage: Number,
     };
     setTableData([...tabledata, obj]);
   };
@@ -113,7 +126,12 @@ const AddTaxModal = (props) => {
       dataIndex: "percentage",
       key: "percentage",
       render: (text, row) => (
-        <Input onChange={handleChangeTaxPercentage} name={row.key} />
+        <InputNumber
+          min={0}
+          max={100}
+          onChange={(value) => handleChangeTaxPercentage(value, row.key)}
+          name={row.key}
+        />
       ),
     },
     {
@@ -142,9 +160,10 @@ const AddTaxModal = (props) => {
   };
   const getTaxPercentage = () => {
     const taxData = getTaxDataObject();
+    //  console.log("i am tax%", taxData);
     return Object.keys(taxData)
       .reduce((sum, key) => sum + parseFloat(taxData[key] || 0), 0)
-      .toFixed(2);
+      .toFixed(6);
   };
   const handleOk = () => {
     const taxDataObject = getTaxDataObject();
@@ -152,9 +171,10 @@ const AddTaxModal = (props) => {
     const taxModalObject = {
       name: taxname,
       tax_type: "2",
-      tax_rate: getTaxPercentage(),
+      tax_rate: parseFloat(getTaxPercentage()),
       tax_data: taxDataObject,
     };
+    //console.log(taxDataObject, taxModalObject);
     axios
       .post(
         `https://inventory-dev-295903.appspot.com/settings/taxes/`,
@@ -199,7 +219,10 @@ const AddTaxModal = (props) => {
       >
         <Form {...layout} form={form} name="control-hooks">
           <Form.Item label={customLabel("Tax Display Name")}>
-            <Input onChange={(e) => setTaxName(e.target.value)} />
+            <Input
+              value={taxname}
+              onChange={(e) => setTaxName(e.target.value)}
+            />
           </Form.Item>
           <Form.Item label={customLabel("Tax Components")}>
             <Table

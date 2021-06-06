@@ -69,7 +69,7 @@ const TaxTable = () => {
       title: "Percentage",
       dataIndex: "percentage",
       key: "percentage",
-      render: (text) => (text * 100).toFixed(0) + "%",
+      render: (text) => parseFloat((text * 100).toFixed(5)).toString() + "%",
     },
 
     {

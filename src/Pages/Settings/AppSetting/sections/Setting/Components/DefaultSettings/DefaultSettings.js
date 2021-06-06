@@ -88,6 +88,14 @@ const DefaultSettings = () => {
         }
       )
       .then((res) => {
+        console.log(res);
+        const setting = res.data;
+        setCountry(setting.country_code);
+        setTimeZone(setting.timezone);
+        setClientSetting(setting.client_settings);
+        setPaymentMethod(setting.payment_methods);
+        setDefaultSettings(setting);
+        getClientSettingStatus(setting);
         Alert("bottomRight", "success");
       })
       .catch((err) => {
