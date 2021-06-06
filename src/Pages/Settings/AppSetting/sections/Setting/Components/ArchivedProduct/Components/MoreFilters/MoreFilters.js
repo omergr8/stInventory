@@ -49,7 +49,6 @@ const MoreFilters = (props) => {
     } else if (tags !== "" && isbundle === "all" && category === undefined) {
       queryParams = "";
     } else if (tags !== "" && isbundle !== "all" && category === undefined) {
-      console.log("bund", isbundle);
       queryParams = `&is_bundle=${isbundle}`;
     } else if (tags !== "" && isbundle === "all" && category !== undefined) {
       queryParams = `&group1=${category}`;
@@ -71,7 +70,6 @@ const MoreFilters = (props) => {
     props.callParent(
       `/dashboard/archived-product/?is_archived=True${queryParams}`
     );
-    console.log(queryParams);
     history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
     // if (queryParams !== undefined) {
     //   history.push(
@@ -93,7 +91,6 @@ const MoreFilters = (props) => {
 
   const onChange4 = (e) => {
     setIsBundle(e.target.value);
-    console.log(e.target.value);
   };
 
   return (
