@@ -72,7 +72,9 @@ const ArchivedProductFilter = () => {
       });
   };
 
-  const moreFilters = () => {};
+  const callParent = (url) => {
+    console.log(url);
+  };
 
   return (
     <div>
@@ -146,6 +148,8 @@ const ArchivedProductFilter = () => {
       </Form>
       <MoreFilters
         more_ref={more_ref}
+        callParent={(url) => callParent(url)}
+        archiveProductTableMethod_ref={archiveProductTableMethod_ref}
         productId={productid}
         searchInput={searchinput}
       />

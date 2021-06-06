@@ -35,19 +35,21 @@ const MoreFilters = (props) => {
   const showModal = () => {
     setIsModalVisible(true);
   };
+
   React.useEffect(() => {
     props.more_ref.current = showModal;
+    props.archiveProductTableMethod_ref.current = setQueryParams;
   }, [props]);
   const setQueryParams = () => {
     let queryParams;
-
     if (isbundle !== "all" && category === undefined && tags === "") {
       queryParams = `&is_bundle=${isbundle}`;
     } else if (category !== undefined && isbundle === "all" && tags === "") {
       queryParams = `&group1=${category}`;
     } else if (tags !== "" && isbundle === "all" && category === undefined) {
-      queryParams = ``;
+      queryParams = "";
     } else if (tags !== "" && isbundle !== "all" && category === undefined) {
+      console.log("bund", isbundle);
       queryParams = `&is_bundle=${isbundle}`;
     } else if (tags !== "" && isbundle === "all" && category !== undefined) {
       queryParams = `&group1=${category}`;
@@ -55,6 +57,8 @@ const MoreFilters = (props) => {
       queryParams = `&is_bundle=${isbundle}&group1=${category}`;
     } else if (tags !== "" && isbundle !== "all" && category !== undefined) {
       queryParams = `&is_bundle=${isbundle}&group1=${category}`;
+    } else {
+      queryParams = "";
     }
     if (props.productId !== undefined && props.searchInput === "") {
       queryParams = queryParams + `&${props.productId}`;
@@ -64,7 +68,16 @@ const MoreFilters = (props) => {
       queryParams =
         queryParams + `&search=${props.searchInput}` + `&${props.productId}`;
     }
+    props.callParent(
+      `/dashboard/archived-product/?is_archived=True${queryParams}`
+    );
+    console.log(queryParams);
     history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
+    // if (queryParams !== undefined) {
+    //   history.push(
+    //     `/dashboard/archived-product/?is_archived=True${queryParams}`
+    //   );
+    // }
   };
   const handleOk = () => {
     setIsModalVisible(false);
@@ -80,6 +93,7 @@ const MoreFilters = (props) => {
 
   const onChange4 = (e) => {
     setIsBundle(e.target.value);
+    console.log(e.target.value);
   };
 
   return (

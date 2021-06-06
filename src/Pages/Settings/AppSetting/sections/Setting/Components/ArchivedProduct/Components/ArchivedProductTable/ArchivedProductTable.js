@@ -70,30 +70,32 @@ const ArchivedProductTable = (props) => {
       setPreviousButton(true);
     }
   };
-  const getQueryParams = () => {
-    let queryParams;
-    if (props.searchInput === "" && props.productId === undefined) {
-      queryParams = "";
-    } else if (props.productId === undefined && props.searchInput !== "") {
-      queryParams = `&search=${props.searchInput}`;
-    } else if (props.searchInput === "" && props.productId !== undefined) {
-      queryParams = `&${props.productId}`;
-    } else {
-      queryParams = `&search=${props.searchInput}&${props.productId}`;
-    }
-    history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
-    // let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
-    // setUrl(url);
-  };
+  // const getQueryParams = () => {
+  //   let queryParams;
+
+  //   if (props.searchInput === "" && props.productId === undefined) {
+  //     queryParams = "";
+  //   } else if (props.productId === undefined && props.searchInput !== "") {
+  //     queryParams = `&search=${props.searchInput}`;
+  //   } else if (props.searchInput === "" && props.productId !== undefined) {
+  //     queryParams = `&${props.productId}`;
+  //   } else {
+  //     queryParams = `&search=${props.searchInput}&${props.productId}`;
+  //   }
+  //   const t = new URLSearchParams(search).get("id");
+
+  //   console.log(search, "test", t, queryParams);
+  //   // if (new URLSearchParams(search).get("id") ===undefined)
+  //   history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
+  //   // let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
+  //   // setUrl(url);
+  // };
   const reset = () => {
     props.reset();
     history.push(`/dashboard/archived-product/?is_archived=True`);
-    // setUrl(
-    //   "https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True"
-    // );
   };
   React.useEffect(() => {
-    props.archiveProductTableMethod_ref.current = getQueryParams;
+    //  props.archiveProductTableMethod_ref.current = getQueryParams;
     props.reset_ref.current = reset;
   }, [props]);
   useEffect(() => {
