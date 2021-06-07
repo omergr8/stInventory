@@ -162,7 +162,6 @@ export const WarehouseLinksDetails = () => {
             </Form.Item>
             <Form.Item label={customLabel("Channel Name")}>
               <Select
-                mode="multiple"
                 allowClear
                 placeholder="Please select"
                 value={

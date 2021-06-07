@@ -181,7 +181,6 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
             </Form.Item>
             <Form.Item label={customLabel("Address")}>
               <TextArea
-                addonAfter={<FcAddressBook />}
                 value={getAddress(warehouseaddress)}
                 rows={
                   getAddress(warehouseaddress) !== undefined
