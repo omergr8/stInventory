@@ -5,10 +5,10 @@ const formReducer = (state, action) => {
         ...state,
         [action.field]: action.payload,
       };
-    case "TOGGLE CONSENT":
+    case "HANDLE SELECT":
       return {
         ...state,
-        hasConsented: state.hasConsented,
+        [action.field]: [action.payload],
       };
     default:
       return state;

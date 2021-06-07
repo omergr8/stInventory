@@ -17,6 +17,7 @@ const Filter = (props) => {
   const [trackingid, setTrackingId] = useState();
   const [inventorysync, setInventorySync] = useState();
   const [optionsSelected, setOptionsSelected] = useState([]);
+  const [onchangeinventory, setOnChangeInventory] = useState("all");
   const localChannel = JSON.parse(localStorage.getItem("meta-data"));
   const [channel] = useState(localChannel.channels);
   const [form] = Form.useForm();
@@ -52,8 +53,9 @@ const Filter = (props) => {
   }
   function onChangeInventory(value) {
     let inventory;
+    setOnChangeInventory(value);
     if (value !== undefined && value !== null) {
-      if (value.length !== 0) {
+      if (value.length !== 0 && value !== "all") {
         inventory = `has_inventory_sync=${value}`;
       }
     }
@@ -78,6 +80,7 @@ const Filter = (props) => {
     setChannelId();
     setTrackingId();
     setInventorySync();
+    setOnChangeInventory("all");
   };
   const sync = (value, type) => {
     const headers = getToken();
@@ -267,11 +270,10 @@ const Filter = (props) => {
             <Form.Item
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              name="Inventory Sync"
               label="Inventory Sync"
             >
-              <Select defaultValue="all" onChange={onChangeInventory}>
-                <Option>All</Option>
+              <Select value={onchangeinventory} onChange={onChangeInventory}>
+                <Option value={"all"}>All</Option>
                 <Option value={true}>Sync On</Option>
                 <Option value={false}>Sync Off</Option>
               </Select>

@@ -32,8 +32,8 @@ const initialFormState = {
   printname: "",
   productuom: "",
   tax: "",
-  category: "",
-  inventorytracking: "",
+  category: [],
+  inventorytracking: [],
   alertthreshold: "",
   isarchived: Boolean,
   isbundle: Boolean,
@@ -75,6 +75,13 @@ const ProductSizeEdit = () => {
       payload: data,
     });
   };
+  const callDispatcher2 = (data, name) => {
+    dispatch({
+      type: "HANDLE SELECT",
+      field: name,
+      payload: data,
+    });
+  };
   const setStateData = (packSizeData) => {
     const data = packSizeData;
     const categoryName = getCategoryName(data.group1_id);
@@ -91,8 +98,8 @@ const ProductSizeEdit = () => {
     callDispatcher(data.uom, "productuom");
     callDispatcher(data.tax_id, "tax");
     callDispatcher(data.image_url, "imgurl");
-    callDispatcher(categoryName, "category");
-    callDispatcher(inventoryTrackingName, "inventorytracking");
+    callDispatcher2(categoryName, "category");
+    callDispatcher2(inventoryTrackingName, "inventorytracking");
     callDispatcher(data.alert_threshold, "alertthreshold");
     callDispatcher(data.tags, "tags");
     callDispatcher(data.supplier_sku, "suppliersku");
@@ -222,7 +229,6 @@ const ProductSizeEdit = () => {
       setRequireSave(true);
     }
   }
-
   const fields = [
     {
       name: ["name"],
