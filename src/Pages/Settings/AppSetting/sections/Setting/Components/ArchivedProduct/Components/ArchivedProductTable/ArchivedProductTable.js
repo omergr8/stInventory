@@ -4,8 +4,9 @@ import axios from "axios";
 import classes from "./ArchivedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-import { Table, Button, notification } from "antd";
+import { Table, Button, notification, Row, Col, Space } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
+
 const columns = [
   {
     title: "Name",
@@ -33,21 +34,59 @@ const ArchivedProductTable = (props) => {
   const [archivedroduct, setArchivedroduct] = useState([]);
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
+  const [selectedrow, setSelectedRow] = useState([]);
   const search = useLocation().search;
   const history = useHistory();
   const [url, setUrl] = useState(
     `https://inventory-dev-295903.appspot.com/products/${search}`
   );
   const headers = getToken();
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows
+      );
+      setSelectedRow(selectedRowKeys);
+    },
+  };
 
   useEffect(() => {
     setUrl(`https://inventory-dev-295903.appspot.com/products/${search}`);
   }, [search]);
+  useEffect(() => {
+    props.reset_ref.current = reset;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props]);
+  useEffect(() => {
+    let unmounted = false;
+    if (!unmounted) {
+      fetchArchivedProducts();
+    }
+    return () => {
+      unmounted = true;
+    };
+  }, [url]);
 
+  const fetchArchivedProducts = () => {
+    axios
+      .get(url, {
+        headers,
+      })
+      .then((res) => {
+        const ArchivedProductData = res.data;
+        setArchivedroduct(ArchivedProductData);
+        totalPages(ArchivedProductData);
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
-        message: `Settings Saved. `,
+        message: error,
         placement,
       });
     } else if (type === "error")
@@ -70,54 +109,76 @@ const ArchivedProductTable = (props) => {
       setPreviousButton(true);
     }
   };
-  // const getQueryParams = () => {
-  //   let queryParams;
 
-  //   if (props.searchInput === "" && props.productId === undefined) {
-  //     queryParams = "";
-  //   } else if (props.productId === undefined && props.searchInput !== "") {
-  //     queryParams = `&search=${props.searchInput}`;
-  //   } else if (props.searchInput === "" && props.productId !== undefined) {
-  //     queryParams = `&${props.productId}`;
-  //   } else {
-  //     queryParams = `&search=${props.searchInput}&${props.productId}`;
-  //   }
-  //   const t = new URLSearchParams(search).get("id");
-
-  //   console.log(search, "test", t, queryParams);
-  //   // if (new URLSearchParams(search).get("id") ===undefined)
-  //   history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
-  //   // let url = `https://inventory-dev-295903.appspot.com/products/?is_archived=True&paginate=True${queryParams}`;
-  //   // setUrl(url);
-  // };
   const reset = () => {
     props.reset();
     history.push(`/dashboard/archived-product/?is_archived=True`);
   };
-  React.useEffect(() => {
-    //  props.archiveProductTableMethod_ref.current = getQueryParams;
-    props.reset_ref.current = reset;
-  }, [props]);
-  useEffect(() => {
-    let unmounted = false;
+
+  const deleteArchived = () => {
+    const deleteObj = {
+      product_ids: selectedrow,
+    };
     axios
-      .get(url, {
-        headers,
-      })
+      .post(
+        "https://inventory-dev-295903.appspot.com/products/bulk/delete/",
+        deleteObj,
+        { headers }
+      )
       .then((res) => {
-        if (!unmounted) {
-          const ArchivedProductData = res.data;
-          setArchivedroduct(ArchivedProductData);
-          totalPages(ArchivedProductData);
-        }
+        console.log(res);
+        fetchArchivedProducts();
+        setSelectedRow([]);
+        Alert("bottomRight", "success", "Product Deleted Successfully");
       })
       .catch((err) => {
         Alert("bottomRight", "error", err.response);
       });
-    return () => {
-      unmounted = true;
+  };
+  const deleteAllArchived = () => {
+    const deleteObj = {
+      is_select_all: "True",
     };
-  }, [url]);
+    axios
+      .post(
+        "https://inventory-dev-295903.appspot.com/products/bulk/delete/",
+        deleteObj,
+        { headers }
+      )
+      .then((res) => {
+        console.log(res);
+        fetchArchivedProducts();
+        setSelectedRow([]);
+        Alert(
+          "bottomRight",
+          "success",
+          "All Archived Products Deleted Successfully"
+        );
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
+  const undoArchived = () => {
+    const undoArchiveObj = {
+      product_ids: selectedrow,
+    };
+    axios
+      .post(
+        "https://inventory-dev-295903.appspot.com/products/bulk/undo-archive/",
+        undoArchiveObj,
+        { headers }
+      )
+      .then((res) => {
+        console.log(res);
+        setSelectedRow([]);
+        fetchArchivedProducts();
+        Alert("bottomRight", "success", "Unarchived Successfully");
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
+      });
+  };
   let data;
   if (archivedroduct.results !== undefined) {
     data = [
@@ -170,13 +231,43 @@ const ArchivedProductTable = (props) => {
       />
     </div>
   );
+  const selectedButtons = (
+    <Space>
+      <label> Selected {selectedrow.length} items</label>
+      <Button onClick={undoArchived}>Undo Archive Products</Button>
+      <Button onClick={deleteArchived}>Delete Selected Products</Button>
+      <Button onClick={deleteAllArchived}>Delete All Archived Products</Button>
+    </Space>
+  );
   return (
     <div>
-      {pageButtons}
+      {selectedrow.length === 0 ? (
+        <div>
+          <label>
+            Showing{" "}
+            {archivedroduct.results !== undefined
+              ? archivedroduct.results.length
+              : null}{" "}
+            results
+          </label>
+        </div>
+      ) : null}
+
+      <div>
+        <Row>
+          <Col xs={24} sm={24} md={24} lg={13} xl={13}>
+            {selectedrow.length > 0 ? selectedButtons : null}
+          </Col>
+          <Col xs={24} sm={4} md={4} lg={3} xl={3} offset={8}>
+            {pageButtons}
+          </Col>
+        </Row>
+      </div>
       <Table
         pagination={false}
         rowSelection={{
           type: "checkbox",
+          ...rowSelection,
         }}
         columns={columns}
         dataSource={data}

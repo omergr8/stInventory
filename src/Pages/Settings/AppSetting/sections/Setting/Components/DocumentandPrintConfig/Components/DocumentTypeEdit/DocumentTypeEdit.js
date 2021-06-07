@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import DocumentDetails from "./Components/DocumentDetails/DocumentDetails";
 import PrintConfigs from "./Components/PrintConfigs/PrintConfigs";
+import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Tabs, notification } from "antd";
 
 const { TabPane } = Tabs;
+
 const DocumentTypeEdit = () => {
   const { id } = useParams();
   const headers = getToken();
@@ -70,7 +71,9 @@ const DocumentTypeEdit = () => {
     return () => {
       unmounted = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div>
       <ContentBar title={document.prefix} />

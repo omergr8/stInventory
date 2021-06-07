@@ -1,11 +1,25 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Form, Input, notification, Select, Divider, Row, Col } from "antd";
 import ArchivedProductTable from "../ArchivedProductTable/ArchivedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import MoreFilters from "../MoreFilters/MoreFilters";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-import axios from "axios";
+
 const { Option } = Select;
+const Alert = (placement, type, error) => {
+  if (type === "success") {
+    notification.success({
+      message: `Settings Saved. `,
+      placement,
+    });
+  } else if (type === "error")
+    notification.error({
+      message: `Error Code: ${error.status} `,
+      description: [JSON.stringify(error.data.errors)],
+      placement,
+    });
+};
 
 const ArchivedProductFilter = () => {
   const [searchData, setSearchData] = useState([]);
@@ -16,26 +30,8 @@ const ArchivedProductFilter = () => {
   const archiveProductTableMethod_ref = React.useRef(null);
   const reset_ref = React.useRef(null);
   const more_ref = React.useRef(null);
-  function onChangeProduct(value) {
-    let productId;
-    if (value.length !== 0) {
-      productId = `id=${value}`;
-    }
-    setProductId(productId);
-  }
-  const Alert = (placement, type, error) => {
-    if (type === "success") {
-      notification.success({
-        message: `Settings Saved. `,
-        placement,
-      });
-    } else if (type === "error")
-      notification.error({
-        message: `Error Code: ${error.status} `,
-        description: [JSON.stringify(error.data.errors)],
-        placement,
-      });
-  };
+  const moreReset_ref = React.useRef();
+
   const fetchSearchData = () => {
     const headers = getToken();
     axios
@@ -51,10 +47,7 @@ const ArchivedProductFilter = () => {
         Alert("bottomRight", "error", err.response);
       });
   };
-  const reset = () => {
-    form.resetFields();
-    setProductId(undefined);
-  };
+
   const onSearch = (val) => {
     const headers = getToken();
     axios
@@ -72,8 +65,19 @@ const ArchivedProductFilter = () => {
       });
   };
 
-  const callParent = (url) => {
-    console.log(url);
+  function onChangeProduct(value) {
+    let productId;
+    if (value.length !== 0) {
+      productId = `id=${value}`;
+    }
+    setProductId(productId);
+  }
+
+  const reset = () => {
+    form.resetFields();
+    moreReset_ref.current.setFromOutside();
+    setProductId(undefined);
+    setSearchInput("");
   };
 
   return (
@@ -148,7 +152,7 @@ const ArchivedProductFilter = () => {
       </Form>
       <MoreFilters
         more_ref={more_ref}
-        callParent={(url) => callParent(url)}
+        ref={moreReset_ref}
         archiveProductTableMethod_ref={archiveProductTableMethod_ref}
         productId={productid}
         searchInput={searchinput}

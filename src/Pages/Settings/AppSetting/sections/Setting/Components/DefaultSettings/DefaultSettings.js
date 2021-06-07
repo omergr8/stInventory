@@ -1,19 +1,10 @@
-import {
-  Form,
-  Input,
-  Select,
-  Checkbox,
-  Button,
-  notification,
-  Row,
-  Col,
-} from "antd";
+import { Form, Input, Checkbox, Button, notification, Row, Col } from "antd";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CountrySelector from "./Components/CountrySelector/CountrySelector";
 import TimeZoneSelector from "./Components/TimeZoneSelector/TimeZoneSelector";
 import { getToken } from "../../../../../../../Services/ListServices";
-const { Option } = Select;
+
 const layout = {
   labelCol: {
     span: 12,
@@ -21,6 +12,19 @@ const layout = {
   wrapperCol: {
     span: 15,
   },
+};
+const Alert = (placement, type, error) => {
+  if (type === "success") {
+    notification.success({
+      message: `Settings Saved. `,
+      placement,
+    });
+  } else if (type === "error")
+    notification.error({
+      message: `Error Code: ${error.status} `,
+      description: [JSON.stringify(error.data)],
+      placement,
+    });
 };
 
 const DefaultSettings = () => {
@@ -33,20 +37,33 @@ const DefaultSettings = () => {
   const [hidesetupinstruction, setHideSetupInstruction] = useState(false);
   const [disableautoarchive, setDisableAutoArchive] = useState(false);
 
-  const Alert = (placement, type, error) => {
-    if (type === "success") {
-      notification.success({
-        message: `Settings Saved. `,
-        placement,
+  useEffect(() => {
+    let unmounted = false;
+    axios
+      .get(`https://inventory-dev-295903.appspot.com/settings/defaults/`, {
+        headers,
+      })
+      .then((res) => {
+        if (!unmounted) {
+          const setting = res.data;
+          setCountry(setting.country_code);
+          setTimeZone(setting.timezone);
+          setClientSetting(setting.client_settings);
+          setPaymentMethod(setting.payment_methods);
+          setDefaultSettings(setting);
+          getClientSettingStatus(setting);
+        }
+      })
+      .catch((err) => {
+        Alert("bottomRight", "error", err.response);
       });
-    } else if (type === "error")
-      notification.error({
-        message: `Error Code: ${error.status} `,
-        description: [JSON.stringify(error.data)],
-        placement,
-      });
-  };
-  const onFinish = (values) => {
+    return () => {
+      unmounted = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onFinish = () => {
     const oldArray = [...clientsetting];
     if (hidesetupinstruction && oldArray.includes(1) === false) {
       oldArray.push(1);
@@ -109,31 +126,6 @@ const DefaultSettings = () => {
     setTimeZone(e);
   };
 
-  useEffect(() => {
-    let unmounted = false;
-    axios
-      .get(`https://inventory-dev-295903.appspot.com/settings/defaults/`, {
-        headers,
-      })
-      .then((res) => {
-        if (!unmounted) {
-          const setting = res.data;
-          setCountry(setting.country_code);
-          setTimeZone(setting.timezone);
-          setClientSetting(setting.client_settings);
-          setPaymentMethod(setting.payment_methods);
-          setDefaultSettings(setting);
-          getClientSettingStatus(setting);
-        }
-      })
-      .catch((err) => {
-        Alert("bottomRight", "error", err.response);
-      });
-    return () => {
-      unmounted = true;
-    };
-  }, []);
-
   const getClientSettingStatus = (setting) => {
     const client_settings = JSON.parse(localStorage.getItem("meta-data"));
     for (let i = 0; i < client_settings.client_settings.length; i++) {
@@ -181,11 +173,8 @@ const DefaultSettings = () => {
     <Row>
       <Col xs={24} sm={24} md={24} lg={24} xl={16}>
         <Form {...layout} name="nest-messages" onFinish={onFinish}>
-          {/* <button onClick={covertPaymentToString}>test</button> */}
-
           <Form.Item
             name={["user", "country"]}
-            label="Country"
             label={<label style={{ fontWeight: "600" }}>Country</label>}
           >
             <CountrySelector
@@ -196,11 +185,6 @@ const DefaultSettings = () => {
           <Form.Item
             name={["user", "timeZone"]}
             label={<label style={{ fontWeight: "600" }}>Time Zone</label>}
-            rules={[
-              {
-                type: "email",
-              },
-            ]}
             wrapperCol={{ span: 12 }}
           >
             <TimeZoneSelector
@@ -213,13 +197,6 @@ const DefaultSettings = () => {
             label={
               <label style={{ fontWeight: "600" }}>Default Currency</label>
             }
-            rules={[
-              {
-                type: "number",
-                min: 0,
-                max: 99,
-              },
-            ]}
           >
             <label>{defaultSettings.currency}</label>
           </Form.Item>

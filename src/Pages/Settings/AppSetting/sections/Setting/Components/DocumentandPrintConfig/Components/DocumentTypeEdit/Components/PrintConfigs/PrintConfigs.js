@@ -1,3 +1,7 @@
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { getToken } from "../../../../../../../../../../../Services/ListServices";
 import {
   Form,
   notification,
@@ -8,13 +12,9 @@ import {
   Row,
   Col,
 } from "antd";
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../../../Services/ListServices";
-
 const { TextArea } = Input;
 const { Search } = Input;
+
 const layout = {
   labelCol: {
     span: 10,
@@ -80,15 +80,14 @@ const PrintConfigs = (props) => {
       const copyObj = { ...checkedItems };
       const copyObj2 = props.documentData;
       copyObj2.print_config = copyObj.print_config;
-      // setFooterTerms({});
       setCheckedItems(copyObj2);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
 
   const customLabel = (value) => {
     return <label style={{ fontWeight: "600" }}>{value}</label>;
   };
-
   const addFooter = () => {
     const footerObj = [];
     if (footerterms === undefined) {
@@ -137,17 +136,13 @@ const PrintConfigs = (props) => {
   };
   const save = () => {
     let arrayToObj;
-    //  (footerterms);
     if (footerterms !== undefined) {
       arrayToObj = Object.fromEntries(footerterms);
     } else {
       arrayToObj = null;
     }
-
     const copyObj = { ...checkedItems };
-    // ("save", copyObj);
     copyObj.print_config.footer_terms = arrayToObj;
-
     axios
       .put(
         `https://inventory-dev-295903.appspot.com/settings/documents/print/configs/${id}/`,

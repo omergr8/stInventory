@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Select } from "antd";
 const countryList = require("country-list");
 const { Option } = Select;
-
-function handleChange(value) {}
 
 const CountrySelector = (props) => {
   return (

@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { useHistory } from "react-router-dom";
-import { Modal, Button, Form, Input, Select, Radio } from "antd";
-import { AiOutlinePlus } from "react-icons/ai";
+import { Modal, Form, Input, Select, Radio } from "antd";
 import { getCategory } from "../../../../../../../../../Services/ListServices";
 
 const { Option } = Select;
@@ -13,12 +17,6 @@ const layout = {
     span: 16,
   },
 };
-const tailLayout = {
-  wrapperCol: {
-    offset: 7,
-    span: 16,
-  },
-};
 const label = (text) => <label style={{ fontWeight: "600" }}>{text}</label>;
 const optionsWithDisabled = [
   { label: "All", value: "all" },
@@ -26,20 +24,17 @@ const optionsWithDisabled = [
   { label: "No", value: "False" },
 ];
 
-const MoreFilters = (props) => {
+const MoreFilters = (props, ref) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isbundle, setIsBundle] = useState("all");
   const [category, setCategory] = useState();
   const [tags, setTags] = useState("");
+  const [form] = Form.useForm();
   const history = useHistory();
   const showModal = () => {
     setIsModalVisible(true);
   };
 
-  React.useEffect(() => {
-    props.more_ref.current = showModal;
-    props.archiveProductTableMethod_ref.current = setQueryParams;
-  }, [props]);
   const setQueryParams = () => {
     let queryParams;
     if (isbundle !== "all" && category === undefined && tags === "") {
@@ -67,16 +62,19 @@ const MoreFilters = (props) => {
       queryParams =
         queryParams + `&search=${props.searchInput}` + `&${props.productId}`;
     }
-    props.callParent(
-      `/dashboard/archived-product/?is_archived=True${queryParams}`
-    );
     history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
-    // if (queryParams !== undefined) {
-    //   history.push(
-    //     `/dashboard/archived-product/?is_archived=True${queryParams}`
-    //   );
-    // }
   };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      setFromOutside() {
+        setIsBundle("all");
+        setCategory();
+      },
+    }),
+    []
+  );
   const handleOk = () => {
     setIsModalVisible(false);
     setQueryParams();
@@ -92,6 +90,11 @@ const MoreFilters = (props) => {
   const onChange4 = (e) => {
     setIsBundle(e.target.value);
   };
+  useEffect(() => {
+    props.more_ref.current = showModal;
+    props.archiveProductTableMethod_ref.current = setQueryParams;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props]);
 
   return (
     <>
@@ -101,13 +104,14 @@ const MoreFilters = (props) => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form {...layout} name="basic">
+        <Form {...layout} form={form} name="basic">
           <Form.Item label={label("Category")}>
             <Select
               showSearch
               style={{ width: 311 }}
               placeholder="Select a person"
               optionFilterProp="children"
+              value={category}
               onChange={onChange}
               filterOption={(input, option) =>
                 option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -140,4 +144,5 @@ const MoreFilters = (props) => {
   );
 };
 
-export default MoreFilters;
+//export default MoreFilters;
+export default forwardRef(MoreFilters);
