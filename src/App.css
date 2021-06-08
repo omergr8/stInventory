@@ -44,3 +44,21 @@
 .site-layout-background {
   background: #fff;
 }
+.ant-table-thead {
+  font-size: 13px;
+}
+.ant-table-tbody {
+  font-size: 13px;
+}
+hr {
+  border: none !important;
+  height: 0.07px !important;
+  /* Set the hr color */
+  color: rgb(238, 235, 235) !important; /* old IE */
+  background-color: rgb(238, 235, 235) !important; /* Modern Browsers */
+}
+.crossIcon {
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  color: white !important;
+}

@@ -241,21 +241,18 @@ const ArchivedProductTable = (props) => {
   );
   return (
     <div>
-      {selectedrow.length === 0 ? (
-        <div>
-          <label>
-            Showing{" "}
-            {archivedroduct.results !== undefined
-              ? archivedroduct.results.length
-              : null}{" "}
-            results
-          </label>
-        </div>
-      ) : null}
-
       <div>
         <Row>
           <Col xs={24} sm={24} md={24} lg={13} xl={13}>
+            {selectedrow.length === 0 ? (
+              <label>
+                Showing{" "}
+                {archivedroduct.results !== undefined
+                  ? archivedroduct.results.length
+                  : null}{" "}
+                results
+              </label>
+            ) : null}
             {selectedrow.length > 0 ? selectedButtons : null}
           </Col>
           <Col xs={24} sm={4} md={4} lg={3} xl={3} offset={8}>

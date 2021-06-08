@@ -78,7 +78,7 @@ const ProductSizeFilter = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: "30px" }}>
+      <div style={{ marginBottom: "20px" }}>
         <ContentBar
           productTableMethod_ref={productTableMethod_ref}
           reset_ref={reset_ref}
@@ -124,7 +124,7 @@ const ProductSizeFilter = () => {
           </Select>
         </Form.Item>
       </Form>
-      <Divider />
+      <hr />
       <div>
         <ProductSizeTable
           productId={productid}

@@ -7,7 +7,7 @@ import EditProductGroupModal from "../EditProductGroupModal/EditProductGroupModa
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Table, Button, Space, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import { AiFillDelete } from "react-icons/ai";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const ProductCategoryTable = () => {
   const [productcategory, setProductCategory] = useState([]);
@@ -104,13 +104,12 @@ const ProductCategoryTable = () => {
             name={row.name}
           />
           <Button
-            type="button"
-            type="primary"
-            danger
-            icon={<AiFillDelete />}
+            icon={<RiDeleteBin6Line />}
             onClick={() => deleteProduct(row.key)}
             size="small"
-          />
+          >
+            Delete
+          </Button>
         </Space>
       ),
     },

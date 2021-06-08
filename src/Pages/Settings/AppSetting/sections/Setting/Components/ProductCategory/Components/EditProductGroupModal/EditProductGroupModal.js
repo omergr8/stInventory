@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form, Input, notification } from "antd";
 import { getToken } from "../../../../../../../../../Services/ListServices";
-
+import { GrEdit } from "react-icons/gr";
+import { EditOutlined } from "@ant-design/icons";
 const layout = {
   labelCol: {
     span: 5,
@@ -64,7 +65,7 @@ const EditProductGroupModal = (props) => {
 
   return (
     <>
-      <Button onClick={showModal} type="button" type="primary" size="small">
+      <Button icon={<EditOutlined />} onClick={showModal} size="small">
         Edit
       </Button>
       <Modal

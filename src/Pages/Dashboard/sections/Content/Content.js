@@ -7,15 +7,12 @@ const ContentDash = (props) => {
       className="site-layout"
       style={{ marginLeft: 190, backgroundColor: "#FAFAFA" }}
     >
-      <Breadcrumb style={{ margin: "26px 26px" }}>
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
-      </Breadcrumb>
       <Content
         className="site-layout-background"
         style={{
-          padding: 24,
+          paddingLeft: "20px",
+          paddingTop: "10px",
+          paddingRight: "10px",
           margin: 0,
           minHeight: 280,
         }}

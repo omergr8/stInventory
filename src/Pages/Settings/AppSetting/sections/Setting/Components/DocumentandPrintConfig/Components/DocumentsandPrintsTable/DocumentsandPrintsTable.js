@@ -70,7 +70,7 @@ const DocumentsandPrintsTable = () => {
   }));
 
   return (
-    <div>
+    <div style={{ marginTop: "30px" }}>
       <Table pagination={false} bordered columns={columns} dataSource={data} />
     </div>
   );

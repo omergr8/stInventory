@@ -283,21 +283,15 @@ const PurchaseinPackTable = (props) => {
       dataIndex: "close",
       key: "close",
       render: (text, row) => (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div style={{ margin: "6px" }}>
-            <Button
-              onClick={() => save(row.id, row.key)}
-              type="primary"
-              icon={<RiSave3Fill />}
-              size="small"
-            >
+        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+          <div style={{ margin: "4px" }}>
+            <Button onClick={() => save(row.id, row.key)} size="small">
               Save
             </Button>
           </div>
-          <div style={{ margin: "6px" }}>
+          <div style={{ margin: "4px" }}>
             <Button
               onClick={() => remove(row.id, row.product_id)}
-              type="danger"
               icon={<RiDeleteBin5Line />}
               size="small"
             />{" "}

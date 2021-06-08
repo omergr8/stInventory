@@ -16,6 +16,7 @@ import {
   Descriptions,
   Tag,
   Upload,
+  Space,
 } from "antd";
 import {
   AiOutlinePlus,
@@ -101,17 +102,17 @@ const ContentBar = (props) => {
   );
   if (props.incoming === "user") {
     description = (
-      <React.Fragment key="34">
+      <Space key="34">
         <Descriptions size="small" column={24}>
           <Descriptions.Item>
             <h4>Email: </h4> &nbsp; <label> {props.user.email}</label>
           </Descriptions.Item>
         </Descriptions>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "ProductListings") {
     extra = (
-      <React.Fragment key="30">
+      <Space key="30">
         <Button key="1" onClick={() => exportCSV("ProductListings")}>
           Export
         </Button>
@@ -138,41 +139,34 @@ const ContentBar = (props) => {
         >
           Apply
         </Button>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "ProductCategory") {
     const ProductCategoryUrl =
       "https://inventory-dev-295903.appspot.com/products/groups/1/?format=csv&is_archived=false&paginate=False";
     extra = (
-      <React.Fragment key="31">
+      <Space key="31">
         <Button
           onClick={() => exportList(ProductCategoryUrl, "Product Category")}
-          className={classes.margin}
           key="5"
         >
           Export
         </Button>
-
         <Upload customRequest={customRequestCategory} showUploadList={false}>
-          <Dropdown.Button className={classes.margin} key="2" overlay={menu}>
+          <Dropdown.Button key="2" overlay={menu}>
             Import
           </Dropdown.Button>
         </Upload>
-        <Button
-          onClick={() => props.addNew()}
-          className={classes.margin}
-          key="6"
-          type="primary"
-        >
+        <Button onClick={() => props.addNew()} key="6" type="primary">
           Add New
         </Button>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "ProductPackSize") {
     const ProductCategoryUrl =
       "https://inventory-dev-295903.appspot.com/products/pack_sizes/?format=csv&paginate=False";
     extra = (
-      <React.Fragment key="29">
+      <Space key="29">
         <Button
           key="7"
           onClick={() => exportList(ProductCategoryUrl, "Pack Sizes")}
@@ -192,13 +186,13 @@ const ContentBar = (props) => {
         >
           Apply
         </Button>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "ArchivedProduct") {
     const ArchiveProductUrl =
       "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
     extra = (
-      <React.Fragment key="32">
+      <Space key="32">
         <Button
           onClick={() => props.more_ref.current()}
           icon={<AiOutlinePlus />}
@@ -221,19 +215,19 @@ const ContentBar = (props) => {
         >
           Apply
         </Button>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "Warehouses") {
     extra = (
-      <React.Fragment key="33">
+      <Space key="33">
         <Button onClick={props.addWarehouse} icon={<AiOutlinePlus />} key="23">
           Add Warehouse
         </Button>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "WarehouseLink") {
     extra = (
-      <React.Fragment key="33">
+      <Space key="33">
         <Button
           onClick={() => {
             history.push("/dashboard/warehouselink/new");
@@ -243,7 +237,7 @@ const ContentBar = (props) => {
         >
           New Link
         </Button>
-      </React.Fragment>
+      </Space>
     );
   } else if (props.incoming === "ProductSizeEdit") {
     description = (
@@ -352,24 +346,21 @@ const ContentBar = (props) => {
       );
     } else if (props.isBundle && props.isArchive) {
       return (
-        <React.Fragment>
+        <Space>
           <Tag style={{ marginLeft: "20px" }} color="red">
             Bundle
           </Tag>
           <Tag style={{ marginLeft: "20px" }} color="red">
             Archived
           </Tag>
-        </React.Fragment>
+        </Space>
       );
     } else {
       return null;
     }
   };
   return (
-    <div
-      className="site-page-header-ghost-wrapper"
-      style={{ marginBottom: "30px" }}
-    >
+    <div className="site-page-header-ghost-wrapper">
       <PageHeader
         style={{ backgroundColor: "#F5F5F5" }}
         ghost={false}

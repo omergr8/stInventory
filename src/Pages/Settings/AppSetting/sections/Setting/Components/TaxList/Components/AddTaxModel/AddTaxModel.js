@@ -10,7 +10,8 @@ import {
   Modal,
   notification,
 } from "antd";
-import { ImCancelCircle } from "react-icons/im";
+import { ImCross } from "react-icons/im";
+import { IconContext } from "react-icons";
 const layout = {
   labelCol: {
     span: 7,
@@ -141,8 +142,17 @@ const AddTaxModal = (props) => {
       render: (text, row) => (
         <Button
           onClick={() => remove(row.key)}
-          type="danger"
-          icon={<ImCancelCircle />}
+          style={{ backgroundColor: "#d9534f" }}
+          icon={
+            <IconContext.Provider
+              value={{
+                className: "crossIcon",
+              }}
+            >
+              {" "}
+              <ImCross />
+            </IconContext.Provider>
+          }
           size="small"
         />
       ),
@@ -207,7 +217,7 @@ const AddTaxModal = (props) => {
   );
   return (
     <>
-      <Button type="primary" onClick={showModal} block>
+      <Button type="primary" onClick={showModal}>
         Add New Tax
       </Button>
       <Modal

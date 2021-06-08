@@ -91,13 +91,14 @@ const ArchivedProductFilter = () => {
       />
       <Form
         name="basic"
+        style={{ marginTop: "20px" }}
         form={form}
         initialValues={{
           remember: true,
         }}
       >
-        <Row gutter={18}>
-          <Col xs={24} sm={24} md={24} lg={24} xl={10} key={1}>
+        <Row>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8} key={1}>
             <Form.Item label="Product" name="product" labelCol={{ span: 24 }}>
               <Select
                 mode="multiple"
@@ -128,7 +129,7 @@ const ArchivedProductFilter = () => {
               </Select>
             </Form.Item>
           </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={10} key={2}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={8} key={2}>
             <Form.Item
               label="Search"
               name="search"
@@ -157,7 +158,7 @@ const ArchivedProductFilter = () => {
         productId={productid}
         searchInput={searchinput}
       />
-      <Divider />
+      <hr />
       <div>
         <ArchivedProductTable
           archiveProductTableMethod_ref={archiveProductTableMethod_ref}

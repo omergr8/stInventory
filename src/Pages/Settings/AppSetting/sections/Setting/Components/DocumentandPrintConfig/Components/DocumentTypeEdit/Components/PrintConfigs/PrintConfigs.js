@@ -12,6 +12,8 @@ import {
   Row,
   Col,
 } from "antd";
+import { ImCross } from "react-icons/im";
+import { IconContext } from "react-icons";
 const { TextArea } = Input;
 const { Search } = Input;
 
@@ -190,8 +192,17 @@ const PrintConfigs = (props) => {
                       >
                         <Search
                           placeholder="input search text"
-                          enterButton="Delete"
-                          size="large"
+                          enterButton={
+                            <IconContext.Provider
+                              value={{
+                                className: "crossIcon",
+                              }}
+                            >
+                              {" "}
+                              <ImCross />
+                            </IconContext.Provider>
+                          }
+                          size="middle"
                           value={data[0]}
                           onSearch={() => remove(index)}
                           onChange={(e) => handleFooter(e, index)}

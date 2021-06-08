@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   getToken,
   getWarehouse,
+  getAllWarehouses,
 } from "../../../../../../../../../../../Services/ListServices";
 import { Form, Input, Select, Button, notification, Row, Col } from "antd";
 import formReducer from "../../../../../../../../../../../Reducers/FormReducer";
@@ -117,10 +118,10 @@ const DocumentDetails = (props) => {
   return (
     <div>
       <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+        <Col xs={24} sm={24} md={24} lg={16} xl={16}>
           <Form
+            style={{ marginTop: "40px" }}
             {...layout}
-            onFinish={save}
             name="nest-messages"
             fields={fields}
           >
@@ -136,9 +137,11 @@ const DocumentDetails = (props) => {
                   handleSelectChange(value, "defaultwarehouse")
                 }
               >
-                <Option value={formState.defaultwarehouse}>
-                  {getWarehouse(formState.defaultwarehouse)}
-                </Option>
+                {getAllWarehouses().map((value, index) => (
+                  <Option key={index} value={value.id}>
+                    {value.name}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item name="docprefix" label={customLabel("Doc No. Prefix")}>
@@ -147,12 +150,12 @@ const DocumentDetails = (props) => {
             <Form.Item name="docnumber" label={customLabel("Doc Number")}>
               <Input name="docnumber" onChange={(e) => handleTextChange(e)} />
             </Form.Item>
-            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-            </Form.Item>
           </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={4} xl={4} offset={4}>
+          <Button block onClick={save} type="primary">
+            Save
+          </Button>
         </Col>
       </Row>
     </div>

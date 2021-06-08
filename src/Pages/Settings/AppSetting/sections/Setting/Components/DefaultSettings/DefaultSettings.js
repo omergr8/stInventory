@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CountrySelector from "./Components/CountrySelector/CountrySelector";
 import TimeZoneSelector from "./Components/TimeZoneSelector/TimeZoneSelector";
+import ContentBar from "../../../ContentBar/ContentBar";
 import { getToken } from "../../../../../../../Services/ListServices";
 
 const layout = {
@@ -170,78 +171,89 @@ const DefaultSettings = () => {
   };
 
   return (
-    <Row>
-      <Col xs={24} sm={24} md={24} lg={24} xl={16}>
-        <Form {...layout} name="nest-messages" onFinish={onFinish}>
-          <Form.Item
-            name={["user", "country"]}
-            label={<label style={{ fontWeight: "600" }}>Country</label>}
+    <div>
+      <ContentBar title="Default Settings" />
+      <Row>
+        <Col xs={24} sm={24} md={24} lg={16} xl={16}>
+          <Form style={{ marginTop: "50px" }} {...layout} name="nest-messages">
+            <Form.Item
+              name={["user", "country"]}
+              label={<label style={{ fontWeight: "600" }}>Country</label>}
+            >
+              <CountrySelector
+                handleChange={handleCountryValue}
+                countryCode={country}
+              />
+            </Form.Item>
+            <Form.Item
+              name={["user", "timeZone"]}
+              label={<label style={{ fontWeight: "600" }}>Time Zone</label>}
+              wrapperCol={{ span: 12 }}
+            >
+              <TimeZoneSelector
+                handleChange={handleTimeZoneValue}
+                timeZone={timezone}
+              />
+            </Form.Item>
+            <Form.Item
+              name={["user", "currency"]}
+              label={
+                <label style={{ fontWeight: "600" }}>Default Currency</label>
+              }
+            >
+              <label>{defaultSettings.currency}</label>
+            </Form.Item>
+            <Form.Item
+              label={
+                <label style={{ fontWeight: "600" }}>Payment Methods</label>
+              }
+            >
+              <Input.TextArea
+                value={paymentmethod}
+                onChange={(e) => setPaymentMethod([e.target.value])}
+              />
+            </Form.Item>
+            <Form.Item
+              name={["user", "instruction"]}
+              label={
+                <label style={{ fontWeight: "600" }}>
+                  Hide setup instructions
+                </label>
+              }
+              labelCol={{ span: 12 }}
+            >
+              <Checkbox
+                onChange={onChangeHideSetup}
+                checked={hidesetupinstruction}
+              />
+            </Form.Item>
+            <Form.Item
+              name={["user", "autoarchive"]}
+              label={
+                <label style={{ fontWeight: "600" }}>
+                  Disable Auto Archive
+                </label>
+              }
+              labelCol={{ span: 12 }}
+            >
+              <Checkbox
+                onChange={onChangeAutoArchive}
+                checked={disableautoarchive}
+              />
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={3} xl={3} offset={5}>
+          <Button
+            style={{ marginTop: "15px" }}
+            type="primary"
+            onClick={onFinish}
           >
-            <CountrySelector
-              handleChange={handleCountryValue}
-              countryCode={country}
-            />
-          </Form.Item>
-          <Form.Item
-            name={["user", "timeZone"]}
-            label={<label style={{ fontWeight: "600" }}>Time Zone</label>}
-            wrapperCol={{ span: 12 }}
-          >
-            <TimeZoneSelector
-              handleChange={handleTimeZoneValue}
-              timeZone={timezone}
-            />
-          </Form.Item>
-          <Form.Item
-            name={["user", "currency"]}
-            label={
-              <label style={{ fontWeight: "600" }}>Default Currency</label>
-            }
-          >
-            <label>{defaultSettings.currency}</label>
-          </Form.Item>
-          <Form.Item
-            label={<label style={{ fontWeight: "600" }}>Payment Methods</label>}
-          >
-            <Input.TextArea
-              value={paymentmethod}
-              onChange={(e) => setPaymentMethod([e.target.value])}
-            />
-          </Form.Item>
-          <Form.Item
-            name={["user", "instruction"]}
-            label={
-              <label style={{ fontWeight: "600" }}>
-                Hide setup instructions
-              </label>
-            }
-            labelCol={{ span: 12 }}
-          >
-            <Checkbox
-              onChange={onChangeHideSetup}
-              checked={hidesetupinstruction}
-            />
-          </Form.Item>
-          <Form.Item
-            name={["user", "autoarchive"]}
-            label={
-              <label style={{ fontWeight: "600" }}>Disable Auto Archive</label>
-            }
-            labelCol={{ span: 12 }}
-          >
-            <Checkbox
-              onChange={onChangeAutoArchive}
-              checked={disableautoarchive}
-            />
-          </Form.Item>
-          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </Col>
-    </Row>
+            Submit
+          </Button>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

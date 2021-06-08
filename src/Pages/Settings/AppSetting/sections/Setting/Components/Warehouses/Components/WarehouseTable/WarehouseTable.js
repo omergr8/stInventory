@@ -120,12 +120,17 @@ const WarehouseTable = () => {
           fetchWarehouses={fetchWarehouses}
         />
       </div>
-      <div>
-        <h4>
+      <div style={{ marginTop: "20px" }}>
+        <p>
           Total <span>{warehouses.length}</span> Warehouses
-        </h4>
+        </p>
       </div>
-      <Table pagination={false} columns={columns} dataSource={data[0]} />
+      <Table
+        bordered
+        pagination={false}
+        columns={columns}
+        dataSource={data[0]}
+      />
     </div>
   );
 };

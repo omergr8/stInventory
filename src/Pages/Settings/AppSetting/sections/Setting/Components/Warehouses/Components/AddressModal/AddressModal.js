@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, notification, Row, Col } from "antd";
 import CountrySelector from "../../../DefaultSettings/Components/CountrySelector/CountrySelector";
 import { AiFillEdit } from "react-icons/ai";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 
@@ -116,12 +115,7 @@ const AddressModal = (props) => {
   };
   return (
     <>
-      <Button
-        type="primary"
-        icon={<AiFillEdit />}
-        onClick={showModal}
-        size="small"
-      />
+      <Button icon={<AiFillEdit />} onClick={showModal} size="small" />
       <Modal
         title="Address"
         visible={isModalVisible}

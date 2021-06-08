@@ -4,8 +4,7 @@ import axios from "axios";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import AddressModal from "../AddressModal/AddressModal";
-import { Form, Input, Button, notification, Row, Col } from "antd";
-import { FcAddressBook } from "react-icons/fc";
+import { Form, Input, Button, notification, Row, Col, Space } from "antd";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const { TextArea } = Input;
@@ -154,14 +153,20 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
       return null;
     }
   };
+  var addressBar = {
+    color: "blue",
+    border: "1px solid #D9D9D9",
+    textAlign: "right",
+  };
   return (
     <div>
-      <div style={{ marginBottom: "60px" }}>
+      <div>
         <ContentBar title="Warehouse" />
       </div>
       <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+        <Col xs={24} sm={24} md={24} lg={16} xl={16}>
           <Form
+            style={{ marginTop: "40px" }}
             {...layout}
             form={form}
             name="control-hooks"
@@ -180,6 +185,12 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
               />
             </Form.Item>
             <Form.Item label={customLabel("Address")}>
+              <div style={addressBar}>
+                <AddressModal
+                  updateAddress={(value) => updateAddress(value)}
+                  address={warehouseaddress}
+                />
+              </div>
               <TextArea
                 value={getAddress(warehouseaddress)}
                 rows={
@@ -190,26 +201,22 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
                 }
                 disabled
               />
-              <AddressModal
-                updateAddress={(value) => updateAddress(value)}
-                address={warehouseaddress}
-              />
-            </Form.Item>
-
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-              {undoButton()}
-              <Button
-                onClick={() => onEdit("archive")}
-                icon={<RiDeleteBinLine />}
-                htmlType="button"
-              >
-                Delete
-              </Button>
             </Form.Item>
           </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={4} xl={4} offset={4}>
+          <Space style={{ marginTop: "10px" }}>
+            <Button type="primary" onClick={onFinish}>
+              Save
+            </Button>
+            {undoButton()}
+            <Button
+              onClick={() => onEdit("archive")}
+              icon={<RiDeleteBinLine />}
+            >
+              Delete
+            </Button>
+          </Space>
         </Col>
       </Row>
     </div>

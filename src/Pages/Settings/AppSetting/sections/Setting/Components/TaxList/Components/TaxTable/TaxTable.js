@@ -1,5 +1,5 @@
 import { Table, Button, Space, notification } from "antd";
-import { AiFillDelete } from "react-icons/ai";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import React, { useState, useEffect } from "react";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import EditTaxModal from "../EditTaxModal/EditTaxModal";
@@ -87,9 +87,7 @@ const TaxTable = () => {
           />
           <Button
             onClick={() => onDelete(row.key)}
-            type="primary"
-            danger
-            icon={<AiFillDelete />}
+            icon={<RiDeleteBin6Line />}
             size="small"
           />
         </Space>
@@ -108,10 +106,15 @@ const TaxTable = () => {
 
   return (
     <div>
-      <div style={{ marginTop: "30px" }}>
+      <div style={{ marginTop: "20px", marginBottom: "20px", float: "right" }}>
         <AddTaxModal fetchData={fetchTaxData} />
       </div>
-      <Table pagination={false} columns={columns} dataSource={data[0]} />
+      <Table
+        bordered
+        pagination={false}
+        columns={columns}
+        dataSource={data[0]}
+      />
     </div>
   );
 };

@@ -10,7 +10,8 @@ import {
   Form,
   Modal,
 } from "antd";
-import { ImCancelCircle } from "react-icons/im";
+import { ImCross } from "react-icons/im";
+import { IconContext } from "react-icons";
 const layout = {
   labelCol: {
     span: 7,
@@ -136,8 +137,17 @@ const EditTaxModal = (props) => {
       render: (text, row) => (
         <Button
           onClick={() => remove(row.key)}
-          type="danger"
-          icon={<ImCancelCircle />}
+          style={{ backgroundColor: "#d9534f" }}
+          icon={
+            <IconContext.Provider
+              value={{
+                className: "crossIcon",
+              }}
+            >
+              {" "}
+              <ImCross />
+            </IconContext.Provider>
+          }
           size="small"
         />
       ),
@@ -207,7 +217,7 @@ const EditTaxModal = (props) => {
   );
   return (
     <>
-      <Button type="primary" onClick={showModal} size="small">
+      <Button onClick={showModal} size="small">
         Edit
       </Button>
       <Modal

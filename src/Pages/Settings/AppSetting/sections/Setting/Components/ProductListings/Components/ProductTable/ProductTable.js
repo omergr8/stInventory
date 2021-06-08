@@ -7,6 +7,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import { getToken } from "../../../../../../../../../Services/ListServices";
+import FilterTags from "../FilterTags/FilterTags";
 import classes from "./ProductTable.module.css";
 
 const columns = [
@@ -173,9 +174,9 @@ const ProductTable = (props) => {
       getPageData(product.previous);
     }
   };
+  new URLSearchParams(search).get("channel");
   return (
     <div>
-      {/* <div> <Button onClick={getQueryParams}>test</Button></div> */}
       <div style={{ float: "right" }}>
         <Button
           className={classes.button}
@@ -192,6 +193,11 @@ const ProductTable = (props) => {
           onClick={() => handleTableChange("next")}
         />
       </div>
+      <div style={{ display: "flex" }}>
+        <h4>Filters Applied: </h4>
+        <FilterTags />
+      </div>
+
       <Table columns={columns} dataSource={data} bordered pagination={false} />
       <div style={{ float: "right" }}>
         <Button

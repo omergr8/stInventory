@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Row, Col, notification, Select } from "antd";
+import { Form, Row, Col, notification, Select, Divider } from "antd";
 import {
   getToken,
   getAllChannels,
@@ -146,7 +146,7 @@ const Filter = (props) => {
   };
   return (
     <div>
-      <div style={{ marginBottom: "20px" }}>
+      <div style={{ marginBottom: "10px" }}>
         <ContentBar
           productTableMethod_ref={productTableMethod_ref}
           reset_ref={reset_ref}
@@ -162,7 +162,7 @@ const Filter = (props) => {
         className="ant-advanced-search-form"
       >
         <Row gutter={10}>
-          <Col span={8} key={1}>
+          <Col span={7} key={1}>
             <Form.Item name="Product" labelCol={{ span: 24 }} label="Product">
               <Select
                 mode="multiple"
@@ -281,6 +281,7 @@ const Filter = (props) => {
           </Col>
         </Row>
       </Form>
+      <hr />
       <ProductTable
         productId={productid}
         channelId={channelid}
