@@ -165,7 +165,7 @@ const PrintConfigs = (props) => {
   return (
     <div>
       <Row>
-        <Col xs={24} sm={24} md={24} lg={20} xl={20}>
+        <Col xs={24} sm={24} md={24} lg={16} xl={16}>
           <Form
             {...layout}
             name="basic"
@@ -321,9 +321,9 @@ const PrintConfigs = (props) => {
             </Form.Item>
           </Form>
         </Col>
-        <Col xs={24} sm={24} md={24} lg={2} xl={2}>
+        <Col xs={24} sm={24} md={24} lg={4} xl={4} offset={4}>
           {" "}
-          <Button onClick={save} type="primary" htmlType="submit">
+          <Button onClick={save} type="primary" block>
             Save
           </Button>
         </Col>

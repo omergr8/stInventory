@@ -7,7 +7,16 @@ import {
 } from "../../../../../../../../../Services/ListServices";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import { Form, Input, Button, Select, notification, Row, Col } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  notification,
+  Row,
+  Col,
+  Space,
+} from "antd";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const { Option } = Select;
@@ -146,16 +155,16 @@ export const WarehouseLinksDetails = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: "60px" }}>
+      <div>
         <ContentBar title="Warehouse" />
       </div>
       <Row>
-        <Col xs={24} sm={24} md={24} lg={24} xl={16}>
+        <Col xs={24} sm={24} md={24} lg={16} xl={16}>
           <Form
+            style={{ marginTop: "40px" }}
             {...layout}
             form={form}
             name="control-hooks"
-            onFinish={onFinish}
           >
             <Form.Item label={customLabel("Channel")}>
               <MetaFind id={channel} incoming="WarehouseDetailsChannel" />
@@ -208,21 +217,18 @@ export const WarehouseLinksDetails = () => {
                 onChange={(e) => setPriority(e.target.value)}
               />
             </Form.Item>
-
-            <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-
-              <Button
-                onClick={onDelete}
-                icon={<RiDeleteBinLine />}
-                htmlType="button"
-              >
-                Delete
-              </Button>
-            </Form.Item>
           </Form>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={4} xl={4} offset={4}>
+          <Space style={{ marginTop: "15px" }}>
+            <Button type="primary" onClick={onFinish}>
+              Save
+            </Button>
+
+            <Button onClick={onDelete} icon={<RiDeleteBinLine />}>
+              Delete
+            </Button>
+          </Space>
         </Col>
       </Row>
     </div>

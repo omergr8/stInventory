@@ -248,6 +248,7 @@ const DefaultSettings = () => {
             style={{ marginTop: "15px" }}
             type="primary"
             onClick={onFinish}
+            block
           >
             Submit
           </Button>

@@ -9,10 +9,9 @@ import {
   FaBoxes,
   FaBox,
   FaPrint,
-  FaCubes,
   FaCube,
 } from "react-icons/fa";
-import { Row, Col } from "antd";
+import { Row, Col, PageHeader } from "antd";
 
 const Setting = () => {
   return (

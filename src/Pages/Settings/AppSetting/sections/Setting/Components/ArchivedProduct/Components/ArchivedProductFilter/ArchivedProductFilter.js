@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Form, Input, notification, Select, Divider, Row, Col } from "antd";
+import { Form, Input, notification, Select, Space, Row, Col } from "antd";
 import ArchivedProductTable from "../ArchivedProductTable/ArchivedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import MoreFilters from "../MoreFilters/MoreFilters";
@@ -98,57 +98,59 @@ const ArchivedProductFilter = () => {
         }}
       >
         <Row>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8} key={1}>
-            <Form.Item label="Product" name="product" labelCol={{ span: 24 }}>
-              <Select
-                mode="multiple"
-                showSearch
-                allowClear
-                style={{ width: "400px" }}
-                placeholder="Search product/sku"
-                optionFilterProp="children"
-                onChange={onChangeProduct}
-                onFocus={fetchSearchData}
-                onSearch={onSearch}
+          <Space>
+            <Col xs={24} sm={24} md={24} lg={24} xl={9} key={1}>
+              <Form.Item label="Product" name="product" labelCol={{ span: 24 }}>
+                <Select
+                  mode="multiple"
+                  showSearch
+                  allowClear
+                  style={{ width: "400px" }}
+                  placeholder="Search product/sku"
+                  optionFilterProp="children"
+                  onChange={onChangeProduct}
+                  onFocus={fetchSearchData}
+                  onSearch={onSearch}
+                >
+                  {searchData.map((res, index) => (
+                    <Option
+                      key={index}
+                      value={res.id}
+                      disabled={
+                        productid !== undefined
+                          ? optionsSelected.includes(res.name)
+                            ? false
+                            : true
+                          : false
+                      }
+                    >
+                      {res.name}/ {res.print_name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={24} md={24} lg={24} xl={9} key={2}>
+              <Form.Item
+                label="Search"
+                name="search"
+                rules={[
+                  {
+                    required: false,
+                    message: "Please input your username!",
+                  },
+                ]}
+                labelCol={{ span: 24 }}
               >
-                {searchData.map((res, index) => (
-                  <Option
-                    key={index}
-                    value={res.id}
-                    disabled={
-                      productid !== undefined
-                        ? optionsSelected.includes(res.name)
-                          ? false
-                          : true
-                        : false
-                    }
-                  >
-                    {res.name}/ {res.print_name}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={24} md={24} lg={24} xl={8} key={2}>
-            <Form.Item
-              label="Search"
-              name="search"
-              rules={[
-                {
-                  required: false,
-                  message: "Please input your username!",
-                },
-              ]}
-              labelCol={{ span: 24 }}
-            >
-              <Input
-                style={{ width: "300px" }}
-                placeholder="Any part of product name/sku"
-                value={searchinput}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
-            </Form.Item>
-          </Col>
+                <Input
+                  style={{ width: "300px" }}
+                  placeholder="Any part of product name/sku"
+                  value={searchinput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+          </Space>
         </Row>
       </Form>
       <MoreFilters

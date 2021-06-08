@@ -123,7 +123,6 @@ const MoreFilters = (props, ref) => {
                 </Option>
               ))}
             </Select>
-            ,
           </Form.Item>
 
           <Form.Item label={label("Bundle Product")}>

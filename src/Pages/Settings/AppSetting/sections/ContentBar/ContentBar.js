@@ -26,6 +26,7 @@ import {
   AiOutlineUndo,
 } from "react-icons/ai";
 import { FaFileArchive } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import { CgDanger } from "react-icons/cg";
 const { Option } = Select;
 
@@ -297,7 +298,7 @@ const ContentBar = (props) => {
           </Button>
         )}
 
-        <Button onClick={props.delete} icon={<AiFillDelete />} key="17">
+        <Button onClick={props.delete} icon={<RiDeleteBin6Line />} key="17">
           Delete
         </Button>
         {props.requireSave ? (
