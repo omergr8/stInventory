@@ -5,8 +5,7 @@
 // If not: they are redirected to the login page.
 import React, { useEffect, useState } from "react";
 import { Redirect, Route } from "react-router-dom";
-import axios from "axios";
-import { getToken } from "./Services/ListServices";
+import axios from "./axiosSet";
 
 const PrivateRoute = ({ component: Component, render, ...rest }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -17,9 +16,7 @@ const PrivateRoute = ({ component: Component, render, ...rest }) => {
 
   useEffect(() => {
     axios
-      .get("https://inventory-dev-295903.appspot.com/settings/defaults/", {
-        headers: getToken(),
-      })
+      .get("/settings/defaults/")
       .then((response) => {
         setIsLoggedIn(true);
         setLoading(false);

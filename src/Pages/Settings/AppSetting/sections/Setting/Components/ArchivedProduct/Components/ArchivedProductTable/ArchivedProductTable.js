@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import classes from "./ArchivedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Table, Button, notification, Row, Col, Space, Tag } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 
@@ -37,10 +37,8 @@ const ArchivedProductTable = (props) => {
   const [selectedrow, setSelectedRow] = useState([]);
   const search = useLocation().search;
   const history = useHistory();
-  const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/products/${search}`
-  );
-  const headers = getToken();
+  const [url, setUrl] = useState(`${appUrls.PRODUCTS + search}`);
+
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
@@ -53,7 +51,7 @@ const ArchivedProductTable = (props) => {
   };
 
   useEffect(() => {
-    setUrl(`https://inventory-dev-295903.appspot.com/products/${search}`);
+    setUrl(`${appUrls.PRODUCTS + search}`);
   }, [search]);
   useEffect(() => {
     props.reset_ref.current = reset;
@@ -71,9 +69,7 @@ const ArchivedProductTable = (props) => {
 
   const fetchArchivedProducts = () => {
     axios
-      .get(url, {
-        headers,
-      })
+      .get(url)
       .then((res) => {
         const ArchivedProductData = res.data;
         setArchivedroduct(ArchivedProductData);
@@ -120,11 +116,7 @@ const ArchivedProductTable = (props) => {
       product_ids: selectedrow,
     };
     axios
-      .post(
-        "https://inventory-dev-295903.appspot.com/products/bulk/delete/",
-        deleteObj,
-        { headers }
-      )
+      .post(appUrls.BULK_DELETE_PRODUCTS, deleteObj)
       .then((res) => {
         console.log(res);
         fetchArchivedProducts();
@@ -140,11 +132,7 @@ const ArchivedProductTable = (props) => {
       is_select_all: "True",
     };
     axios
-      .post(
-        "https://inventory-dev-295903.appspot.com/products/bulk/delete/",
-        deleteObj,
-        { headers }
-      )
+      .post(appUrls.BULK_DELETE_PRODUCTS, deleteObj)
       .then((res) => {
         console.log(res);
         fetchArchivedProducts();
@@ -164,11 +152,7 @@ const ArchivedProductTable = (props) => {
       product_ids: selectedrow,
     };
     axios
-      .post(
-        "https://inventory-dev-295903.appspot.com/products/bulk/undo-archive/",
-        undoArchiveObj,
-        { headers }
-      )
+      .post(appUrls.BULK_UNDO_ARCHIVE_PRODUCTS, undoArchiveObj)
       .then((res) => {
         console.log(res);
         setSelectedRow([]);
@@ -196,7 +180,7 @@ const ArchivedProductTable = (props) => {
   }
   const getPageData = (url) => {
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         const packSizeData = res.data;
         setArchivedroduct(packSizeData);

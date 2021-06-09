@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import classes from "./ProductCategoryTable.module.css";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import AddProductGroupModal from "../AddProductGroupModal/AddProductGroupModal";
 import EditProductGroupModal from "../EditProductGroupModal/EditProductGroupModal";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Table, Button, Space, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -14,7 +14,6 @@ const ProductCategoryTable = () => {
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const [showmodal, setShowModal] = useState(false);
-  const headers = getToken();
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -43,12 +42,7 @@ const ProductCategoryTable = () => {
   };
   const deleteProduct = (id) => {
     axios
-      .delete(
-        `https://inventory-dev-295903.appspot.com/products/groups/1/${id}/`,
-        {
-          headers,
-        }
-      )
+      .delete(appUrls.PRODUCT_GROUP1 + id + "/")
       .then((res) => {
         Alert("bottomRight", "success", "Deleted Successfully.");
         fetchData();
@@ -60,9 +54,7 @@ const ProductCategoryTable = () => {
   const fetchData = () => {
     setShowModal(false);
     axios
-      .get(`https://inventory-dev-295903.appspot.com/products/groups/1/`, {
-        headers,
-      })
+      .get(appUrls.PRODUCT_GROUP1)
       .then((res) => {
         const productCategory = res.data;
         setProductCategory(productCategory);
@@ -147,7 +139,7 @@ const ProductCategoryTable = () => {
 
   const getPageData = (url) => {
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         const productCategoryData = res.data;
         setProductCategory(productCategoryData);
@@ -170,18 +162,12 @@ const ProductCategoryTable = () => {
     inputFR.onload = () => {
       let body = new Blob([inputFR.result], { type: "text/csv" });
       axios
-        .post(
-          "https://inventory-dev-295903.appspot.com/products/groups/1/import/",
-          body,
-          {
-            headers: {
-              "Content-Type": "text/csv",
-              Authorization: `token ${JSON.parse(
-                localStorage.getItem("token")
-              )}`,
-            },
-          }
-        )
+        .post(appUrls.PRODUCT_GROUP1_IMPORT, body, {
+          headers: {
+            "Content-Type": "text/csv",
+            Authorization: `token ${JSON.parse(localStorage.getItem("token"))}`,
+          },
+        })
         .then((res) => {
           if (res) {
             fetchData();

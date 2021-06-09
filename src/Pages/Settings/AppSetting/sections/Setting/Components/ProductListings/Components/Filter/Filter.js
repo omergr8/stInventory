@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { Form, Row, Col, notification, Select, Divider } from "antd";
-import {
-  getToken,
-  getAllChannels,
-} from "../../../../../../../../../Services/ListServices";
+import { Form, Row, Col, notification, Select } from "antd";
+import { getAllChannels } from "../../../../../../../../../Services/ListServices";
 import ProductTable from "../ProductTable/ProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 const { Option } = Select;
 
-const Filter = (props) => {
+const Filter = () => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
   const [channelid, setChannelId] = useState();
-  const [allchannels, setAllChannels] = useState(getAllChannels());
+  const [allchannels] = useState(getAllChannels());
   const [trackingid, setTrackingId] = useState();
   const [inventorysync, setInventorySync] = useState();
   const [optionsSelected, setOptionsSelected] = useState([]);
@@ -28,9 +26,6 @@ const Filter = (props) => {
     if (value.length !== 0) {
       productId = `product=${value}`;
     }
-    // else {
-    //   productId = "";
-    // }
 
     setProductId(productId);
   }
@@ -83,14 +78,9 @@ const Filter = (props) => {
     setOnChangeInventory("all");
   };
   const sync = (value, type) => {
-    const headers = getToken();
     if (type === "inventory") {
       axios
-        .post(
-          `https://inventory-dev-295903.appspot.com/ecom/settings/channels/hard_refresh_inventory/${value}/`,
-          {},
-          { headers }
-        )
+        .post(appUrls.HARD_REFRESH_INVENTORY + value + "/", {})
         .then((res) => {
           Alert("bottomRight", "success", "Inventory Synced.");
         })
@@ -99,11 +89,7 @@ const Filter = (props) => {
         });
     } else if (type === "product") {
       axios
-        .post(
-          `https://inventory-dev-295903.appspot.com/ecom/settings/channels/sync_products/${value}/`,
-          {},
-          { headers }
-        )
+        .post(appUrls.SYNC_PRODUCTS + value + "/", {})
         .then((res) => {
           Alert("bottomRight", "success", "Product Synced.");
         })
@@ -114,11 +100,9 @@ const Filter = (props) => {
   };
 
   const onSearch = (val) => {
-    const headers = getToken();
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=${val}`,
-        { headers }
+        `${appUrls.PRODUCTS}?is_archived=False&limit=25&paginate=False&search=${val}`
       )
       .then((res) => {
         const searchDataResponse = res.data;
@@ -129,12 +113,9 @@ const Filter = (props) => {
       });
   };
   const fetchSearchData = () => {
-    const headers = getToken();
-
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=`,
-        { headers }
+        `${appUrls.PRODUCTS}?is_archived=False&limit=25&paginate=False&search=`
       )
       .then((res) => {
         const searchDataResponse = res.data;

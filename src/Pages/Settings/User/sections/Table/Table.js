@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Table, Divider, Checkbox, notification } from "antd";
-import axios from "axios";
-import {
-  getToken,
-  checkUserPermission,
-} from "../../../../../Services/ListServices";
+import axios from "../../../../../axiosSet";
+import { appUrls } from "../../../../../Constants/appUrls";
+import { checkUserPermission } from "../../../../../Services/ListServices";
 import { useParams } from "react-router";
 
 const settingsData = [
   { key: "1", number: 1, function: "Get low stock alerts" },
 ];
 const PermissionTable = (props) => {
-  const [selectionType, setSelectionType] = useState("checkbox");
   const [permission, setPermission] = useState([]);
   const [settings, setSettings] = useState([]);
-  const headers = getToken();
   const { id } = useParams();
 
   const permissionData = [
@@ -57,9 +53,7 @@ const PermissionTable = (props) => {
     }
 
     axios
-      .put(`https://inventory-dev-295903.appspot.com/users/${id}/`, copyObj, {
-        headers,
-      })
+      .put(appUrls.USERS + id + "/", copyObj)
       .then((response) => {
         Alert("bottomRight", "success", "Saved.");
       })

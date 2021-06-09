@@ -1,14 +1,13 @@
 import { Table, Button, Space, notification } from "antd";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import React, { useState, useEffect } from "react";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 import EditTaxModal from "../EditTaxModal/EditTaxModal";
 import AddTaxModal from "../AddTaxModel/AddTaxModel";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 
 const TaxTable = () => {
   const [tax, setTax] = useState([]);
-  const headers = getToken();
 
   const Alert = (placement, type, error) => {
     if (type === "success") {
@@ -26,9 +25,7 @@ const TaxTable = () => {
 
   const onDelete = (id) => {
     axios
-      .delete(`https://inventory-dev-295903.appspot.com/settings/taxes/${id}`, {
-        headers,
-      })
+      .delete(appUrls.TAXES + id)
       .then((res) => {
         Alert("bottomRight", "success");
         fetchTaxData();
@@ -39,9 +36,7 @@ const TaxTable = () => {
   };
   const fetchTaxData = () => {
     axios
-      .get(`https://inventory-dev-295903.appspot.com/settings/taxes/`, {
-        headers,
-      })
+      .get(appUrls.TAXES)
       .then((res) => {
         const taxList = res.data;
         setTax(taxList);

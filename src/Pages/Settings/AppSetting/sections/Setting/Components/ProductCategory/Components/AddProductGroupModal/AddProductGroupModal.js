@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Input, notification } from "antd";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 const layout = {
   labelCol: {
     span: 5,
@@ -39,18 +39,11 @@ const AddProductGroupModal = (props) => {
     props.closeModal();
   };
   const submit = () => {
-    const headers = getToken();
     const groupObject = {
       name: name,
     };
     axios
-      .post(
-        `https://inventory-dev-295903.appspot.com/products/groups/1/`,
-        groupObject,
-        {
-          headers,
-        }
-      )
+      .post(appUrls.PRODUCT_GROUP1, groupObject)
       .then((res) => {
         Alert("bottomRight", "success");
         setIsModalVisible(false);

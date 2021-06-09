@@ -1,8 +1,8 @@
 import React, { useState, useReducer, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import {
-  getToken,
   getLocalUom,
   getLocalTax,
   getCategory,
@@ -49,7 +49,6 @@ const initialFormState = {
 const ProductSizeEdit = () => {
   const [formState, dispatch] = useReducer(formReducer, initialFormState);
   const { id } = useParams();
-  const headers = getToken();
   const [requiresave, setRequireSave] = useState(false);
   const [productsizedata, setProductSizeData] = useState([]);
   const [ispurchasepack, setIsPurchasePack] = useState(Boolean);
@@ -112,9 +111,9 @@ const ProductSizeEdit = () => {
     setIsPurchasePack(data.is_purchased_in_pack);
   };
   const getProductSizeData = () => {
-    const url = `https://inventory-dev-295903.appspot.com/products/${id}`;
+    const url = appUrls.PRODUCTS + id;
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         const packSizeData = res.data;
         setStateData(packSizeData);
@@ -126,9 +125,9 @@ const ProductSizeEdit = () => {
   };
   useEffect(() => {
     let unmounted = false;
-    const url = `https://inventory-dev-295903.appspot.com/products/${id}`;
+    const url = appUrls.PRODUCTS + id;
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         const packSizeData = res.data;
         if (!unmounted) {
@@ -147,14 +146,14 @@ const ProductSizeEdit = () => {
     let url;
     let arch;
     if (archive) {
-      url = `https://inventory-dev-295903.appspot.com/products/${id}/archive/`;
+      url = appUrls.PRODUCTS + id + "/archive/";
       arch = "Product Archived";
     } else {
-      url = `https://inventory-dev-295903.appspot.com/products/${id}/undo-archive/`;
+      url = appUrls.PRODUCTS + id + "/undo-archive/";
       arch = "Product Un-Archived";
     }
     axios
-      .put(url, "t", { headers })
+      .put(url, "t")
       .then((res) => {
         if (res) {
           getProductSizeData();
@@ -186,13 +185,7 @@ const ProductSizeEdit = () => {
       tax_id: formState.tax,
     };
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/products/${id}/`,
-        prodObj,
-        {
-          headers,
-        }
-      )
+      .put(appUrls.PRODUCTS + id + "/", prodObj)
       .then((res) => {
         if (res) {
           Alert("bottomRight", "success", "Saved");
@@ -206,9 +199,7 @@ const ProductSizeEdit = () => {
   };
   const deleteProduct = () => {
     axios
-      .delete(`https://inventory-dev-295903.appspot.com/products/${id}/`, {
-        headers,
-      })
+      .delete(appUrls.PRODUCTS + id + "/")
       .then((res) => {
         if (res) {
           Alert("bottomRight", "success", "Deleted Successfully");

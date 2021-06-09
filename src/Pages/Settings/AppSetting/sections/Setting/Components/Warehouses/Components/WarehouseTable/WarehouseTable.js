@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import AddWarehouseModal from "../AddWarehouseModal/AddWarehouseModal";
 import { Link } from "react-router-dom";
-import { Table, Tag, notification, Button } from "antd";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import { Table, Tag, notification } from "antd";
 
 const columns = [
   {
@@ -50,7 +50,6 @@ const columns = [
 ];
 
 const WarehouseTable = () => {
-  const headers = getToken();
   const [warehouses, setWarehouses] = useState([]);
 
   const Alert = (placement, type, error) => {
@@ -68,9 +67,7 @@ const WarehouseTable = () => {
   };
   const fetchWarehouses = () => {
     axios
-      .get(`https://inventory-dev-295903.appspot.com/settings/warehouses/`, {
-        headers,
-      })
+      .get(appUrls.WAREHOUSES)
       .then((res) => {
         const warehouse = res.data;
         setWarehouses(warehouse);

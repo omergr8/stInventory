@@ -3,13 +3,11 @@ import { useHistory, useLocation } from "react-router-dom";
 import { queryParams } from "../../../../../../../../../Services/ListServices";
 import { Table, Tag, Button, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import { Link } from "react-router-dom";
 import MetaFind from "../../../../../MetaFind/MetaFind";
-import {
-  getToken,
-  dateFormatter,
-} from "../../../../../../../../../Services/ListServices";
+import { dateFormatter } from "../../../../../../../../../Services/ListServices";
 import FilterTags from "../FilterTags/FilterTags";
 import classes from "./ProductTable.module.css";
 
@@ -63,20 +61,15 @@ const columns = [
 ];
 
 const ProductTable = (props) => {
-  const headers = getToken();
   const [product, setProduct] = useState({});
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const history = useHistory();
   const search = useLocation().search;
-  const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/${search}`
-  );
+  const [url, setUrl] = useState(appUrls.PRODUCT_LINKS + search);
 
   useEffect(() => {
-    setUrl(
-      `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/${search}`
-    );
+    setUrl(appUrls.PRODUCT_LINKS + search);
   }, [search]);
   const errorAlert = (placement, error) => {
     notification.error({
@@ -102,15 +95,11 @@ const ProductTable = (props) => {
     history.push(
       `/dashboard/product-listing?is_archived=False${queryParamsList}`
     );
-    // let url = `https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False${queryParamsList}`;
-    // setUrl(url);
   };
   const reset = () => {
     props.reset();
     history.push(`/dashboard/product-listing?is_archived=False`);
-    setUrl(
-      "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?is_archived=False"
-    );
+    setUrl(appUrls.PRODUCT_LINKS + "?is_archived=False");
   };
   useEffect(() => {
     props.productTableMethod_ref.current = getQueryParams;
@@ -120,7 +109,7 @@ const ProductTable = (props) => {
   useEffect(() => {
     let unmounted = false;
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         if (!unmounted) {
           const productLinks = res.data;
@@ -165,7 +154,7 @@ const ProductTable = (props) => {
   const getPageData = (url) => {
     let unmounted = false;
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         if (!unmounted) {
           const productLinks = res.data;
@@ -180,7 +169,7 @@ const ProductTable = (props) => {
       unmounted = true;
     };
   };
-  const handleTableChange = (pagination, filters, sorter) => {
+  const handleTableChange = (pagination) => {
     if (pagination === "next") {
       getPageData(product.next);
     } else if (pagination === "previous") {

@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../axiosSet";
+import { appUrls } from "../../../Constants/appUrls";
 import PermissionTable from "./sections/Table/Table";
 import ContentBar from "../AppSetting/sections/ContentBar/ContentBar";
 import { Form, Input, Button, Radio, notification, Row, Col } from "antd";
-import { getToken } from "../../../Services/ListServices";
 import { useParams } from "react-router";
-import { Content } from "antd/lib/layout/layout";
 
 const User = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
-  const headers = getToken();
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -27,17 +25,13 @@ const User = () => {
   let oldResponse = JSON.parse(localStorage.getItem("user-info"));
 
   useEffect(() => {
-    axios
-      .get(`https://inventory-dev-295903.appspot.com/users/${id}/`, { headers })
-      .then((res) => {
-        setUser(res.data);
-      });
+    axios.get(appUrls.USERS + id + "/").then((res) => {
+      setUser(res.data);
+    });
   }, []);
   const save = () => {
     axios
-      .put(`https://inventory-dev-295903.appspot.com/users/${id}/`, user, {
-        headers,
-      })
+      .put(appUrls.USERS + id + "/", user)
       .then((response) => {
         oldResponse.user = response.data;
         Alert("bottomRight", "success", "Saved.");
@@ -65,7 +59,11 @@ const User = () => {
   return (
     <div>
       <ContentBar
-        title={`User ${user.first_name} ${user.last_name}`}
+        title={
+          user.first_name !== undefined
+            ? `User ${user.first_name} ${user.last_name}`
+            : "User"
+        }
         incoming="user"
         user={user}
       />

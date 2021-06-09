@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import DocumentDetails from "./Components/DocumentDetails/DocumentDetails";
 import PrintConfigs from "./Components/PrintConfigs/PrintConfigs";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 import { Tabs, notification } from "antd";
 
 const { TabPane } = Tabs;
 
 const DocumentTypeEdit = () => {
   const { id } = useParams();
-  const headers = getToken();
   const [document, setDocument] = useState([]);
   const [printconfig, setPrintConfig] = useState([]);
 
@@ -31,10 +30,7 @@ const DocumentTypeEdit = () => {
   const fetchDocument = () => {
     let unmounted = false;
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/settings/documents/types/${id}/`,
-        { headers }
-      )
+      .get(appUrls.DOCUMENT_TYPES + id + "/")
       .then((res) => {
         const documentData = res.data;
         if (!unmounted) {
@@ -50,10 +46,7 @@ const DocumentTypeEdit = () => {
   };
   const fetchPrintConfig = () => {
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/settings/documents/print/configs/${id}/`,
-        { headers }
-      )
+      .get(appUrls.PRINT_CONFIG + id + "/")
       .then((res) => {
         const printConfigg = res.data;
         setPrintConfig(printConfigg);

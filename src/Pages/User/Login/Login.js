@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import classes from "./Login.module.css";
 import LoginForm from "./sections/LoginForm/LoginForm";
 import logo from "../../../Assets/logo-sumtracker.png";
@@ -7,12 +6,6 @@ import { Spin, notification } from "antd";
 
 const Login = (props) => {
   const [waiting, setWaiting] = useState(false);
-  const history = useHistory();
-  // useEffect(() => {
-  //   if (localStorage.getItem("token")) {
-  //     history.push("/dashboard");
-  //   }
-  // }, []);
 
   const showSpinner = (error) => {
     if (waiting === false) {

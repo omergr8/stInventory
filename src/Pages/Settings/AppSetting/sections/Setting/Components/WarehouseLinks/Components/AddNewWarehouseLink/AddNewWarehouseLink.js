@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import {
-  getToken,
   getAllWarehouses,
   getAllChannels,
 } from "../../../../../../../../../Services/ListServices";
-import MetaFind from "../../../../../MetaFind/MetaFind";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import { Form, Input, Button, Select, notification, Row, Col } from "antd";
-import { RiDeleteBinLine } from "react-icons/ri";
 
 const { Option } = Select;
 const layout = {
@@ -30,7 +28,6 @@ const tailLayout = {
 export const AddNewWarehouseLink = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
-  const headers = getToken();
   const [sumtrackerwarehouse, setSumtrackerWarehouse] = useState(Number);
   const [channel, setChannel] = useState("");
   const [priority, setPriority] = useState("");
@@ -58,11 +55,7 @@ export const AddNewWarehouseLink = () => {
       priority: priority,
     };
     axios
-      .post(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/`,
-        linkObj,
-        { headers }
-      )
+      .post(appUrls.WAREHOUSE_LINKS, linkObj)
       .then((res) => {
         Alert("bottomRight", "success", "Warehouse Added Successfully");
       })

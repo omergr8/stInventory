@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Form, notification, Select, Divider } from "antd";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import React, { useState } from "react";
+import { Form, notification, Select } from "antd";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import ProductSizeTable from "../ProductSizeTable/ProductSizeTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 const { Option } = Select;
@@ -13,7 +13,7 @@ const layout = {
 const ProductSizeFilter = () => {
   const [searchData, setSearchData] = useState([]);
   const [productid, setProductId] = useState();
-  const [optionsSelected, setOptionsSelected] = useState([]);
+  const [optionsSelected] = useState([]);
   const [form] = Form.useForm();
   const productTableMethod_ref = React.useRef(null);
   const reset_ref = React.useRef(null);
@@ -40,12 +40,9 @@ const ProductSizeFilter = () => {
     setProductId(productId);
   }
   const fetchSearchData = () => {
-    const headers = getToken();
-
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=`,
-        { headers }
+        `${appUrls.PRODUCTS}?is_archived=False&limit=25&paginate=False&search=`
       )
       .then((res) => {
         const searchDataResponse = res.data;
@@ -61,11 +58,9 @@ const ProductSizeFilter = () => {
     setProductId(undefined);
   };
   const onSearch = (val) => {
-    const headers = getToken();
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=${val}`,
-        { headers }
+        `${appUrls.PRODUCTS}?is_archived=False&limit=25&paginate=False&search=${val}`
       )
       .then((res) => {
         const searchDataResponse = res.data;

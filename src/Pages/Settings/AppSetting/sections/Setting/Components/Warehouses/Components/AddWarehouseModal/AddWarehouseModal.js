@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, notification } from "antd";
-import { useHistory } from "react-router-dom";
-import { AiOutlinePlus } from "react-icons/ai";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
+
 const layout = {
   labelCol: {
     span: 7,
@@ -26,7 +25,6 @@ const AddWarehouseModal = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(props.modal);
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
-  const headers = getToken();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -64,11 +62,7 @@ const AddWarehouseModal = (props) => {
       code: code,
     };
     axios
-      .post(
-        "https://inventory-dev-295903.appspot.com/settings/warehouses/",
-        warehouseObj,
-        { headers }
-      )
+      .post(appUrls.WAREHOUSES, warehouseObj)
       .then((res) => {
         Alert("bottomRight", "success", "Warehouse Added Successfully.");
         setIsModalVisible(false);

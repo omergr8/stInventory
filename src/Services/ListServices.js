@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios from "../axiosSet";
 import { notification } from "antd";
 var moment = require("moment");
+
 const Alert = (placement, type, error) => {
   if (type === "success") {
     notification.success({
@@ -35,8 +36,7 @@ export function getToken() {
   return headers;
 }
 export const exportList = (url, fileName) => {
-  const headers = getToken();
-  axios.get(url, { headers }).then((res) => {
+  axios.get(url).then((res) => {
     const csvData = res.data;
     download(csvData, fileName);
   });
@@ -54,7 +54,6 @@ export const importList = (file, url) => {
         },
       })
       .then((res) => {
-        // refreshAfterImport(res);
         Alert("bottomRight", "success", "Imported Successfully");
       })
       .catch((err) => {

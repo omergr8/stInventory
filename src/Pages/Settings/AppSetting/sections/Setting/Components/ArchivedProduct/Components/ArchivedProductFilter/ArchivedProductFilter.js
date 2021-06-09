@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import { Form, Input, notification, Select, Space, Row, Col } from "antd";
 import ArchivedProductTable from "../ArchivedProductTable/ArchivedProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import MoreFilters from "../MoreFilters/MoreFilters";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 
 const { Option } = Select;
 const Alert = (placement, type, error) => {
@@ -33,11 +33,9 @@ const ArchivedProductFilter = () => {
   const moreReset_ref = React.useRef();
 
   const fetchSearchData = () => {
-    const headers = getToken();
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=`,
-        { headers }
+        `${appUrls.PRODUCTS}?is_archived=False&limit=25&paginate=False&search=`
       )
       .then((res) => {
         const searchDataResponse = res.data;
@@ -49,11 +47,9 @@ const ArchivedProductFilter = () => {
   };
 
   const onSearch = (val) => {
-    const headers = getToken();
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/?is_archived=False&limit=25&paginate=False&search=${val}`,
-        { headers }
+        `${appUrls.PRODUCTS}?is_archived=False&limit=25&paginate=False&search=${val}`
       )
       .then((res) => {
         const searchDataResponse = res.data;

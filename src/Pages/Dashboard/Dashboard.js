@@ -1,13 +1,11 @@
 import Content from "./sections/Content/Content";
 import { useHistory } from "react-router-dom";
 import React from "react";
-import { Spin, Alert, notification } from "antd";
 import Toolbar from "../Common/Toolbar/Toolbar";
 import Sidebar from "../Common/Sidebar/Sidebar";
 import routes from "../../routes";
 import { Switch, Route } from "react-router-dom";
 import { Layout } from "antd";
-import { useEffect } from "react";
 
 const switchRoutes = (
   <Switch>

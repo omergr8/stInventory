@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
-import { getToken } from "../../../../../Services/ListServices";
+import axios from "../../../../../axiosSet";
+import { appUrls } from "../../../../../Constants/appUrls";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import classes from "../../Login.module.css";
@@ -10,21 +10,16 @@ const LoginForm = (props) => {
   const [password, setPassword] = useState("");
   const history = useHistory();
   const getMetadata = () => {
-    const headers = getToken();
     let unmounted = false;
-    axios
-      .get(`https://inventory-dev-295903.appspot.com/settings/metadata/`, {
-        headers,
-      })
-      .then((res) => {
-        if (res && !unmounted) {
-          const metaData = res.data;
-          localStorage.setItem("meta-data", JSON.stringify(metaData));
-          if (localStorage.getItem("token")) {
-            history.push("/dashboard");
-          }
+    axios.get(appUrls.METADATA).then((res) => {
+      if (res && !unmounted) {
+        const metaData = res.data;
+        localStorage.setItem("meta-data", JSON.stringify(metaData));
+        if (localStorage.getItem("token")) {
+          history.push("/dashboard");
         }
-      });
+      }
+    });
     return () => {
       unmounted = true;
     };
@@ -35,7 +30,7 @@ const LoginForm = (props) => {
     props.handler();
     let unmounted = false;
     axios
-      .post("https://inventory-dev-295903.appspot.com/users/login/", item)
+      .post(appUrls.LOGIN, item)
       .then((response) => {
         localStorage.setItem("user-info", JSON.stringify(response.data));
         localStorage.setItem("token", JSON.stringify(response.data.token));

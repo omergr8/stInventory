@@ -11,7 +11,7 @@ import {
   FaPrint,
   FaCube,
 } from "react-icons/fa";
-import { Row, Col, PageHeader } from "antd";
+import { Row, Col } from "antd";
 
 const Setting = () => {
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../../../Constants/appUrls";
 import {
   Form,
   notification,
@@ -53,7 +53,7 @@ const PrintConfigs = (props) => {
   const [footerterms, setFooterTerms] = useState();
   const [checkedItems, setCheckedItems] = useState(initialFormState); //plain object as state
   const { id } = useParams();
-  const headers = getToken();
+
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -146,11 +146,7 @@ const PrintConfigs = (props) => {
     const copyObj = { ...checkedItems };
     copyObj.print_config.footer_terms = arrayToObj;
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/settings/documents/print/configs/${id}/`,
-        copyObj,
-        { headers }
-      )
+      .put(appUrls.PRINT_CONFIG + id + "/", copyObj)
       .then((res) => {
         if (res) {
           Alert("bottomRight", "success", "Print Settings Saved");

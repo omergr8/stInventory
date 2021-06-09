@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import { Modal, Button, Form, Input, notification } from "antd";
-import { getToken } from "../../../../../../../../../Services/ListServices";
-import { GrEdit } from "react-icons/gr";
 import { EditOutlined } from "@ant-design/icons";
 const layout = {
   labelCol: {
@@ -16,7 +15,6 @@ const EditProductGroupModal = (props) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [name, setName] = useState(props.name);
-  const headers = getToken();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -46,13 +44,7 @@ const EditProductGroupModal = (props) => {
     };
 
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/products/groups/1/${props.id}/`,
-        groupObject,
-        {
-          headers,
-        }
-      )
+      .put(appUrls.PRODUCT_GROUP1 + props.id + "/", groupObject)
       .then((res) => {
         Alert("bottomRight", "success");
         setIsModalVisible(false);

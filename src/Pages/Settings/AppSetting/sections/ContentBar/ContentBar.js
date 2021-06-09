@@ -1,7 +1,6 @@
-import classes from "./ContentBar.module.css";
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import MoreFilters from "../Setting/Components/ArchivedProduct/Components/MoreFilters/MoreFilters";
+import { appUrls } from "../../../../../Constants/appUrls";
 import {
   exportList,
   importList,
@@ -20,7 +19,6 @@ import {
 } from "antd";
 import {
   AiOutlinePlus,
-  AiFillDelete,
   AiFillSave,
   AiOutlineSave,
   AiOutlineUndo,
@@ -40,8 +38,7 @@ const menu = (
 
 const exportCSV = (incoming) => {
   if (incoming === "ProductListings") {
-    const url =
-      "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/?paginate=False&format=csv&is_archived=False";
+    const url = `${appUrls.PRODUCT_LINKS}?paginate=False&format=csv&is_archived=False`;
     exportList(url, "Product Listing");
   }
 };
@@ -119,10 +116,7 @@ const ContentBar = (props) => {
         </Button>
         <Upload
           customRequest={(file) =>
-            importList(
-              file.file,
-              "https://inventory-dev-295903.appspot.com/ecom/settings/channels/products/links/import/"
-            )
+            importList(file.file, appUrls.PRODUCT_LINKS_IMPORT)
           }
           showUploadList={false}
         >
@@ -143,8 +137,7 @@ const ContentBar = (props) => {
       </Space>
     );
   } else if (props.incoming === "ProductCategory") {
-    const ProductCategoryUrl =
-      "https://inventory-dev-295903.appspot.com/products/groups/1/?format=csv&is_archived=false&paginate=False";
+    const ProductCategoryUrl = `${appUrls.PRODUCT_GROUP1}?format=csv&is_archived=false&paginate=False`;
     extra = (
       <Space key="31">
         <Button
@@ -164,8 +157,7 @@ const ContentBar = (props) => {
       </Space>
     );
   } else if (props.incoming === "ProductPackSize") {
-    const ProductCategoryUrl =
-      "https://inventory-dev-295903.appspot.com/products/pack_sizes/?format=csv&paginate=False";
+    const ProductCategoryUrl = `${appUrls.PRODUCT_PACK_SIZES}?format=csv&paginate=False`;
     extra = (
       <Space key="29">
         <Button
@@ -190,8 +182,7 @@ const ContentBar = (props) => {
       </Space>
     );
   } else if (props.incoming === "ArchivedProduct") {
-    const ArchiveProductUrl =
-      "https://inventory-dev-295903.appspot.com/products/?format=csv&is_archived=True&paginate=False";
+    const ArchiveProductUrl = `${appUrls.PRODUCTS}?format=csv&is_archived=True&paginate=False`;
     extra = (
       <Space key="32">
         <Button

@@ -1,10 +1,10 @@
 import { Form, Input, Checkbox, Button, notification, Row, Col } from "antd";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../Constants/appUrls";
 import CountrySelector from "./Components/CountrySelector/CountrySelector";
 import TimeZoneSelector from "./Components/TimeZoneSelector/TimeZoneSelector";
 import ContentBar from "../../../ContentBar/ContentBar";
-import { getToken } from "../../../../../../../Services/ListServices";
 
 const layout = {
   labelCol: {
@@ -29,7 +29,6 @@ const Alert = (placement, type, error) => {
 };
 
 const DefaultSettings = () => {
-  const headers = getToken();
   const [defaultSettings, setDefaultSettings] = useState({});
   const [country, setCountry] = useState("");
   const [timezone, setTimeZone] = useState("");
@@ -41,9 +40,7 @@ const DefaultSettings = () => {
   useEffect(() => {
     let unmounted = false;
     axios
-      .get(`https://inventory-dev-295903.appspot.com/settings/defaults/`, {
-        headers,
-      })
+      .get(appUrls.DEFAULT_SETTINGS)
       .then((res) => {
         if (!unmounted) {
           const setting = res.data;
@@ -98,13 +95,7 @@ const DefaultSettings = () => {
     };
 
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/settings/defaults/`,
-        settingObject,
-        {
-          headers,
-        }
-      )
+      .put(appUrls.DEFAULT_SETTINGS, settingObject)
       .then((res) => {
         console.log(res);
         const setting = res.data;

@@ -1,6 +1,6 @@
 import Box from "../Box/Box";
 import classes from "../Setting/Setting.module.css";
-import { NavLink, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { RiUserSettingsLine } from "react-icons/ri";
 
 import { Row, Col } from "antd";

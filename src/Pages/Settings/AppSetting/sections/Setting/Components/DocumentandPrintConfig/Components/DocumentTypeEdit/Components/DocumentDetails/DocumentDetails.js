@@ -1,8 +1,8 @@
 import React, { useReducer, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../../../Constants/appUrls";
 import {
-  getToken,
   getWarehouse,
   getAllWarehouses,
 } from "../../../../../../../../../../../Services/ListServices";
@@ -27,7 +27,6 @@ const initialFormState = {
 const DocumentDetails = (props) => {
   const [formState, dispatch] = useReducer(formReducer, initialFormState);
   const { id } = useParams();
-  const headers = getToken();
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -100,11 +99,7 @@ const DocumentDetails = (props) => {
       warehouse_id: formState.defaultwarehouse,
     };
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/settings/documents/types/${id}/`,
-        docObj,
-        { headers }
-      )
+      .put(appUrls.DOCUMENT_TYPES + id + "/", docObj)
       .then((res) => {
         if (res) {
           Alert("bottomRight", "success", "Settings Updated");

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import {
   Table,
   Input,
@@ -23,7 +23,6 @@ const layout = {
 
 const EditTaxModal = (props) => {
   const [form] = Form.useForm();
-  const headers = getToken();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [taxname, setTaxName] = useState(props.name);
   let data = Object.entries(props.taxData).map(([key, value]) => ({
@@ -189,11 +188,7 @@ const EditTaxModal = (props) => {
     };
     //console.log(taxModalObject);
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/settings/taxes/${props.id}/`,
-        taxModalObject,
-        { headers }
-      )
+      .put(appUrls.TAXES + props.id + "/", taxModalObject)
       .then((response) => {
         Alert("bottomRight", "success");
         setIsModalVisible(false);

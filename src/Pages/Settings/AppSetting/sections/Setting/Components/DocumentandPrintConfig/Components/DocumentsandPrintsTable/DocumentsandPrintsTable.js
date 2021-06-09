@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import { Link } from "react-router-dom";
-import {
-  getToken,
-  getWarehouse,
-} from "../../../../../../../../../Services/ListServices";
+import { getWarehouse } from "../../../../../../../../../Services/ListServices";
 import { Table, notification } from "antd";
 
 const columns = [
@@ -25,7 +23,6 @@ const columns = [
 ];
 
 const DocumentsandPrintsTable = () => {
-  const headers = getToken();
   const [documenttypes, setDocumentTypes] = useState([]);
   const Alert = (placement, type, error) => {
     if (type === "success") {
@@ -43,12 +40,7 @@ const DocumentsandPrintsTable = () => {
   useEffect(() => {
     let unmounted = false;
     axios
-      .get(
-        "https://inventory-dev-295903.appspot.com/settings/documents/types/",
-        {
-          headers,
-        }
-      )
+      .get(appUrls.DOCUMENT_TYPES)
       .then((res) => {
         const document = res.data;
         if (!unmounted) {

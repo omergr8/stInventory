@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getToken } from "../../../../../../../../../Services/ListServices";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import { Table, notification } from "antd";
 
@@ -38,7 +38,6 @@ const columns = [
 ];
 
 const WarehouseTable = () => {
-  const headers = getToken();
   const [warehouselinks, setWarehouseLinks] = useState([]);
 
   const Alert = (placement, type, error) => {
@@ -57,12 +56,7 @@ const WarehouseTable = () => {
   useEffect(() => {
     let unmounted = false;
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/`,
-        {
-          headers,
-        }
-      )
+      .get(appUrls.WAREHOUSE_LINKS)
       .then((res) => {
         if (!unmounted) {
           const warehouse = res.data;

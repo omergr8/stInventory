@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import AddressModal from "../AddressModal/AddressModal";
 import { Form, Input, Button, notification, Row, Col, Space } from "antd";
@@ -16,17 +16,10 @@ const layout = {
     span: 11,
   },
 };
-const tailLayout = {
-  wrapperCol: {
-    offset: 10,
-    span: 16,
-  },
-};
 
 const WarehouseDetails = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
-  const headers = getToken();
   const [warehousename, setWarehouseName] = useState("");
   const [warehousecode, setWarehouseCode] = useState("");
   const [warehouseaddress, setWarehouseAddress] = useState("");
@@ -50,12 +43,7 @@ const WarehouseDetails = () => {
   useEffect(() => {
     let unmounted = false;
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/`,
-        {
-          headers,
-        }
-      )
+      .get(appUrls.WAREHOUSES + id + "/")
       .then((res) => {
         if (!unmounted) {
           const warehouse = res.data;
@@ -79,11 +67,7 @@ const WarehouseDetails = () => {
       code: warehousecode,
     };
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/`,
-        warehouseDetails,
-        { headers }
-      )
+      .put(appUrls.WAREHOUSES + id + "/", warehouseDetails)
       .then((res) => {
         Alert("bottomRight", "success");
       })
@@ -95,12 +79,7 @@ const WarehouseDetails = () => {
     const action = value;
 
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/settings/warehouses/${id}/${action}/`,
-        { name: "hh" },
-
-        { headers }
-      )
+      .put(appUrls.WAREHOUSES + id + `/${action}/`, { name: "hh" })
       .then((res) => {
         Alert("bottomRight", "success");
         if (value === "archive") {

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../../../Constants/appUrls";
 import { Table, Input, Button, notification } from "antd";
-import { RiSave3Fill } from "react-icons/ri";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 const PurchaseinPackTable = (props) => {
-  const headers = getToken();
   const [packsize, setPackSize] = useState([]);
   const data = packsize.map((data, index) => ({
     key: data.id,
@@ -35,8 +33,7 @@ const PurchaseinPackTable = (props) => {
   const fetchPurchasePackData = () => {
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product_id=${props.productId}`,
-        { headers }
+        `${appUrls.PRODUCT_PACK_SIZES}?paginate=False&product_id=${props.productId}`
       )
       .then((res) => {
         setPackSize(res.data);
@@ -49,8 +46,7 @@ const PurchaseinPackTable = (props) => {
     let unmounted = false;
     axios
       .get(
-        `https://inventory-dev-295903.appspot.com/products/pack_sizes/?paginate=False&product_id=${props.productId}`,
-        { headers }
+        `${appUrls.PRODUCT_PACK_SIZES}?paginate=False&product_id=${props.productId}`
       )
       .then((res) => {
         if (!unmounted) {
@@ -90,7 +86,7 @@ const PurchaseinPackTable = (props) => {
   };
   const deletePackSize = (url) => {
     axios
-      .delete(url, { headers })
+      .delete(url)
       .then((res) => {
         Alert("bottomRight", "success", "Deleted Successfully.");
         fetchPurchasePackData();
@@ -106,9 +102,7 @@ const PurchaseinPackTable = (props) => {
       });
       setTableData(filtered);
     } else {
-      deletePackSize(
-        `https://inventory-dev-295903.appspot.com/products/pack_sizes/${id}/`
-      );
+      deletePackSize(appUrls.PRODUCT_PACK_SIZES + id + "/");
     }
   };
   const updatePackData = (data) => {
@@ -126,7 +120,7 @@ const PurchaseinPackTable = (props) => {
       purchase_rate: rowObject.purchaserate,
     };
     axios
-      .post(url, packSizeObject, { headers })
+      .post(url, packSizeObject)
       .then((res) => {
         if (res) {
           const copyPackSizeArray = [...packsize];
@@ -150,7 +144,7 @@ const PurchaseinPackTable = (props) => {
       purchase_rate: rowObject.purchaserate,
     };
     axios
-      .put(url, packSizeObject, { headers })
+      .put(url, packSizeObject)
       .then((res) => {
         if (res) {
           Alert("bottomRight", "success", "Product Updated");
@@ -167,15 +161,9 @@ const PurchaseinPackTable = (props) => {
   const save = (id, productId) => {
     const findRow = tabledata.find((sid) => sid.key === productId);
     if (id !== undefined) {
-      putPackSize(
-        `https://inventory-dev-295903.appspot.com/products/pack_sizes/${id}/`,
-        findRow
-      );
+      putPackSize(appUrls.PRODUCT_PACK_SIZES + id + "/", findRow);
     } else {
-      postPackSize(
-        `https://inventory-dev-295903.appspot.com/products/pack_sizes/`,
-        findRow
-      );
+      postPackSize(appUrls.PRODUCT_PACK_SIZES, findRow);
     }
   };
   const onChangePackSize = (value) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import {
   Table,
   Input,
@@ -24,7 +24,6 @@ const layout = {
 const AddTaxModal = (props) => {
   const [form] = Form.useForm();
   const [tabledata, setTableData] = useState([]);
-  const headers = getToken();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [taxname, setTaxName] = useState("");
 
@@ -186,11 +185,7 @@ const AddTaxModal = (props) => {
     };
     //console.log(taxDataObject, taxModalObject);
     axios
-      .post(
-        `https://inventory-dev-295903.appspot.com/settings/taxes/`,
-        taxModalObject,
-        { headers }
-      )
+      .post(appUrls.TAXES, taxModalObject)
       .then((response) => {
         Alert("bottomRight", "success");
         setIsModalVisible(false);

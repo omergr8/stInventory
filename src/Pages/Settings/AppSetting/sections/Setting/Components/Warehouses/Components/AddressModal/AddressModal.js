@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, notification, Row, Col } from "antd";
 import CountrySelector from "../../../DefaultSettings/Components/CountrySelector/CountrySelector";
 import { AiFillEdit } from "react-icons/ai";
-import axios from "axios";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 
 const layout = {
   labelCol: {
@@ -20,7 +20,6 @@ const customLabel = (value) => {
 const AddressModal = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [warehouseaddress, setWarehouseAddress] = useState(props.address);
-  const headers = getToken();
   const Alert = (placement, type, error) => {
     if (type === "success") {
       notification.success({
@@ -39,11 +38,7 @@ const AddressModal = (props) => {
   }, [props]);
   const onFinish = () => {
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/contacts/addresses/${warehouseaddress.id}/`,
-        warehouseaddress,
-        { headers }
-      )
+      .put(appUrls.ADDRESSES + warehouseaddress.id + "/", warehouseaddress)
       .then((res) => {
         setIsModalVisible(false);
         props.updateAddress(warehouseaddress);

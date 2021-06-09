@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import {
-  getToken,
-  getAllWarehouses,
-} from "../../../../../../../../../Services/ListServices";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
+import { getAllWarehouses } from "../../../../../../../../../Services/ListServices";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import {
@@ -28,17 +26,10 @@ const layout = {
     span: 11,
   },
 };
-const tailLayout = {
-  wrapperCol: {
-    offset: 12,
-    span: 16,
-  },
-};
 
 export const WarehouseLinksDetails = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
-  const headers = getToken();
   const [warehouselinks, setWarehouseLinks] = useState([]);
   const [channel, setChannel] = useState(Number);
   const [sumtrackerwarehouse, setSumtrackerWarehouse] = useState([]);
@@ -63,12 +54,7 @@ export const WarehouseLinksDetails = () => {
   useEffect(() => {
     let unmounted = false;
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/${id}/`,
-        {
-          headers,
-        }
-      )
+      .get(appUrls.WAREHOUSE_LINKS + id + "/")
       .then((res) => {
         if (!unmounted) {
           const warehouse = res.data;
@@ -89,11 +75,7 @@ export const WarehouseLinksDetails = () => {
   }, []);
   const onDelete = () => {
     axios
-      .delete(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/${id}/`,
-
-        { headers }
-      )
+      .delete(appUrls.WAREHOUSE_LINKS + id + "/")
       .then((res) => {
         Alert("bottomRight", "success", "Warehouse Deleted Successfully");
         window.history.back();
@@ -113,11 +95,7 @@ export const WarehouseLinksDetails = () => {
     };
 
     axios
-      .put(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/warehouses/links/${id}/`,
-        linkObj,
-        { headers }
-      )
+      .put(appUrls.WAREHOUSE_LINKS + id + "/", linkObj)
       .then((res) => {
         Alert("bottomRight", "success", "Warehouse Updated Successfully");
       })
@@ -138,12 +116,7 @@ export const WarehouseLinksDetails = () => {
   }
   function onFocus(id) {
     axios
-      .get(
-        `https://inventory-dev-295903.appspot.com/ecom/settings/channels/shopify/locations/${id}/`,
-        {
-          headers,
-        }
-      )
+      .get(appUrls.SHOPIFY_LOCATIONS + id + "/")
       .then((res) => {
         setShopifyLocation(res.data);
         setLocationId(warehouselinks.location_id);

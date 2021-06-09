@@ -2,33 +2,22 @@ import classes from "./Card.module.css";
 import { Select } from "antd";
 import { Button, Form } from "antd";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../../../../axiosSet";
+import { appUrls } from "../../../../../Constants/appUrls";
 const { Option } = Select;
 
 const Card = () => {
   const [plans, setPlans] = useState([]);
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [cost, setCost] = useState();
   const handleChange = (value) => {
     setCost(value);
   };
-  let userToken = "token";
-  userToken += " ";
-  userToken += token;
-  const headers = {
-    Authorization: userToken,
-  };
-  useEffect(() => {
-    ("hi theree");
-    axios
-      .get(`https://inventory-dev-295903.appspot.com/settings/billing/plans/`, {
-        headers,
-      })
-      .then((res) => {
-        const billingPlan = res.data;
 
-        setPlans(billingPlan);
-      });
+  useEffect(() => {
+    axios.get(appUrls.BILLING_PLANS).then((res) => {
+      const billingPlan = res.data;
+      setPlans(billingPlan);
+    });
   }, [setPlans]);
   return (
     <div className={classes.box}>

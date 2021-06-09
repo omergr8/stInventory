@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../../../../../../axiosSet";
+import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import classes from "./ProductSizeTable.module.css";
 import { Table, Button, notification, Tag } from "antd";
-import { getToken } from "../../../../../../../../../Services/ListServices";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
@@ -43,16 +43,11 @@ const ProductSizeTable = (props) => {
   const [nextButtonState, setNextButton] = useState(true);
   const [previousButtonState, setPreviousButton] = useState(true);
   const search = useLocation().search;
-  const [url, setUrl] = useState(
-    `https://inventory-dev-295903.appspot.com/products/pack_sizes/${search}`
-  );
+  const [url, setUrl] = useState(appUrls.PRODUCT_PACK_SIZES + search);
   const history = useHistory();
-  const headers = getToken();
 
   useEffect(() => {
-    setUrl(
-      `https://inventory-dev-295903.appspot.com/products/pack_sizes/${search}`
-    );
+    setUrl(appUrls.PRODUCT_PACK_SIZES + search);
   }, [search]);
   const totalPages = (product) => {
     if (product.next !== null) {
@@ -112,18 +107,12 @@ const ProductSizeTable = (props) => {
     inputFR.onload = () => {
       let body = new Blob([inputFR.result], { type: "text/csv" });
       axios
-        .post(
-          "https://inventory-dev-295903.appspot.com/products/pack_sizes/import/",
-          body,
-          {
-            headers: {
-              "Content-Type": "text/csv",
-              Authorization: `token ${JSON.parse(
-                localStorage.getItem("token")
-              )}`,
-            },
-          }
-        )
+        .post(appUrls.PRODUCT_PACK_SIZES + "import/", body, {
+          headers: {
+            "Content-Type": "text/csv",
+            Authorization: `token ${JSON.parse(localStorage.getItem("token"))}`,
+          },
+        })
         .then((res) => {
           if (res) {
             fetchProductSize();
@@ -146,9 +135,7 @@ const ProductSizeTable = (props) => {
   }, [props]);
   const fetchProductSize = () => {
     axios
-      .get(url, {
-        headers,
-      })
+      .get(url)
       .then((res) => {
         const packSizeData = res.data;
 
@@ -189,7 +176,7 @@ const ProductSizeTable = (props) => {
   }
   const getPageData = (url) => {
     axios
-      .get(url, { headers })
+      .get(url)
       .then((res) => {
         const packSizeData = res.data;
         setPackSize(packSizeData);
