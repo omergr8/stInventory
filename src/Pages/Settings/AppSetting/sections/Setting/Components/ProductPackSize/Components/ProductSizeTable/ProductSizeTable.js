@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import classes from "./ProductSizeTable.module.css";
-import { Table, Button, notification } from "antd";
+import { Table, Button, notification, Tag } from "antd";
 import { getToken } from "../../../../../../../../../Services/ListServices";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { Link } from "react-router-dom";
@@ -224,9 +224,24 @@ const ProductSizeTable = (props) => {
       />
     </div>
   );
+  const FilterTags = (
+    <div style={{ display: "flex" }}>
+      <p>Filters Applied: </p>
+      <div style={{ marginLeft: "10px" }}>
+        {new URLSearchParams(search).get("product") !== null ? (
+          <Tag color="cyan">
+            Product: {new URLSearchParams(search).get("product")}
+          </Tag>
+        ) : (
+          <Tag color="default">None</Tag>
+        )}
+      </div>
+    </div>
+  );
   return (
     <div>
       {pageButtons}
+      {FilterTags}
       <Table pagination={false} columns={columns} dataSource={data} />
       {pageButtons}
     </div>

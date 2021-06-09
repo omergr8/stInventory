@@ -6,7 +6,10 @@ import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import MetaFind from "../../../../../MetaFind/MetaFind";
-import { getToken } from "../../../../../../../../../Services/ListServices";
+import {
+  getToken,
+  dateFormatter,
+} from "../../../../../../../../../Services/ListServices";
 import FilterTags from "../FilterTags/FilterTags";
 import classes from "./ProductTable.module.css";
 
@@ -43,11 +46,19 @@ const columns = [
   {
     title: "Properties",
     dataIndex: "properties",
-    render: (text) => (text ? <Tag color="#87d068">{text}</Tag> : ""),
+    render: (text) =>
+      text !== "Not Tracked" ? (
+        <Tag color="#87d068">{text}</Tag>
+      ) : text === "Not Tracked" ? (
+        <Tag color="default">{text}</Tag>
+      ) : (
+        ""
+      ),
   },
   {
     title: "Last Update Time",
     dataIndex: "updatetime",
+    render: (text) => dateFormatter(text),
   },
 ];
 
@@ -142,6 +153,8 @@ const ProductTable = (props) => {
           ? "Archived"
           : product.product.is_ebay_inventory_item
           ? "Uses Inventory API"
+          : product.product.tracking_type === 5
+          ? "Not Tracked"
           : "",
         updatetime: product.stock_update_time,
       })),
@@ -194,7 +207,7 @@ const ProductTable = (props) => {
         />
       </div>
       <div style={{ display: "flex" }}>
-        <h4>Filters Applied: </h4>
+        <p>Filters Applied: </p>
         <FilterTags />
       </div>
 
