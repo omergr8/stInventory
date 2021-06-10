@@ -88,7 +88,7 @@ const PrintConfigs = (props) => {
   }, [props]);
 
   const customLabel = (value) => {
-    return <label style={{ fontWeight: "600" }}>{value}</label>;
+    return <label>{value}</label>;
   };
   const addFooter = () => {
     const footerObj = [];

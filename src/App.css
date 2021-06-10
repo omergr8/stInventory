@@ -62,3 +62,6 @@ hr {
   font-weight: 400 !important;
   color: white !important;
 }
+label {
+  font-weight: 600;
+}

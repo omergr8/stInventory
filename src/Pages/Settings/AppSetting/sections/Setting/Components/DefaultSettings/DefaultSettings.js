@@ -169,7 +169,7 @@ const DefaultSettings = () => {
           <Form style={{ marginTop: "50px" }} {...layout} name="nest-messages">
             <Form.Item
               name={["user", "country"]}
-              label={<label style={{ fontWeight: "600" }}>Country</label>}
+              label={<label>Country</label>}
             >
               <CountrySelector
                 handleChange={handleCountryValue}
@@ -178,7 +178,7 @@ const DefaultSettings = () => {
             </Form.Item>
             <Form.Item
               name={["user", "timeZone"]}
-              label={<label style={{ fontWeight: "600" }}>Time Zone</label>}
+              label={<label>Time Zone</label>}
               wrapperCol={{ span: 12 }}
             >
               <TimeZoneSelector
@@ -188,17 +188,11 @@ const DefaultSettings = () => {
             </Form.Item>
             <Form.Item
               name={["user", "currency"]}
-              label={
-                <label style={{ fontWeight: "600" }}>Default Currency</label>
-              }
+              label={<label>Default Currency</label>}
             >
               <label>{defaultSettings.currency}</label>
             </Form.Item>
-            <Form.Item
-              label={
-                <label style={{ fontWeight: "600" }}>Payment Methods</label>
-              }
-            >
+            <Form.Item label={<label>Payment Methods</label>}>
               <Input.TextArea
                 value={paymentmethod}
                 onChange={(e) => setPaymentMethod([e.target.value])}
@@ -206,11 +200,7 @@ const DefaultSettings = () => {
             </Form.Item>
             <Form.Item
               name={["user", "instruction"]}
-              label={
-                <label style={{ fontWeight: "600" }}>
-                  Hide setup instructions
-                </label>
-              }
+              label={<label>Hide setup instructions</label>}
               labelCol={{ span: 12 }}
             >
               <Checkbox
@@ -220,11 +210,7 @@ const DefaultSettings = () => {
             </Form.Item>
             <Form.Item
               name={["user", "autoarchive"]}
-              label={
-                <label style={{ fontWeight: "600" }}>
-                  Disable Auto Archive
-                </label>
-              }
+              label={<label>Disable Auto Archive</label>}
               labelCol={{ span: 12 }}
             >
               <Checkbox

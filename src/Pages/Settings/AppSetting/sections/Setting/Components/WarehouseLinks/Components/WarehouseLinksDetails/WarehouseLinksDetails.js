@@ -105,7 +105,7 @@ export const WarehouseLinksDetails = () => {
   };
 
   const customLabel = (value) => {
-    return <label style={{ fontWeight: "600" }}>{value}</label>;
+    return <label>{value}</label>;
   };
   function handleChange(value, name) {
     if (name === "warehouse") {

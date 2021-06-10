@@ -115,7 +115,7 @@ ${address.company_name}\n${address.first_name}\n${address.last_name}
     }
   };
   const customLabel = (value) => {
-    return <label style={{ fontWeight: "600" }}>{value}</label>;
+    return <label>{value}</label>;
   };
   const undoButton = () => {
     if (isarchive) {

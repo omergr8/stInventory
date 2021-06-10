@@ -203,7 +203,7 @@ const EditTaxModal = (props) => {
     setIsModalVisible(false);
   };
   const customLabel = (value) => {
-    return <label style={{ fontWeight: "600" }}>{value}</label>;
+    return <label>{value}</label>;
   };
   const Footer = (
     <Button onClick={addComponent} size="small">

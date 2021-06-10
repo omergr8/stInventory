@@ -18,7 +18,7 @@ const layout = {
     span: 16,
   },
 };
-const label = (text) => <label style={{ fontWeight: "600" }}>{text}</label>;
+const label = (text) => <label>{text}</label>;
 const optionsWithDisabled = [
   { label: "All", value: "all" },
   { label: "Yes", value: "True" },

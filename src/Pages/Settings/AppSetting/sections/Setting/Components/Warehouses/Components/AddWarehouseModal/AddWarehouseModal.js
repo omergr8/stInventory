@@ -18,7 +18,7 @@ const tailLayout = {
   },
 };
 const label = (text) => {
-  return <label style={{ fontWeight: "600" }}>{text}</label>;
+  return <label>{text}</label>;
 };
 
 const AddWarehouseModal = (props) => {

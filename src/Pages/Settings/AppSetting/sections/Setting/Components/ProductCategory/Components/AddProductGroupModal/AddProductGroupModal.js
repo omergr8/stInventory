@@ -69,9 +69,7 @@ const AddProductGroupModal = (props) => {
       ]}
     >
       <Form {...layout} form={form} name="control-hooks">
-        <Form.Item
-          label={<label style={{ fontWeight: "600" }}>Group Name</label>}
-        >
+        <Form.Item label={<label>Group Name</label>}>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Form.Item>
       </Form>

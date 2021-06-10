@@ -289,7 +289,7 @@ const ProductSizeEdit = () => {
     });
   };
   const customLabel = (value) => {
-    return <label style={{ fontWeight: "600" }}>{value}</label>;
+    return <label>{value}</label>;
   };
   return (
     <React.Fragment>
