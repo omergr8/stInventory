@@ -92,7 +92,7 @@ const ProductSizeTable = (props) => {
     if (props.productId === undefined) {
       history.push(appRoutes.PRODUCT_PACK_SIZE);
     } else {
-      history.push(appRoutes.PRODUCT_PACK_SIZE + props.productId);
+      history.push(appRoutes.PRODUCT_PACK_SIZE + "&" + props.productId);
     }
   };
   const reset = () => {
