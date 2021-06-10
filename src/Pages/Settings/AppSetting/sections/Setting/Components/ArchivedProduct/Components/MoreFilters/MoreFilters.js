@@ -7,6 +7,7 @@ import React, {
 import { useHistory } from "react-router-dom";
 import { Modal, Form, Input, Select, Radio } from "antd";
 import { getCategory } from "../../../../../../../../../Services/ListServices";
+import { appRoutes } from "../../../../../../../../../Constants/appRoutes";
 
 const { Option } = Select;
 const layout = {
@@ -62,7 +63,7 @@ const MoreFilters = (props, ref) => {
       queryParams =
         queryParams + `&search=${props.searchInput}` + `&${props.productId}`;
     }
-    history.push(`/dashboard/archived-product/?is_archived=True${queryParams}`);
+    history.push(appRoutes.ARCHIVED_PRODUCT + queryParams);
   };
 
   useImperativeHandle(

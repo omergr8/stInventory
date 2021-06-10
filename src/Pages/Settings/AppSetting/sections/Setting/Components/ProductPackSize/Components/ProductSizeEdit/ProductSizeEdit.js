@@ -2,6 +2,7 @@ import React, { useState, useReducer, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../../../../../../../../axiosSet";
 import { appUrls } from "../../../../../../../../../Constants/appUrls";
+import { Constants } from "../../../../../../../../../Constants/Constants";
 import {
   getLocalUom,
   getLocalTax,
@@ -85,9 +86,9 @@ const ProductSizeEdit = () => {
     const data = packSizeData;
     const categoryName = getCategoryName(data.group1_id);
     let inventoryTrackingName;
-    if (data.tracking_type === 2) {
+    if (data.tracking_type === Constants.TRACKING_TYPE.TRACKED) {
       inventoryTrackingName = "Tracked";
-    } else if (data.tracking_type === 5) {
+    } else if (data.tracking_type === Constants.TRACKING_TYPE.NOT_TRACKED) {
       inventoryTrackingName = "Not Tracked";
     }
     callDispatcher(data.id, "id");
@@ -176,7 +177,10 @@ const ProductSizeEdit = () => {
       currency: formState.purchasecurrency,
       moq: formState.moq,
       is_purchased_in_pack: ispurchasepack,
-      tracking_type: formState.inventorytracking === "Tracked" ? 2 : 5,
+      tracking_type:
+        formState.inventorytracking === "Tracked"
+          ? Constants.TRACKING_TYPE.TRACKED
+          : Constants.TRACKING_TYPE.NOT_TRACKED,
       grade: formState.grade,
       is_bundle: formState.is_bundle,
       is_archived: formState.isarchived,

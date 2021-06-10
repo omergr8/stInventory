@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import axios from "../../../../../../../../../axiosSet";
 import { appUrls } from "../../../../../../../../../Constants/appUrls";
+import { appRoutes } from "../../../../../../../../../Constants/appRoutes";
 import classes from "./ArchivedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import { Table, Button, notification, Row, Col, Space, Tag } from "antd";
@@ -108,7 +109,7 @@ const ArchivedProductTable = (props) => {
 
   const reset = () => {
     props.reset();
-    history.push(`/dashboard/archived-product/?is_archived=True`);
+    history.push(appRoutes.ARCHIVED_PRODUCT);
   };
 
   const deleteArchived = () => {

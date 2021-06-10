@@ -5,6 +5,7 @@ import ProductTable from "../ProductTable/ProductTable";
 import ContentBar from "../../../../../ContentBar/ContentBar";
 import axios from "../../../../../../../../../axiosSet";
 import { appUrls } from "../../../../../../../../../Constants/appUrls";
+import { Constants } from "../../../../../../../../../Constants/Constants";
 const { Option } = Select;
 
 const Filter = () => {
@@ -221,26 +222,30 @@ const Filter = () => {
                 <Option
                   disabled={
                     trackingid !== undefined
-                      ? optionsSelected.includes(2)
+                      ? optionsSelected.includes(
+                          Constants.TRACKING_TYPE.TRACKED
+                        )
                         ? false
                         : true
                       : false
                   }
                   key={1}
-                  value={2}
+                  value={Constants.TRACKING_TYPE.TRACKED}
                 >
                   Tracked
                 </Option>
                 <Option
                   disabled={
                     trackingid !== undefined
-                      ? optionsSelected.includes(5)
+                      ? optionsSelected.includes(
+                          Constants.TRACKING_TYPE.NOT_TRACKED
+                        )
                         ? false
                         : true
                       : false
                   }
                   key={2}
-                  value={5}
+                  value={Constants.TRACKING_TYPE.NOT_TRACKED}
                 >
                   Not Tracked
                 </Option>

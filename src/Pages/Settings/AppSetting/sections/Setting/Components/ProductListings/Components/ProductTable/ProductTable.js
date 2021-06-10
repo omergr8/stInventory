@@ -5,6 +5,8 @@ import { Table, Tag, Button, notification } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import axios from "../../../../../../../../../axiosSet";
 import { appUrls } from "../../../../../../../../../Constants/appUrls";
+import { appRoutes } from "../../../../../../../../../Constants/appRoutes";
+import { Constants } from "../../../../../../../../../Constants/Constants";
 import { Link } from "react-router-dom";
 import MetaFind from "../../../../../MetaFind/MetaFind";
 import { dateFormatter } from "../../../../../../../../../Services/ListServices";
@@ -92,13 +94,11 @@ const ProductTable = (props) => {
   };
   const getQueryParams = () => {
     const queryParamsList = queryParams(props);
-    history.push(
-      `/dashboard/product-listing?is_archived=False${queryParamsList}`
-    );
+    history.push(appRoutes.PRODUCT_LISTING + queryParamsList);
   };
   const reset = () => {
     props.reset();
-    history.push(`/dashboard/product-listing?is_archived=False`);
+    history.push(appRoutes.PRODUCT_LISTING);
     setUrl(appUrls.PRODUCT_LINKS + "?is_archived=False");
   };
   useEffect(() => {
@@ -142,7 +142,8 @@ const ProductTable = (props) => {
           ? "Archived"
           : product.product.is_ebay_inventory_item
           ? "Uses Inventory API"
-          : product.product.tracking_type === 5
+          : product.product.tracking_type ===
+            Constants.TRACKING_TYPE.NOT_TRACKED
           ? "Not Tracked"
           : "",
         updatetime: product.stock_update_time,

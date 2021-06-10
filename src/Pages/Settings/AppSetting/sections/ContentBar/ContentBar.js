@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { appUrls } from "../../../../../Constants/appUrls";
+import { appRoutes } from "../../../../../Constants/appRoutes";
 import {
   exportList,
   importList,
@@ -222,7 +223,7 @@ const ContentBar = (props) => {
       <Space key="33">
         <Button
           onClick={() => {
-            history.push("/dashboard/warehouselink/new");
+            history.push(appRoutes.WAREHOUSE_LINK_NEW);
           }}
           icon={<AiOutlinePlus />}
           key="23"

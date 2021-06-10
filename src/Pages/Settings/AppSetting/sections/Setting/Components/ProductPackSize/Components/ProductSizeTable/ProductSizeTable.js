@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import axios from "../../../../../../../../../axiosSet";
 import { appUrls } from "../../../../../../../../../Constants/appUrls";
+import { appRoutes } from "../../../../../../../../../Constants/appRoutes";
 import classes from "./ProductSizeTable.module.css";
 import { Table, Button, notification, Tag } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
@@ -89,16 +90,14 @@ const ProductSizeTable = (props) => {
   };
   const getQueryParams = () => {
     if (props.productId === undefined) {
-      history.push(`/dashboard/product-pack-size?paginate=True`);
+      history.push(appRoutes.PRODUCT_PACK_SIZE);
     } else {
-      history.push(
-        `/dashboard/product-pack-size?paginate=True&${props.productId}`
-      );
+      history.push(appRoutes.PRODUCT_PACK_SIZE + props.productId);
     }
   };
   const reset = () => {
     props.reset();
-    history.push(`/dashboard/product-pack-size?paginate=True`);
+    history.push(appRoutes.PRODUCT_PACK_SIZE);
     // setUrl("https://inventory-dev-295903.appspot.com/products/pack_sizes/");
   };
   const importt = (file) => {

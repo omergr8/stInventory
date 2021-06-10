@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "../../../../../axiosSet";
 import { appUrls } from "../../../../../Constants/appUrls";
+import { appRoutes } from "../../../../../Constants/appRoutes";
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import classes from "../../Login.module.css";
@@ -16,7 +17,7 @@ const LoginForm = (props) => {
         const metaData = res.data;
         localStorage.setItem("meta-data", JSON.stringify(metaData));
         if (localStorage.getItem("token")) {
-          history.push("/dashboard");
+          history.push(appRoutes.DASHBOARD);
         }
       }
     });

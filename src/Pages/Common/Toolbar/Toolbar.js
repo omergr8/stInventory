@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Menu, Dropdown } from "antd";
 import { CaretDownFilled, QuestionCircleFilled } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
+import { appRoutes } from "../../../Constants/appRoutes";
 import Button from "antd-button-color";
 import classes from "./Toolbar.module.css";
 import logo from "../../../Assets/logo-sumtracker-light.svg";
@@ -20,11 +21,11 @@ const menuHelp = (
 const Toolbar = () => {
   const history = useHistory();
   let userr = JSON.parse(localStorage.getItem("user-info"));
-  const [user, setUser] = useState(userr);
+  const [user] = useState(userr);
 
   const logout = () => {
     localStorage.clear();
-    history.push("/login");
+    history.push(appRoutes.LOGIN);
   };
 
   const menuUser = (
