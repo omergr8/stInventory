@@ -5,6 +5,7 @@ import { appUrls } from "../../../../../../../../../Constants/appUrls";
 import { appRoutes } from "../../../../../../../../../Constants/appRoutes";
 import classes from "./ArchivedProductTable.module.css";
 import MetaFind from "../../../../../MetaFind/MetaFind";
+import FilterTags from "../FilterTags/FilterTags";
 import { Table, Button, notification, Row, Col, Space, Tag } from "antd";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 
@@ -224,31 +225,11 @@ const ArchivedProductTable = (props) => {
       <Button onClick={deleteAllArchived}>Delete All Archived Products</Button>
     </Space>
   );
-  const FilterTags = (
-    <div style={{ display: "flex" }}>
-      <p>Filters Applied: </p>
-      <div style={{ marginLeft: "10px" }}>
-        {new URLSearchParams(search).get("id") !== null ? (
-          <Tag color="cyan">
-            Product: {new URLSearchParams(search).get("id")}
-          </Tag>
-        ) : null}
-        {new URLSearchParams(search).get("search") !== null ? (
-          <Tag color="cyan">
-            Search: {new URLSearchParams(search).get("search")}
-          </Tag>
-        ) : null}
-        {new URLSearchParams(search).get("search") === null &&
-        new URLSearchParams(search).get("id") === null ? (
-          <Tag color="default">None</Tag>
-        ) : null}
-      </div>
-    </div>
-  );
+
   return (
     <div>
       <div>
-        {FilterTags}
+        <FilterTags />
         <hr />
         <Row>
           <Col xs={24} sm={24} md={24} lg={13} xl={13}>
