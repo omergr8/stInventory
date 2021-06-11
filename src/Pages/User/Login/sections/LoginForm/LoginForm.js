@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "../../../../../axiosSet";
 import { appUrls } from "../../../../../Constants/appUrls";
@@ -10,17 +10,28 @@ const LoginForm = (props) => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      history.push(appRoutes.DASHBOARD);
+    }
+  }, []);
   const getMetadata = () => {
     let unmounted = false;
-    axios.get(appUrls.METADATA).then((res) => {
-      if (res && !unmounted) {
-        const metaData = res.data;
-        localStorage.setItem("meta-data", JSON.stringify(metaData));
-        if (localStorage.getItem("token")) {
-          history.push(appRoutes.DASHBOARD);
+    axios
+      .get(appUrls.METADATA)
+      .then((res) => {
+        if (res && !unmounted) {
+          const metaData = res.data;
+          localStorage.setItem("meta-data", JSON.stringify(metaData));
+          if (localStorage.getItem("token")) {
+            history.push(appRoutes.DASHBOARD);
+          }
         }
-      }
-    });
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
     return () => {
       unmounted = true;
     };
@@ -38,7 +49,9 @@ const LoginForm = (props) => {
         if (response && !unmounted) {
           props.handler();
           props.onSuccess();
-          getMetadata();
+          if (localStorage.getItem("token")) {
+            getMetadata();
+          }
         }
       })
       .catch((err) => {
@@ -61,7 +74,6 @@ const LoginForm = (props) => {
         onFinish={login}
       >
         <Form.Item
-          name="username"
           rules={[
             {
               required: false,
@@ -79,7 +91,6 @@ const LoginForm = (props) => {
           />
         </Form.Item>
         <Form.Item
-          name="password"
           rules={[
             {
               required: false,

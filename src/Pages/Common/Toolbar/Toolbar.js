@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Menu, Dropdown } from "antd";
 import { CaretDownFilled, QuestionCircleFilled } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { appRoutes } from "../../../Constants/appRoutes";
 import Button from "antd-button-color";
 import classes from "./Toolbar.module.css";
 import logo from "../../../Assets/logo-sumtracker-light.svg";
 
 const menuHelp = (
-  <Menu>
+  <Menu className={classes.menu}>
     <Menu.Item key="0">
-      <a href="#">Help Documentation</a>
+      <Link to="#">Help Documentation</Link>
     </Menu.Item>
     <Menu.Item key="1">
-      <a href="#">Show Setup</a>
+      <Link to="#">Show Setup</Link>
     </Menu.Item>
   </Menu>
 );
@@ -29,14 +29,14 @@ const Toolbar = () => {
   };
 
   const menuUser = (
-    <Menu>
+    <Menu className={classes.menu}>
       <Menu.Item key="0">
-        <a href="#">Profile</a>
+        <Link to="#">Profile</Link>
       </Menu.Item>
       <Menu.Item key="1">
-        <a href="#" onClick={logout}>
+        <Button type="text" onClick={logout}>
           Log Out
-        </a>
+        </Button>
       </Menu.Item>
     </Menu>
   );

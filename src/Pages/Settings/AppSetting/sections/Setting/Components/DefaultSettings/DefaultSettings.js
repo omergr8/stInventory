@@ -97,7 +97,6 @@ const DefaultSettings = () => {
     axios
       .put(appUrls.DEFAULT_SETTINGS, settingObject)
       .then((res) => {
-        console.log(res);
         const setting = res.data;
         setCountry(setting.country_code);
         setTimeZone(setting.timezone);

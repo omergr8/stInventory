@@ -43,11 +43,6 @@ const ArchivedProductTable = (props) => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
       setSelectedRow(selectedRowKeys);
     },
   };
@@ -120,7 +115,6 @@ const ArchivedProductTable = (props) => {
     axios
       .post(appUrls.BULK_DELETE_PRODUCTS, deleteObj)
       .then((res) => {
-        console.log(res);
         fetchArchivedProducts();
         setSelectedRow([]);
         Alert("bottomRight", "success", "Product Deleted Successfully");
@@ -136,7 +130,6 @@ const ArchivedProductTable = (props) => {
     axios
       .post(appUrls.BULK_DELETE_PRODUCTS, deleteObj)
       .then((res) => {
-        console.log(res);
         fetchArchivedProducts();
         setSelectedRow([]);
         Alert(
@@ -156,7 +149,6 @@ const ArchivedProductTable = (props) => {
     axios
       .post(appUrls.BULK_UNDO_ARCHIVE_PRODUCTS, undoArchiveObj)
       .then((res) => {
-        console.log(res);
         setSelectedRow([]);
         fetchArchivedProducts();
         Alert("bottomRight", "success", "Unarchived Successfully");
